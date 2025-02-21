@@ -57,7 +57,7 @@ const AssignedTasks = (props) => {
           }
         });
         console.log(response.data);
-        setData(response.data);  // Handle the response data
+        setData(response.data.reverse());  // Handle the response data
         setLoading(false);  // Stop the loading state
       } catch (error) {
         console.error('Error fetching data:', error);  // Log any error that occurs
@@ -110,7 +110,7 @@ const AssignedTasks = (props) => {
             "Authorization": `Bearer ${token}`  // Add the token to the Authorization header
           }
         });
-        setData(response.data);
+        setData(response.data.reverse());
         setLoading(false);
         setIsDelete(false);
       } catch (error) {
@@ -155,7 +155,7 @@ const AssignedTasks = (props) => {
             }
           }
           );
-          setData(response.data);
+          setData(response.data.reverse());
           setLoading(false);
           setIsDelete(false);
         } catch (error) {
@@ -213,7 +213,7 @@ const AssignedTasks = (props) => {
             "Authorization": `Bearer ${token}`  // Add the token to the Authorization header
           }
         });
-        setData(response.data);
+        setData(response.data.reverse());
         setLoading(false)
       } catch (error) {
         setLoading(false);

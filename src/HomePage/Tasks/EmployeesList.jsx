@@ -15,6 +15,7 @@ const EmployeesList = props => {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [personToAddTask, setPersonToAddTask] = useState();
+  const [searchTerm, setSearchTerm] = useState("");  // Add search state
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -35,6 +36,7 @@ const EmployeesList = props => {
         }
 
         const data = await response.json();
+        
         setEmployees(data);  // Assuming the API returns an array of employees
         setLoading(false);
       } catch (error) {
@@ -46,11 +48,20 @@ const EmployeesList = props => {
     fetchEmployees();
   }, []);
 
+  // Filter employees by name
+  let filteredEmployees = [];
+if (employees.length > 0) {
+  filteredEmployees = employees.filter(employee =>
+    employee.firstName.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    employee.lastName.toLowerCase().includes(searchTerm.toLowerCase()) // Filter by first name or last name
+  );
+}
+
   const indexOfLastEmployee = currentPage * itemsPerPage;
   const indexOfFirstEmployee = indexOfLastEmployee - itemsPerPage;
-  const currentEmployees = employees.slice(indexOfFirstEmployee, indexOfLastEmployee);
+  const currentEmployees = filteredEmployees.slice(indexOfFirstEmployee, indexOfLastEmployee);
 
-  const totalPages = Math.ceil(employees.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredEmployees.length / itemsPerPage);
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
@@ -137,8 +148,17 @@ const EmployeesList = props => {
         <div className="bg-white shadow rounded-lg overflow-hidden">
           <div className="px-6 py-5 border-b border-gray-200">
             <h3 className="text-xl font-semibold leading-6 text-gray-900">
-              Responsible For Following Employees
+              Select employees to assign the task.
             </h3>
+            
+            {/* Search input */}
+            <input
+              type="text"
+              placeholder="Search by name"
+              className="mt-4 px-4 py-2 border rounded-lg w-full"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}  // Update search term
+            />
           </div>
           <ul className="divide-y divide-gray-200">
             {currentEmployees.map((member) => (

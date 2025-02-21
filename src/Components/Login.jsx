@@ -34,7 +34,8 @@ const Login = () => {
             const response = await axios.post('https://middlewaretalentsbackend.azurewebsites.net/api/v1/employeeManager/login', {
                 email: email,
                 password: password,
-            });
+            }
+        );
 
             // Log the entire response object
             console.log('Login response:', response);

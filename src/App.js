@@ -31,6 +31,7 @@ import Tasks from './HomePage/Tasks/Tasks.jsx'
 import LeaveMain from './Leave/LeaveMain.jsx'
 import TimesheetMain from './Timesheet/TimesheetMain.jsx';
 import LeaveSheet from './Leave/LeaveSheet.jsx';
+import ChangePassword from './Components/ChangePassword.jsx';
 
 function App() {
   const [submissions, setSubmissions] = useState([]);
@@ -86,6 +87,7 @@ function Main({ submissions, setSubmissions }) {
         <Route path='/OtherEmployeesList' element={<OtherEmployeesList/>}/>
         <Route path='/LeaveManagement' element={<LeaveMain/>}/>
         <Route path='/LeaveSheet' element={<LeaveSheet/>}/>
+        <Route path='/ChangePassword' element={<ChangePassword/>} />
       </Routes>
     </>
   );

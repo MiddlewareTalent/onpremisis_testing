@@ -26,7 +26,7 @@ const MyTasks = props => {
             "Authorization": `Bearer ${token}`  // Add the token to the Authorization header
           }
         });
-        setData(response.data);
+        setData(response.data.reverse());
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -78,7 +78,7 @@ const MyTasks = props => {
           "Authorization": `Bearer ${token}`  // Add the token to the Authorization header
         }
       });
-      setData(response.data);
+      setData(response.data.reverse());
       setLoading(false);
     } catch (error) {
       setLoading(false);
