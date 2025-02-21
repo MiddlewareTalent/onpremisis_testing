@@ -84,7 +84,7 @@ export default function LeaveApprovalDashboard() {
     setLoading(true);
     try {
       const token = localStorage.getItem('token')
-      await axios.put(`http://localhost:8085/api/leaves/approve/${id}`, null,  {
+      await axios.put(`https://middlewaretalentsbackend.azurewebsites.net/api/leaves/approve/${id}`, null,  {
        
         headers:{
           'Authorization' : `Bearer ${token}`,
