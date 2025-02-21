@@ -87,7 +87,7 @@ const ManagerTimesheets = () => {
         headers: {
           "Authorization": `Bearer ${token}`,  // Ensure token is valid
         },
-        withCredentials: true  // Ensure credentials (cookies) are sent
+        // Ensure credentials (cookies) are sent
       });
       fetchSubmissions(); // Refresh the submissions after the approve request is successful
     } catch (error) {
