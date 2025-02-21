@@ -73,7 +73,7 @@ const LeaveSheet = () => {
           // If no data exists, create a new leave sheet
           const token = localStorage.getItem('token');
           const response = await axios.post(
-            "http://localhost:8085/api/submitSheet",
+            "https://middlewaretalentsbackend.azurewebsites.net/api/submitSheet",
             leaveData, {
                
                 headers:{
