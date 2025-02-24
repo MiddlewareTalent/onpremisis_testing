@@ -64,6 +64,29 @@ export default function AddTask(props) {
       } finally {
         setIsLoading(false);
       }
+
+
+      try{
+        await axios.post("https://middlewaretalentsbackend.azurewebsites.net/apis/employees/notifications",{
+          "notificationType":"tasks",
+          "notification": `${localStorage.getItem('firstName')} ${localStorage.getItem('lastName')} has been assigned a new task. Click here to see the full details.`,
+          "notificationTo":personId,
+          "isRead":false
+        }
+        , {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        })
+      }
+      catch (error) {
+        console.error("Error creating task:", error);
+        setIsError(true);
+      } finally {
+        setIsLoading(false);
+      }
+
+
     } else {
       setIsError(true);
     }

@@ -21,6 +21,7 @@ const ManagerTimesheets = () => {
   const [startDate, setStartDate] = useState(""); 
   const [endDate, setEndDate] = useState(""); 
   const [isDownloadEnabled, setIsDownloadEnabled] = useState(false);
+  const [rejectEmployeeId,setRejectEmployeeId]=useState();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);  // Set the number of items per page
@@ -76,10 +77,10 @@ const ManagerTimesheets = () => {
     setCurrentPage(1);  // Reset to the first page when filter changes
   };
 
-  const handleShow = (id) => { setCurrentId(id); setComments(""); setShowModal(true); };
+  const handleShow = (id, rejectEmp) => { setCurrentId(id); setComments(""); setShowModal(true); setRejectEmployeeId(rejectEmp)};
   const handleClose = () => setShowModal(false);
 
-  const handleApprove = async (id) => {
+  const handleApprove = async (id,aproveEmployeeId) => {
     setLoading(true);
     console.log(token); // Make sure the token is valid here
     try {
@@ -95,21 +96,56 @@ const ManagerTimesheets = () => {
     } finally {
       setLoading(false);
     }
+    try{
+      console.log(submissions.employeeId);
+      const notificationResponse=await axios.post("https://middlewaretalentsbackend.azurewebsites.net/apis/employees/notifications",{
+        "notificationType":"TimesheetManage",
+        "notification":"Your Timesheet has been Approved, tap to see details",
+        "notificationTo":aproveEmployeeId,
+        "isRead":false
+      }
+      , {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      })
+    }catch (error) {
+      console.error("Error approving timesheet:", error);
+    } finally {
+      setLoading(false);
+    }
   };
   
 
   const handleReject = async () => {
     setLoading(true);
+    console.log(rejectEmployeeId);
     try {
       await axios.put(`https://middlewaretalentsbackend.azurewebsites.net/api/timesheets/reject/${currentId}/status/REJECTED/comments/${comments}`, null, {
         headers: {
           "Authorization": `Bearer ${token}`,  // Ensure the token is valid
-        },
-        withCredentials: true  // Ensure credentials (cookies) are sent
+        } // Ensure credentials (cookies) are sent
       });
       fetchSubmissions(); // Refresh the submissions after rejecting the timesheet
       handleClose(); // Close any modal or dialog if needed
     } catch (error) {
+      console.error("Error rejecting timesheet:", error);
+    } finally {
+      setLoading(false);
+    }
+    try{
+      const notificationResponse=await axios.post("https://middlewaretalentsbackend.azurewebsites.net/apis/employees/notifications",{
+        "notificationType":"TimesheetManage",
+        "notification":"Your Timesheet has been Rejected, tap to see details",
+        "notificationTo":rejectEmployeeId,
+        "isRead":false
+      }
+      , {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      })
+    }catch (error) {
       console.error("Error rejecting timesheet:", error);
     } finally {
       setLoading(false);
@@ -330,13 +366,13 @@ const ManagerTimesheets = () => {
                           {submission.status !== "APPROVED" && submission.status !== "REJECTED" && (
                             <>
                               <button
-                                onClick={() => handleApprove(submission.id)}
+                                onClick={() => handleApprove(submission.id, submission.employeeId)}
                                 className="text-green-600 hover:text-green-600 text-xl border border-green-500 px-1 py-1 rounded-lg hover:bg-green-100"
                               >
                                 Approve
                               </button>
                               <button
-                                onClick={() => handleShow(submission.id)}
+                                onClick={() => handleShow(submission.id,submission.employeeId)}
                                 className="text-red-600 hover:text-red-600 text-xl border border-red-500 px-1 py-1 rounded-lg hover:bg-red-100"
                               >
                                 Reject

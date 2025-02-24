@@ -35,6 +35,25 @@ const TimesheetSubmission = ({ setSubmissions }) => {
       setErrors(error.response?.data || 'Error occurred');
       console.log("Error response data:", error.response?.data);
     }
+
+    try{
+      const notificationResponse=await axios.post("https://middlewaretalentsbackend.azurewebsites.net/apis/employees/notifications",{
+        "notificationType":"TimesheetManage",
+        "notification":formData.employeeName+"is submitted new timesheet, tap to see details",
+        "notificationTo":formData.managerId,
+        "isRead":false
+      }
+      , {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      })
+    }catch (error) {
+      console.log("Error submitting timesheet:", error);
+      
+      
+    }
+
   };
 
   const handleCloseForm = () => {

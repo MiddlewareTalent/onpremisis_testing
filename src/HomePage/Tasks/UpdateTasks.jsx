@@ -14,8 +14,10 @@ export default function UpdateTasks(props) {
     const [effectiveDate, setEffectiveDate]=useState(taskData.effectiveDate)
     const [dueDate, setDueDate]=useState(taskData.dueDate)
     const [isChecked, setIsChecked]=useState(taskData.taskStatus)
+    
     const [isError, setIsError]=useState(false);
     const token=localStorage.getItem("token");
+    const personId=taskData.personId;
 
     const handleCheckBoxChange=(event)=>{
       setIsChecked(!isChecked)
@@ -48,6 +50,24 @@ export default function UpdateTasks(props) {
       }
       else{
         setIsError(true)
+      }
+
+      try{
+        await axios.post("https://middlewaretalentsbackend.azurewebsites.net/apis/employees/notifications",{
+          "notificationType":"tasks",
+          "notification": `Your ${taskName} task has been updated. Please click here to see the full details.`,
+          "notificationTo":personId,
+          "isRead":false
+        }
+        , {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        })
+      }
+      catch (error) {
+        console.error("Error creating task:", error);
+        setIsError(true);
       }
     }
 

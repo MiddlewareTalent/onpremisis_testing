@@ -22,7 +22,7 @@ export default function LeaveApprovalDashboard() {
    const [filteredRequests, setFilteredRequests] = useState([]);
     const [startDate, setStartDate] = useState(""); // Start date for filtering
     const [endDate, setEndDate] = useState(""); // End date for filtering
-   
+   const [leaveRejectEmployeeId, setLeaveRejectEmployeeId]=useState("");
 
   // pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -31,9 +31,10 @@ export default function LeaveApprovalDashboard() {
  
 
   // open modal and set selected leave ID
-  const openRejectModal = (id) => {
+  const openRejectModal = (id, rejectedEmployeeId) => {
     setSelectedLeaveId(id);
     setShowModal(true);
+    setLeaveRejectEmployeeId(rejectedEmployeeId);
   };
  
 
@@ -80,7 +81,7 @@ export default function LeaveApprovalDashboard() {
   }, [managerId]);
  
 
-  const handleApprove = async (id) => {
+  const handleApprove = async (id, approvalEmployeeId) => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token')
@@ -91,6 +92,19 @@ export default function LeaveApprovalDashboard() {
           'Content-Type' : 'application/json'
         },
       });
+
+      await axios.post("https://middlewaretalentsbackend.azurewebsites.net/apis/employees/notifications",{
+        "notificationType":"leave",
+        "notification": "Your leave has been approved. Click here to see the full details.",
+        "notificationTo":approvalEmployeeId,
+        "isRead":false
+      }
+      , {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      })
+
       const response = await axios.get(`https://middlewaretalentsbackend.azurewebsites.net/api/leaves/manager/${managerId}`, {
        
         headers:{
@@ -123,6 +137,7 @@ export default function LeaveApprovalDashboard() {
  
   // Handle rejection with backend integration
   const handleReject = async () => {
+    console.log()
     setLoading(true);
     if (!rejectionReason) {
       alert("Please provide a rejection reason.");
@@ -141,6 +156,17 @@ export default function LeaveApprovalDashboard() {
           'Content-Type' : 'application/json'
         },
       });
+
+      await axios.post("https://middlewaretalentsbackend.azurewebsites.net/apis/employees/notifications",{
+        "notificationType":"leave",
+        "notification": "Your leave has been rejected. Click here to see the full details.",
+        "notificationTo":leaveRejectEmployeeId,
+        "isRead":false
+      }, {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      })
       const response = await axios.get(`https://middlewaretalentsbackend.azurewebsites.net/api/leaves/manager/${managerId}`, {
        
         headers:{
@@ -353,13 +379,13 @@ useEffect(() => {
         <div className="flex items-center space-x-2">
           <button
             className="text-green-500 hover:text-green-500 border border-green-400 px-3 py-2 whitespace-nowrap text-lg font-medium rounded"
-            onClick={() => handleApprove(data.id)} // Approve the request
+            onClick={() => handleApprove(data.id, data.employeeId)} // Approve the request
           >
             Approve
           </button>
           <button
             className="text-red-500 hover:text-red-500 border border-red-400 px-3 py-2 whitespace-nowrap text-lg font-medium rounded"
-            onClick={() => openRejectModal(data.id)} // Open the rejection modal
+            onClick={() => openRejectModal(data.id, data.employeeId)} // Open the rejection modal
           >
             Reject
           </button>

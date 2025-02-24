@@ -1,10 +1,10 @@
-'use client'
 
 import React, { useEffect, useState } from 'react'
 import PerformanceMatrix from './EmployeeDashboard/PerformanceMatrix'
 import LeavePerformance from './EmployeeDashboard/LeavePerformance'
 import TimesheetPerformance from './EmployeeDashboard/TimeSheetPerformance'
 import CompanyNews from './EmployeeDashboard/CompanyNews'
+import Notification from './EmployeeDashboard/Notification'
 import { motion } from "framer-motion"
 import {
   
@@ -70,7 +70,7 @@ useEffect(()=>{
       transition={{ duration: 0.5 }}
       className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 p-6"
     >
-      <h1 className="mb-8 text-4xl font-bold text-gray-800">{localStorage.getItem("role")==="employee" ? "Employee Dashboard":"Admin Dashboard"}</h1>
+      
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {/* Employee Details */}
         <div className="col-span-full rounded-lg bg-white p-6 shadow-lg">
@@ -113,24 +113,15 @@ useEffect(()=>{
         </div>
 
         {/* Upcoming Events */}
-        <div className="rounded-lg bg-white p-6 shadow-lg">
+        <div className="rounded-lg bg-white p-6 shadow-lg" style={{ height: '300px' }}>
           <CompanyNews/>
         </div>
 
         {/* Team Members */}
-        <div className="rounded-lg bg-white p-6 shadow-lg">
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-gray-800">Team Members</h2>
-            <UserGroupIcon className="h-5 w-5 text-gray-500" />
-          </div>
-          <div className="flex space-x-2">
-            {team!==null && team.map((initials, index) => (
-              <div key={index} className="flex h-10 w-50 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-sm font-medium text-white">
-                {initials.name}
-              </div>
-            ))}
-          </div>
-        </div>
+        <div className="rounded-lg bg-white p-6 shadow-lg" style={{ height: '300px' }}>
+    <Notification />
+</div>
+
 
         {/* Current Projects */}
         <div className="rounded-lg bg-white p-6 shadow-lg">
@@ -155,25 +146,7 @@ useEffect(()=>{
         </div>
 
         {/* Quick Links */}
-        <div className="rounded-lg bg-white p-6 shadow-lg">
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-gray-800">Quick Links</h2>
-            <LinkIcon className="h-5 w-5 text-gray-500" />
-          </div>
-          <ul className="space-y-2">
-            {quickLinks.map((link) => (
-              <li key={link.name}>
-                <a
-                  href={link.href}
-                  className="flex items-center rounded-md p-2 transition-colors hover:bg-gray-100"
-                >
-                  <link.icon className={`mr-3 h-5 w-5 ${link.color}`} aria-hidden="true" />
-                  <span className="text-sm font-medium text-gray-700">{link.name}</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
+        
       </div>
     </motion.div>
   )

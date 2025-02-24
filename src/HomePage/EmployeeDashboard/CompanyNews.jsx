@@ -55,16 +55,21 @@ const CompanyNews = () => {
  
  
     return (
-        <div className="relative lg:row-span-2 p-6"> {/* Added padding for spacing */}
+        <div className="relative lg:row-span-2 p-6" style={{ height: '280px' }}> {/* Added padding for spacing */}
             <div className="absolute inset-px rounded-lg bg-white lg:rounded-l-[2rem]"></div>
             <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] lg:rounded-l-[calc(2rem+1px)]">
                 <h3 className="text-2xl font-semibold text-gray-900 ml-5">Company News</h3> {/* Increased text size */}
                 <p className="mt-2 text-lg text-gray-700">
                     Stay updated with the latest company news and updates. {/* Example content */}
                 </p>
-                <div className=" flex fex-row mt-5">
+                <div>
+                    {
+                        localStorage.getItem("role")!=="employee" &&
+                        <div className=" flex fex-row mt-5">
                     {tab==="Post News" && <button className="mr-5 border border-solid border-black rounded-md w-40" onClick={(e=>{setTab("View News")})}>View News</button>}
                     {tab==="View News" && <button className="mr-5 border border-solid border-black rounded-md w-40" onClick={(e=>{setTab("Post News")})}>Post news</button>}
+                </div>
+                    }
                 </div>
  
                 <hr class="border-gray-300 my-4" />

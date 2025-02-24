@@ -320,6 +320,18 @@ requiredFields.forEach(field => {
                     },
  
                 });
+
+                await axios.post("https://middlewaretalentsbackend.azurewebsites.net/apis/employees/notifications",{
+                    "notificationType":"leave",
+                    "notification": `${localStorage.getItem('firstName')} ${localStorage.getItem('lastName')} has requested new leave. Click here to see the full details.`,
+                    "notificationTo":formData.managerId,
+                    "isRead":false
+                  }
+                  , {
+                    headers: {
+                      "Authorization": `Bearer ${token}`
+                    }
+                  })
  
             } else {
                 console.log("PUT Request:", formData);
