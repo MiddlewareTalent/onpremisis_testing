@@ -26,7 +26,7 @@ const Notification = () => {
     }, []);
 
     return (
-        <div className="relative lg:row-span-2 p-6 " style={{ height: '280px' }}>
+        <div className="relative lg:row-span-2 p-6 " style={{ height: '380px' }}>
             <div className="absolute inset-px rounded-lg bg-white lg:rounded-r-[2rem]"></div>
             <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] lg:rounded-r-[calc(2rem+1px)]">
                 <h3 className="text-2xl font-semibold text-gray-900">Notifications</h3>

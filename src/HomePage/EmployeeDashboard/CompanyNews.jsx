@@ -55,7 +55,7 @@ const CompanyNews = () => {
  
  
     return (
-        <div className="relative lg:row-span-2 p-6" style={{ height: '280px' }}> {/* Added padding for spacing */}
+        <div className="relative lg:row-span-2 p-6" style={{ height: '380px' }}> {/* Added padding for spacing */}
             <div className="absolute inset-px rounded-lg bg-white lg:rounded-l-[2rem]"></div>
             <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] lg:rounded-l-[calc(2rem+1px)]">
                 <h3 className="text-2xl font-semibold text-gray-900 ml-5">Company News</h3> {/* Increased text size */}

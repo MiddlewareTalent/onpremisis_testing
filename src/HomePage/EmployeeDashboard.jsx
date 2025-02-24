@@ -99,12 +99,12 @@ useEffect(()=>{
         </div>
 
         {/* Upcoming Events */}
-        <div className="rounded-lg bg-white p-6 shadow-lg" style={{ height: '300px' }}>
+        <div className="rounded-lg bg-white p-6 shadow-lg" style={{ height: '400px' }}>
           <CompanyNews/>
         </div>
 
         {/* Team Members */}
-        <div className="rounded-lg bg-white p-6 shadow-lg" style={{ height: '300px' }}>
+        <div className="rounded-lg bg-white p-6 shadow-lg" style={{ height: '400px' }}>
     <Notification />
 </div>
 
