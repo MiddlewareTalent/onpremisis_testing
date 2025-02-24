@@ -7,26 +7,12 @@ import CompanyNews from './EmployeeDashboard/CompanyNews'
 import Notification from './EmployeeDashboard/Notification'
 import { motion } from "framer-motion"
 import {
-  
-  ClockIcon,
-  CalendarIcon,
-  UserGroupIcon,
   BriefcaseIcon,
-  DocumentIcon,
   PencilIcon,
-  LinkIcon,
-
 } from "@heroicons/react/24/outline"
 
-const quickLinks = [
-  { name: 'TimeSheet', href: '/timesheet', icon: ClockIcon, color: 'text-blue-600' },
-  { name: 'Documents', href: '/documents', icon: DocumentIcon, color: 'text-green-600' },
-  { name: 'Holiday Planner', href: '/holiday-planner', icon: CalendarIcon, color: 'text-red-600' },
-]
 
 export default function EnhancedDashboard() {
-
-  const team=null;
 //hi
 //   useEffect(() => {
 //     const fetchEmployees = async () => {

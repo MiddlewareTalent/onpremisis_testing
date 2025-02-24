@@ -98,7 +98,7 @@ const ManagerTimesheets = () => {
     }
     try{
       console.log(submissions.employeeId);
-      const notificationResponse=await axios.post("https://middlewaretalentsbackend.azurewebsites.net/apis/employees/notifications",{
+      await axios.post("https://middlewaretalentsbackend.azurewebsites.net/apis/employees/notifications",{
         "notificationType":"TimesheetManage",
         "notification":"Your Timesheet has been Approved, tap to see details",
         "notificationTo":aproveEmployeeId,
@@ -134,7 +134,7 @@ const ManagerTimesheets = () => {
       setLoading(false);
     }
     try{
-      const notificationResponse=await axios.post("https://middlewaretalentsbackend.azurewebsites.net/apis/employees/notifications",{
+      await axios.post("https://middlewaretalentsbackend.azurewebsites.net/apis/employees/notifications",{
         "notificationType":"TimesheetManage",
         "notification":"Your Timesheet has been Rejected, tap to see details",
         "notificationTo":rejectEmployeeId,

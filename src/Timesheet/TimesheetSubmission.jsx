@@ -37,7 +37,7 @@ const TimesheetSubmission = ({ setSubmissions }) => {
     }
 
     try{
-      const notificationResponse=await axios.post("https://middlewaretalentsbackend.azurewebsites.net/apis/employees/notifications",{
+      await axios.post("https://middlewaretalentsbackend.azurewebsites.net/apis/employees/notifications",{
         "notificationType":"TimesheetManage",
         "notification":formData.employeeName+"is submitted new timesheet, tap to see details",
         "notificationTo":formData.managerId,
