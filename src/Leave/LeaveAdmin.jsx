@@ -79,9 +79,12 @@ export default function LeaveApprovalDashboard() {
     };
     fetchData();
   }, [managerId]);
+
+  console.log(Data);
  
 
   const handleApprove = async (id, approvalEmployeeId) => {
+    console.log(approvalEmployeeId);
     setLoading(true);
     try {
       const token = localStorage.getItem('token')
@@ -348,6 +351,7 @@ useEffect(() => {
   const renderActions = (data) => {
     // Check if the request is being edited (edit mode is toggled)
     //const employeeId = localStorage.getItem('employeeId');
+    console.log("data"+data);
       console.log("doc: " +  data.medicalDocument)
     
       if ((data.leaveStatus === 'APPROVED' || data.leaveStatus === 'REJECTED') && data.leaveType !== 'SICK'){
@@ -407,13 +411,13 @@ useEffect(() => {
         <div className="flex items-center space-x-2">
         <button
           className="text-green-500 hover:text-green-500 border border-green-400 px-3 py-2 whitespace-nowrap text-lg font-medium rounded"
-          onClick={() => handleApprove(data.id)} // Approve the request
+          onClick={() => handleApprove(data.id, data.employeeId)} // Approve the request
         >
           Approve
         </button>
         <button
           className="text-red-500 hover:text-red-500 border border-red-400 px-3 py-2 whitespace-nowrap text-lg font-medium rounded"
-          onClick={() => openRejectModal(data.id)} // Open the rejection modal
+          onClick={() => openRejectModal(data.id, data.employeeId)} // Open the rejection modal
         >
           Reject
         </button>
