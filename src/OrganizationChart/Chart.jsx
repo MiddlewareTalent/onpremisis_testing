@@ -86,7 +86,7 @@ export default function Chart() {
           setReportingEmployees([]); // Reset reporting employees in case of failure
         }
    
-        
+       
    
         try {
           const token = localStorage.getItem('token')
@@ -116,12 +116,12 @@ export default function Chart() {
           setErrorMessage("there are no reporting employees to this person");
           // Reset reporting employees in case of failure
         }
-  
+ 
         setLoading((prev)=>false);
    
    
       };
-  
+ 
       const fetchWorkingWith=async()=>{
         try {
           const token = localStorage.getItem('token')
@@ -153,10 +153,10 @@ export default function Chart() {
       await fetchData();
       await fetchWorkingWith();
     }
-
+ 
     fetchAllData();
-
-
+ 
+ 
   }, [employeeId]); // This effect runs when the employeeId changes
  
   // Handle employee change on suggestion click
@@ -246,7 +246,7 @@ export default function Chart() {
    
   >
     <div className="min-h-screen bg-gradient-to-b from-blue-100 to-white p-8">
-      <h1 className="text-4xl font-bold text-center  mb-8">Organizational Chart</h1>
+      <h1 className="text-4xl font-bold text-center  mb-8">Organization Chart</h1>
  
       <div className="max-w-md mx-auto mb-8 relative">
         <div className="relative">
@@ -305,10 +305,11 @@ export default function Chart() {
                   </div>
                 ))}
                 <div>
+                 
                   {isHovered && (
                     <div
                       className="absolute  p-6"
-                      style={{ top: hoverPosition.top, left: hoverPosition.left }}
+                      style={{ top: hoverPosition.top, left: hoverPosition.left , zIndex: 9999 }}
                     >
                      
                      <motion.div
@@ -386,13 +387,13 @@ export default function Chart() {
             ) : (
               <div className="flex-1 bg-white rounded-lg shadow-lg p-6">
                 <h2 className="text-2xl font-semibold text-blue-800 mb-4">Reporting Employees</h2>
-                <p className="text-red-600">{errorMessage || "This employee has no direct reports."}</p>
+                <p className="text-red-600 font-semibold">{errorMessage || "This employee has no direct reports."}</p>
               </div>
             )}
           </div>
         </div>
-        <div className="flex flex justify-center mt-10">
-        <div className="shadow-lg rounded-lg flex flex-col p-10 w-4/5  ">
+        <div className="flex flex justify-center mt-10 ">
+        <div className="shadow-lg rounded-lg bg-white flex flex-col p-10 w-4/5  ">
   <div>
     <h1 className="text-2xl font-semibold text-blue-800">Also works with</h1>
   </div>

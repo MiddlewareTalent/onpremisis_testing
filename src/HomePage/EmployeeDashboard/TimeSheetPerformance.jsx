@@ -37,7 +37,7 @@ const TimesheetPerformance = () => {
                <div>
                <h3 className="text-2xl font-semibold text-gray-900">Timesheet Performance</h3> {/* Increased text size */}
                 <p className="mt-2 text-lg text-gray-700">
-                Track every minute to refine and maximize your performance. {/* Example content */}
+                Track your work hours and manage your productivity with a timesheet. {/* Example content */}
                 </p>
                </div>
                     <div className="mt-5 ">

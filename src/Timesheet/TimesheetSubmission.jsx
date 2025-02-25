@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { FaTimes } from "react-icons/fa";
-
+// import { FaTimes } from "react-icons/fa";
+import { IoCloseCircleOutline } from "react-icons/io5";
+ 
 const TimesheetSubmission = ({ setSubmissions }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -10,7 +11,7 @@ const TimesheetSubmission = ({ setSubmissions }) => {
   const [errors, setErrors] = useState("");
   const { formData } = location.state || {};
   const token=localStorage.getItem("token");
-
+ 
   // Function to handle timesheet submission
   const handleSubmitToHome = async () => {
     try {
@@ -18,28 +19,29 @@ const TimesheetSubmission = ({ setSubmissions }) => {
         ...formData,
         SubmissionDate: new Date().toISOString(),
       };
-
+ 
       const response = await axios.post("https://middlewaretalentsbackend.azurewebsites.net/api/timesheets", newFormData, {
         headers: {
           "Authorization": `Bearer ${token}`
         }
       });
       console.log(response.data);
-
+ 
       // Add the new submission to the list of submissions
       setSubmissions((prev) => [...prev, response.data]);
       navigate('/TimesheetManage'); // Navigate to employee home page
-
+ 
     } catch (error) {
       console.log("Error submitting timesheet:", error);
       setErrors(error.response?.data || 'Error occurred');
       console.log("Error response data:", error.response?.data);
     }
-
+ 
     try{
       await axios.post("https://middlewaretalentsbackend.azurewebsites.net/apis/employees/notifications",{
         "notificationType":"TimesheetManage",
-        "notification":formData.employeeName+"is submitted new timesheet, tap to see details",
+        "notification":formData.employeeName+" has submitted new timesheet, tap to see details",
+        // "notification":"Tap to view the details of "+formData.employeeName+"'s recently submitted timesheet.",
         "notificationTo":formData.managerId,
         "isRead":false
       }
@@ -50,35 +52,55 @@ const TimesheetSubmission = ({ setSubmissions }) => {
       })
     }catch (error) {
       console.log("Error submitting timesheet:", error);
-      
-      
-    }
-
+ 
+      // Check if the error has response data
+      const errorData = error.response?.data;
+      console.log(error.response?.data);
+      // Initialize the error message variable
+      let errorMessage = '';
+ 
+      // Check for missing or invalid fields and add specific messages
+          if (!errorData.managerId) {
+              errorMessage += 'managerId cannot be null or empty. ';
+          }
+          else if(!errorData.employeeId) {
+              errorMessage += 'employeeId cannot be null or empty. ';
+          }
+          else if(!errorData.employeeName) {
+              errorMessage += 'employeeName cannot be null or empty. ';
+          }
+          else if(!errorData.emailId) {
+            errorMessage += 'emailId cannot be null or empty. ';
+        }
+      // If no specific error was found, set the default error message
+      setErrors(errorMessage || 'Error occurred');
+      console.log("Error response data:", errorData);
+  }
+ 
   };
-
+ 
   const handleCloseForm = () => {
     setIsFormVisible(false); // Set form visibility to false
   };
-
+ 
   // Function to handle going back to the form
   const handleBackToForm = () => {
     navigate('/timesheet-management', { state: { formData } });
   };
-
+ 
   // Destructure submissionData and prepare for rendering
   const {totalNumberOfHours, comments, reportingManager, managerName, manager, status, id, ...displayData } = formData;
-
+ 
   if (!isFormVisible) return navigate('/EmployeeHomePage');
-
+ 
   return (
     <div className="mx-auto py-4 px-6 text-black w-10/12">
       <div className="bg-white rounded-lg shadow-md m-2 border border-gray-300">
         <div className="flex justify-between text-xs font-semibold mb-4 bg-gray-100 p-2 rounded-t-sm">
           <h2 className="text-3xl font-semibold">Submitted Timesheet Data</h2>
-          <FaTimes
-              onClick={handleCloseForm} // Close form when clicked
-              className="cursor-pointer text-gray-500 hover:text-gray-700 w-8 h-6"
-          />
+          <button onClick={handleCloseForm} className="text-gray-400 hover:text-gray-500">
+                                    <IoCloseCircleOutline className="h-8 w-8" />
+                                  </button>
         </div>
         <div className="p-2">
           <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-md border-r text-xl ">
@@ -121,5 +143,5 @@ const TimesheetSubmission = ({ setSubmissions }) => {
     </div>
   );
 };
-
+ 
 export default TimesheetSubmission;

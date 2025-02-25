@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import ContactsItem from './ContactsItem';
+import EmpContactsItem from './EmpContactsItem';
 // import {Link} from "react-router-dom";
 // import { FaSearch } from 'react-icons/fa';
-import Loader from '../../Assets/Loader';
-import Empty from '../../Assets/Empty.svg';
+import Loader from '../Assets/Loader';
+import Empty from '../Assets/Empty.svg';
 
 
-const Contacts=(props)=>{
+const EmpContacts=(props)=>{
     const [contacts, setContacts]=useState([]);
     const [isLoading, setLoading]=useState(false);
     // const [searchValue, setSearchValue]=useState("");
@@ -77,7 +77,7 @@ const Contacts=(props)=>{
                                 <tbody className="bg-white divide-y divide-gray-200">
                                 {
                                     contacts.map(each=>
-                                        <ContactsItem key={each.contactId} each={each}/>
+                                        <EmpContactsItem key={each.contactId} each={each}/>
                                     )
                                 }
                                 </tbody>
@@ -105,4 +105,4 @@ const Contacts=(props)=>{
 
 }
 
-export default Contacts;
+export default EmpContacts;

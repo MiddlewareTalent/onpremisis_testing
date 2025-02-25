@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import {Link} from "react-router-dom";
 import {
     UserCircleIcon,
     EnvelopeIcon,
@@ -8,14 +8,13 @@ import {
     BriefcaseIcon,
     MapPinIcon,
     PaperClipIcon,
-    ShieldCheckIcon,
     ClockIcon,
     BuildingOfficeIcon,
     IdentificationIcon,
 } from "@heroicons/react/20/solid";
 import axios from "axios";
 import Loader from "../Assets/Loader";
-import EmpContacts from "./EmpContacts";
+import Contacts from "../HomePage/MyContacts/Contacts";
  
 const Badge = ({ children, variant, className }) => (
     <span className={`inline-flex items-center rounded-full px-3 py-2 text-xs font-medium ${variant === 'outline' ? 'border' : 'bg-gray-100'} ${className}`}>
@@ -35,20 +34,20 @@ const Button = ({ children, variant, size, ...props }) => (
 const ScrollArea = ({ children, className }) => <div className={`overflow-auto ${className}`}>{children}</div>;
 const Separator = () => <hr className="my-4" />;
  
-export default function EmployeeDetails() {
-    const { id,employeeId } = useParams();
+export default function ProfileCard() {
+    
     const [employee, setEmployee] = useState(null);
     const [contacts, setContacts]=useState([]);
-    
+    const employeeId=localStorage.getItem("employeeId");
+    const token= localStorage.getItem('token');
  
     useEffect(() => {
         const fetchEmployee = async () => {
-            const token= localStorage.getItem('token');
             try {
                 
                 console.log(token);
                 console.log("upto");
-                const response = await axios.get(`https://middlewaretalentsbackend.azurewebsites.net/api/v1/employeeManager/employees/${id}`,{
+                const response = await axios.get(`https://middlewaretalentsbackend.azurewebsites.net/api/v1/employeeManager//getEmployee//${employeeId}`,{
                     method:'GET',
                     headers:{
                         'Authorization':`Bearer ${token}`,
@@ -75,9 +74,10 @@ export default function EmployeeDetails() {
                 
                 console.error('Error fetching data:', error);
               }
+            
         };
         fetchEmployee();
-    }, [id,employeeId]);
+    }, [employeeId, token]);
  
     if (!employee) {
         return <div className="flex justify-center items-center h-screen"><Loader /></div>;
@@ -95,11 +95,8 @@ export default function EmployeeDetails() {
         <div className="flex flex-col min-h-screen bg-gray-50">
             <header className="bg-white shadow-sm w-full">
                 <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-                    <h1 className="text-4xl font-semibold text-gray-900">Employee Information</h1>
-                    <Badge variant="outline" className="text-lg px-5 py-3">
-                        <ShieldCheckIcon className="w-10 h-10 mr-2 text-green-600" />
-                        <span className="font-bold">{employee.role || "N/A"}</span>
-                    </Badge>
+                    <h1 className="text-4xl font-semibold text-gray-900">My Information</h1>
+                    
                 </div>
             </header>
             <ScrollArea className="flex-grow">
@@ -148,10 +145,9 @@ export default function EmployeeDetails() {
                                 </ul>
                             </div>
                             <div>
-                                <div>
                                 <h2 className="text-3xl font-bold text-gray-900 mb-4">Emergency Contact</h2>
-                                {contacts.length===0 ? <p>No Emergency Contact</p>: <EmpContacts employeeId={employeeId}/>}
-                            </div>
+                                {contacts.length===0 ? <Link to="/NewContacts">
+                                        <button type="button" className="ml-5 px-6 py-3 bg-blue-500 text-white text-lg font-semibold rounded-md hover:bg-blue-700">Add Emergency Contact</button> </Link>: <Contacts employeeId={employeeId}/>}
                                 
                             </div>
                         </div>

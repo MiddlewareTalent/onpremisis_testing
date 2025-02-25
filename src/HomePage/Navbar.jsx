@@ -52,8 +52,17 @@ export default function Navbar() {
   const adminNavItems = [
     { name: "Dashboard", href: "/dashboard" },
     { name: "Employees", href: "/employee" },
+    { name: "My Team", href: "/MyTeam" },
     { name: "Tasks", href: "/tasks" },
-    { name: "Contacts", href: "/contacts" },
+    { name: "Organization Chart", href: "/OrgChart" },
+    { name: "Timesheet", href: "/TimesheetManage" },
+    { name: "Leave Management", href: "/LeaveManagement" },
+  ];
+
+  const managerNavItems = [
+    { name: "Dashboard", href: "/dashboard" },
+    { name: "My Team", href: "/MyTeam" },
+    { name: "Tasks", href: "/tasks" },
     { name: "Organization Chart", href: "/OrgChart" },
     { name: "Timesheet", href: "/TimesheetManage" },
     { name: "Leave Management", href: "/LeaveManagement" },
@@ -61,16 +70,26 @@ export default function Navbar() {
 
   const employeeNavItems = [
     { name: "Dashboard", href: "/dashboard" },
+    { name: "My Team", href: "/MyTeam" },
     { name: "Tasks", href: "/tasks" },
-    { name: "Contacts", href: "/contacts" },
     { name: "Organization Chart", href: "/OrgChart" },
     { name: "Timesheet", href: "/TimesheetManage" },
     { name: "Leave Management", href: "/LeaveManagement" },
   ];
 
   // Show admin nav items if role is 'admin', else show employee nav items
-  const navItems =
-    role === "admin" || role === "Admin" ? adminNavItems : employeeNavItems;
+  
+  let navItems=[];
+
+    if(role==="admin" || role==="Admin"){
+      navItems=adminNavItems;
+    }
+    else if(role==="employee"){
+      navItems=employeeNavItems;
+    }
+    else if(role==="manager"){
+      navItems=managerNavItems;
+    }
 
   return (
     <header className="bg-white">
@@ -95,7 +114,7 @@ export default function Navbar() {
           </button>
         </div>
         <Popover.Group className="hidden lg:flex lg:gap-x-12">
-          {navItems.map((item) => (
+          {navItems.length!==0 && navItems.map((item) => (
             <Link
               key={item.name}
               to={item.href}
@@ -162,6 +181,20 @@ export default function Navbar() {
                                         </Link>
                                     )}
                                 </Menu.Item> */}
+                <Menu.Item>
+                  {({ active }) => (
+                    <Link
+                      to="/ProfileCard"
+                      className={classNames(
+                        active ? "bg-gray-100" : "",
+                        "block w-full text-left px-4 py-2 text-2xl text-gray-500"
+                      )}
+                    >
+                      Profile Card
+                    </Link>
+                  )}
+                </Menu.Item>
+                
                 <Menu.Item>
                   {({ active }) => (
                     <button
@@ -234,6 +267,14 @@ export default function Navbar() {
                     {item.name}
                   </Link>
                 ))}
+              </div>
+              <div className="py-6">
+                <Link
+                  to="/ProfileCard"
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                >
+                  Profile Card
+                </Link>
               </div>
               <div className="py-6">
                 <Link

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import { useParams } from 'react-router-dom';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
 
-const ContactsDetails = () => {
+const EmpContactsDetails = () => {
     const [formData, setFormData] = useState({
         contactCreatedEmployee: localStorage.getItem("email"),
         employeeId:'',
@@ -30,11 +30,7 @@ const ContactsDetails = () => {
     const [isOpen, setIsOpen] = useState(false);
     const isDisable = true;
     const token=localStorage.getItem("token");
-    const employeeId=localStorage.getItem("employeeId");
-
     let { contactId } = useParams();
-
-    const path = `/UpdateContacts/${contactId}`;
     const navigate = useNavigate();
     console.log(contactId);
 
@@ -94,7 +90,7 @@ const ContactsDetails = () => {
                 {/* Back Button */}
                 <div className="absolute top-4 left-4">
                     <button
-                        onClick={() => navigate('/ProfileCard')} // This will navigate back to the previous page
+                        onClick={() => navigate(window.history.back())} // This will navigate back to the previous page
                         className="px-4 py-2 bg-blue-500 text-white text-lg font-semibold rounded-md hover:bg-blue-700"
                     >
                         Back
@@ -211,7 +207,7 @@ const ContactsDetails = () => {
                                         className="mt-1 p-3 block w-full shadow-sm text-lg border border-gray-300 rounded-md" />
                                 </div>
                             </div> */}
-                            <div>
+                            {/* <div>
                             { formData.employeeId!=="" && formData.employeeId===employeeId &&
                                 <div>
                                     <Link to={path}><button type="button" className="px-6 py-3 bg-blue-500 text-white text-lg font-semibold rounded-md hover:bg-blue-700">Edit</button></Link>
@@ -222,7 +218,7 @@ const ContactsDetails = () => {
                                         >Delete
                                         </button>
                                     </div>}
-                            </div>
+                            </div> */}
                         </form>
                 </div>
             </div>
@@ -234,4 +230,4 @@ const ContactsDetails = () => {
     </div>);
 };
 
-export default ContactsDetails;
+export default EmpContactsDetails;

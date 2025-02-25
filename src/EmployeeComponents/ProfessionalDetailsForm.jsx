@@ -247,6 +247,21 @@ const ProfessionalDetailsForm = ({ formData, onNext, onBack, onFormDataChange })
                                 </div>
                                 <div className="flex items-center gap-x-3">
                                     <input
+                                        id="role-manager"
+                                        name="role"
+                                        type="radio"
+                                        value="manager"
+                                        checked={formData.role === 'manager'}
+                                        onChange={() => onFormDataChange({role: 'manager'})}
+                                        className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                    />
+                                    <label htmlFor="role-admin"
+                                           className="block text-sm font-medium leading-6 text-gray-900">
+                                        Manager
+                                    </label>
+                                </div>
+                                <div className="flex items-center gap-x-3">
+                                    <input
                                         id="role-employee"
                                         name="role"
                                         type="radio"

@@ -32,6 +32,9 @@ import LeaveMain from './Leave/LeaveMain.jsx'
 import TimesheetMain from './Timesheet/TimesheetMain.jsx';
 import LeaveSheet from './Leave/LeaveSheet.jsx';
 import ChangePassword from './Components/ChangePassword.jsx';
+import ProfileCard from './EmployeeComponents/ProfileCard.jsx';
+import EmpContactsDetails from './EmployeeComponents/EmpContactsDetails.jsx';
+import MyTeam from './HomePage/MyTeam.jsx';
 
 function App() {
   const [submissions, setSubmissions] = useState([]);
@@ -63,7 +66,7 @@ function Main({ submissions, setSubmissions }) {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/employee" element={<Employee />} />
         {/* Add more routes as needed */}
-        <Route path="/employeedetails/:employeeId" element={<EmployeeDetails />} />
+        <Route path="/employeedetails/:id/:employeeId" element={<EmployeeDetails />} />
         <Route path="/Contacts" element={<Contacts />} />
         <Route path="/NewContacts" element={<NewContacts />} />
         <Route path="/ContactsDetails/:contactId" element={<ContactsDetails />} />
@@ -88,6 +91,9 @@ function Main({ submissions, setSubmissions }) {
         <Route path='/LeaveManagement' element={<LeaveMain/>}/>
         <Route path='/LeaveSheet' element={<LeaveSheet/>}/>
         <Route path='/ChangePassword' element={<ChangePassword/>} />
+        <Route path='/ProfileCard' element={<ProfileCard/>} />
+        <Route path='/EmpContactsDetails/:contactId' element={<EmpContactsDetails/>} />
+        <Route path='/MyTeam' element={<MyTeam/>} />
       </Routes>
     </>
   );

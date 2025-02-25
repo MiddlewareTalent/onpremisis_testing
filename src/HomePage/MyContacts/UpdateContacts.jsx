@@ -144,7 +144,7 @@ const UpdateContacts = () => {
                         className="mt-1 p-3 block w-full shadow-sm text-lg border border-gray-300 rounded-md" />
                 </div>
             </div>
-            <h2 className="text-3xl font-bold mb-6">Bank Information</h2>
+            {/* <h2 className="text-3xl font-bold mb-6">Bank Information</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
                     <label className="block text-lg font-medium text-gray-700">Bank Name:</label>
@@ -176,7 +176,7 @@ const UpdateContacts = () => {
                     <input type="text" name="bankAddress" value={formData.bankAddress} onChange={handleChange}
                         className="mt-1 p-3 block w-full shadow-sm text-lg border border-gray-300 rounded-md" />
                 </div>
-            </div>
+            </div> */}
             <div className='flex flex-row'>
             <button type="submit" className="px-6 py-3 bg-blue-500 text-white text-lg font-semibold rounded-md hover:bg-blue-700">Update</button>
             {isAdding?<p className='text-green-500'>Updating Contact.....</p>:null}

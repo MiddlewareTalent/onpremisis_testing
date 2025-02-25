@@ -1,10 +1,10 @@
 import {useNavigate} from "react-router-dom";
 
-const ContactsItem=(props)=>{
+const EmpContactsItem=(props)=>{
     const {each}=props;
     const {contactId,personName,personEmail,personMobile,relation}=each;
     const navigate=useNavigate();
-    const path=`/ContactsDetails/${contactId}`;
+    const path=`/EmpContactsDetails/${contactId}`;
 
     const details=()=>{
         navigate(path)
@@ -34,4 +34,4 @@ const ContactsItem=(props)=>{
     )
 }
 
-export default ContactsItem;
+export default EmpContactsItem;

@@ -158,6 +158,17 @@ export default function ProfessionalInfoModal({
 <input
                     type="radio"
                     name="role"
+                    value="manager"
+                    checked={formData.role === 'manager'}
+                    onChange={handleChange}
+                    className="mr-2"
+                  />
+                  Manager
+</label>
+<label className="flex items-center">
+<input
+                    type="radio"
+                    name="role"
                     value="employee"
                     checked={formData.role === 'employee'}
                     onChange={handleChange}

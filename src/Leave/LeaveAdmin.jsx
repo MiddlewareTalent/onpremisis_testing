@@ -507,7 +507,7 @@ useEffect(() => {
       {/* Leave Requests Table */}
       {loading ? (
   <Loader />
-) : filteredData.length === 0 ? (
+) : filteredRequests.length === 0 ? (
   <img
     className="mt-40 ml-auto mr-auto h-80 self-center"
     src={Empty}

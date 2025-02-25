@@ -6,7 +6,7 @@ import { FaTrash, FaEdit } from "react-icons/fa";
 import { MdOutlineFileDownload } from "react-icons/md";
 import "jspdf-autotable";
 import {ChevronLeftIcon,ChevronRightIcon} from '@heroicons/react/20/solid';
-
+ 
 const EmployeeHomePage = ({ submissions, setSubmissions }) => {
   const navigate = useNavigate();
   const [filteredSubmissions, setFilteredSubmissions] = useState(submissions);
@@ -21,22 +21,22 @@ const EmployeeHomePage = ({ submissions, setSubmissions }) => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [isDownloadEnabled, setIsDownloadEnabled] = useState(false);
-  const [showModal, setShowModal] = useState(false); 
-  const [selectedSubmissionId, setSelectedSubmissionId] = useState(null); 
+  const [showModal, setShowModal] = useState(false);
+  const [selectedSubmissionId, setSelectedSubmissionId] = useState(null);
   const token=localStorage.getItem("token");
-
+ 
   useEffect(() => {
     const employeeId = localStorage.getItem("employeeId");
     const token=localStorage.getItem("token");
-
+ 
     const fetchSubmissions = async () => {
       try {
         let url = `https://middlewaretalentsbackend.azurewebsites.net/api/timesheets/list/${employeeId}`;
-
+ 
         if (startDate && endDate) {
           url = `https://middlewaretalentsbackend.azurewebsites.net/api/timesheets/totalList/employeeId/${employeeId}/startDate/${startDate}/endDate/${endDate}`;
         }
-
+ 
         const response = await axios.get(url, {
           headers: {
             "Authorization": `Bearer ${token}`
@@ -55,14 +55,14 @@ const EmployeeHomePage = ({ submissions, setSubmissions }) => {
         console.error("Error fetching submissions:", error);
       }
     };
-
+ 
     fetchSubmissions();
   }, [setSubmissions, startDate, endDate]);
-
+ 
   const handleCreateTimesheet = () => navigate("/timesheet-management");
   const handleEditTimesheet = (submission) =>
     navigate("/timesheet-management", { state: { submission } });
-
+ 
   const handleDeleteTimesheet = async () => {
     try {
       await axios.delete(`https://middlewaretalentsbackend.azurewebsites.net/api/timesheets/delete/${selectedSubmissionId}`, {
@@ -86,29 +86,29 @@ const EmployeeHomePage = ({ submissions, setSubmissions }) => {
       console.error("Error deleting timesheet:", error);
     }
   };
-
+ 
   const filterSubmissions = (status) => {
     const filtered = status
       ? submissions.filter((sub) => sub.status === status)
       : submissions;
     setFilteredSubmissions(filtered);
   };
-
+ 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const totalPages = Math.ceil(filteredSubmissions.length / submissionsPerPage);
   const currentSubmissions = filteredSubmissions.slice(
     (currentPage - 1) * submissionsPerPage,
     currentPage * submissionsPerPage
   );
-
+ 
   const downloadTimesheets = () => {
     const doc = new jsPDF();
     doc.setFont("helvetica", "normal");
     doc.setFontSize(14);
-
+ 
     // Set the title for the document
     doc.text("Timesheets", 20, 20);
-
+ 
     // Define the table columns and headers
     const columns = [
       { title: "Client", dataKey: "clientName" },
@@ -117,7 +117,7 @@ const EmployeeHomePage = ({ submissions, setSubmissions }) => {
       { title: "Total Hours", dataKey: "totalNumberOfHours" },
       { title: "Status", dataKey: "status" },
     ];
-
+ 
     // Map the filtered submissions into rows for the table
     const rows = currentSubmissions.map(submission => ({
       clientName: submission.clientName,
@@ -126,7 +126,7 @@ const EmployeeHomePage = ({ submissions, setSubmissions }) => {
       totalNumberOfHours: submission.totalNumberOfHours,
       status: submission.status,
     }));
-
+ 
     // Add the table to the PDF
     doc.autoTable({
       head: [columns.map(col => col.title)], // Table headers
@@ -145,19 +145,19 @@ const EmployeeHomePage = ({ submissions, setSubmissions }) => {
         1: { cellWidth: "auto", halign: "left" }, // Left-align Value column
       },
     });
-
+ 
     // Save the generated PDF
     doc.save("Timesheets.pdf");
   };
-
+ 
   const downloadTimesheet = (submission) => {
     const doc = new jsPDF();
     doc.setFont("helvetica", "normal");
     doc.setFontSize(14);
-
+ 
     // Title
     doc.text(`Timesheet for ${submission.clientName}`, 20, 20);
-
+ 
     // Table data
     const tableData = [
       ["Project", submission.projectName],
@@ -165,7 +165,7 @@ const EmployeeHomePage = ({ submissions, setSubmissions }) => {
       ["Total Hours", submission.totalNumberOfHours],
       ["Status", submission.status],
     ];
-
+ 
     // Define table options and render
     doc.autoTable({
       startY: 30, // Position of the table
@@ -178,11 +178,11 @@ const EmployeeHomePage = ({ submissions, setSubmissions }) => {
         1: { cellWidth: "auto", halign: "left" }, // Left-align Value column
       },
     });
-
+ 
     // Save the document as a PDF with a dynamic file name
     doc.save(`Timesheet_${submission.clientName}_${submission.projectName}.pdf`);
   };
-
+ 
   const handleApplyDateRange = () => {
     if (startDate && endDate) { // Only apply the date range if both dates are provided
       setIsDownloadEnabled(true);
@@ -191,7 +191,7 @@ const EmployeeHomePage = ({ submissions, setSubmissions }) => {
       alert("Please select both start and end dates.");
     }
   };
-
+ 
   return (
     <div className="bg-gray-100 min-h-screen p-4 sm:p-6 lg:p-8">
       <div className="max-w-full mx-auto">
@@ -200,30 +200,30 @@ const EmployeeHomePage = ({ submissions, setSubmissions }) => {
             <div className="flex justify-between mb-8">
               <h1 className="text-3xl font-bold text-gray-900 mb-6">Submitted Timesheets</h1>
             </div>
-
+ 
             {/* Modal for Delete Confirmation */}
             {showModal && (
               <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                 <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-                  <h2 className="text-xl font-bold mb-4 text-gray-900">Confirm Deletion</h2>
+                  <h2 className="text-xl font-bold mb-4 text-gray-900">Are you sure to delete?</h2>
                   <div className="mt-4 flex justify-end space-x-2">
                     <button
-                      onClick={() => setShowModal(false)} 
+                      onClick={() => setShowModal(false)}
                       className="bg-gray-200 text-lg text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300 transition duration-300 ease-in-out"
                     >
                       Close
                     </button>
                     <button
-                      onClick={handleDeleteTimesheet} 
+                      onClick={handleDeleteTimesheet}
                       className="bg-blue-600 text-lg text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300 ease-in-out"
                     >
-                      Confirm Delete
+                      Delete
                     </button>
                   </div>
                 </div>
               </div>
             )}
-
+ 
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
               <button
                 onClick={handleCreateTimesheet}
@@ -256,7 +256,7 @@ const EmployeeHomePage = ({ submissions, setSubmissions }) => {
                 Rejected: {counts.rejected}
               </button>
             </div>
-
+ 
             <div className="mb-10">
               <label className="block text-lg font-medium text-gray-700">Filter by Date Range</label>
               <div className="flex gap-4">
@@ -277,34 +277,34 @@ const EmployeeHomePage = ({ submissions, setSubmissions }) => {
                   className={`bg-blue-500 text-white py-2 px-4 rounded-md ${!startDate || !endDate ? 'opacity-50 cursor-not-allowed' : ''}`}
                   disabled={!startDate || !endDate}
                 >
-                  Apply Date Range
+                  Download
                 </button>
               </div>
             </div>
-
+ 
             {currentSubmissions.length > 0 ? (
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th className="px-6 py-3 text-left text-lg font-medium text-gray-500 uppercase tracking-wider">Start Date</th>
-                      <th className="px-6 py-3 text-left text-lg font-medium text-gray-500 uppercase tracking-wider">End Date</th>
-                      <th className="px-6 py-3 text-left text-lg font-medium text-gray-500 uppercase tracking-wider">Client</th>
-                      <th className="px-6 py-3 text-left text-lg font-medium text-gray-500 uppercase tracking-wider">Project</th>
-                      <th className="px-6 py-3 text-left text-lg font-medium text-gray-500 uppercase tracking-wider">Hours</th>
-                      <th className="px-6 py-3 text-left text-lg font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                      <th className="px-6 py-3 text-left text-lg font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                      <th className="px-6 py-3 text-left text-xl font-medium text-gray-500 uppercase tracking-wider">Start Date</th>
+                      <th className="px-6 py-3 text-left text-xl font-medium text-gray-500 uppercase tracking-wider">End Date</th>
+                      <th className="px-6 py-3 text-left text-xl font-medium text-gray-500 uppercase tracking-wider">Client</th>
+                      <th className="px-6 py-3 text-left text-xl font-medium text-gray-500 uppercase tracking-wider">Project</th>
+                      <th className="px-6 py-3 text-left text-xl font-medium text-gray-500 uppercase tracking-wider">Hours</th>
+                      <th className="px-6 py-3 text-left text-xl font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                      <th className="px-6 py-3 text-left text-xl font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
                     {currentSubmissions.map((submission) => (
                       <tr key={submission.id} className="hover:bg-gray-50">
-                        
-                        <td className="px-6 py-4 whitespace-nowrap text-lg font-medium text-gray-900">{submission.startDate}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-lg font-medium text-gray-900">{submission.endDate}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-lg font-medium text-gray-900">{submission.clientName}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-lg font-medium text-gray-900">{submission.projectName}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-lg font-medium text-gray-900">{submission.totalNumberOfHours}</td>
+                       
+                        <td className="px-6 py-4 whitespace-nowrap text-xl font-medium text-gray-900">{submission.startDate}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-xl font-medium text-gray-900">{submission.endDate}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-xl font-medium text-gray-900">{submission.clientName}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-xl font-medium text-gray-900">{submission.projectName}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-xl font-medium text-gray-900">{submission.totalNumberOfHours}</td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
                             className={`px-2 inline-flex text-lg leading-5 font-semibold rounded-full ${
@@ -353,7 +353,7 @@ const EmployeeHomePage = ({ submissions, setSubmissions }) => {
             ) : (
               <div className="text-center py-10">No submissions found</div>
             )}
-
+ 
             {isDownloadEnabled && (
               <button
                 onClick={downloadTimesheets}
@@ -363,7 +363,7 @@ const EmployeeHomePage = ({ submissions, setSubmissions }) => {
                 Download All Timesheets
               </button>
             )}
-
+ 
             {/* Pagination */}
             <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
               <div className="flex-1 flex justify-between sm:hidden">
@@ -445,5 +445,5 @@ const EmployeeHomePage = ({ submissions, setSubmissions }) => {
     </div>
   );
 };
-
+ 
 export default EmployeeHomePage;

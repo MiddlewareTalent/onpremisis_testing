@@ -7,7 +7,7 @@ import { MdOutlineFileDownload } from 'react-icons/md';
 import 'react-calendar/dist/Calendar.css';
 import {ChevronLeftIcon,ChevronRightIcon} from '@heroicons/react/20/solid';
 import "jspdf-autotable";
-
+ 
 const ManagerTimesheets = () => {
   const [submissions, setSubmissions] = useState([]);
   const [filteredSubmissions, setFilteredSubmissions] = useState([]);
@@ -18,28 +18,28 @@ const ManagerTimesheets = () => {
   const [loading, setLoading] = useState(false);
   const [date, setDate] = useState(new Date());
   const [showCalendar, setShowCalendar] = useState(false);
-  const [startDate, setStartDate] = useState(""); 
-  const [endDate, setEndDate] = useState(""); 
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [isDownloadEnabled, setIsDownloadEnabled] = useState(false);
   const [rejectEmployeeId,setRejectEmployeeId]=useState();
-
+ 
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);  // Set the number of items per page
-
+ 
   // const managerId = "";
   const employeeId = localStorage.getItem('employeeId');
   const token=localStorage.getItem("token");
-
+ 
   const fetchSubmissions = useCallback(async () => {
     if (!employeeId) return;
-
+ 
     try {
       let url = `https://middlewaretalentsbackend.azurewebsites.net/api/timesheets/list/manager/${employeeId}`;
-        
+       
       if (startDate && endDate) {
         url = `https://middlewaretalentsbackend.azurewebsites.net/api/timesheets/totalList/employeeId/${employeeId}/startDate/${startDate}/endDate/${endDate}`;
       }
-
+ 
       const response = await axios.get(url, {
         headers: {
           "Authorization": `Bearer ${token}`
@@ -59,7 +59,7 @@ const ManagerTimesheets = () => {
       console.log("Error:", error);
     }
   }, [startDate, endDate, employeeId, token]);
-
+ 
   useEffect(() => {
     if (employeeId) {
       fetchSubmissions();
@@ -67,7 +67,7 @@ const ManagerTimesheets = () => {
       return () => clearInterval(interval);
     }
   }, [fetchSubmissions, employeeId]);
-
+ 
   const handleFilter = (status) => {
     if (status === "ALL") {
       setFilteredSubmissions(submissions);
@@ -76,10 +76,10 @@ const ManagerTimesheets = () => {
     }
     setCurrentPage(1);  // Reset to the first page when filter changes
   };
-
+ 
   const handleShow = (id, rejectEmp) => { setCurrentId(id); setComments(""); setShowModal(true); setRejectEmployeeId(rejectEmp)};
   const handleClose = () => setShowModal(false);
-
+ 
   const handleApprove = async (id,aproveEmployeeId) => {
     setLoading(true);
     console.log(token); // Make sure the token is valid here
@@ -115,8 +115,8 @@ const ManagerTimesheets = () => {
       setLoading(false);
     }
   };
-  
-
+ 
+ 
   const handleReject = async () => {
     setLoading(true);
     console.log(rejectEmployeeId);
@@ -151,8 +151,8 @@ const ManagerTimesheets = () => {
       setLoading(false);
     }
   };
-  
-
+ 
+ 
   const downloadTimesheets = () => {
     const doc = new jsPDF();
     doc.setFont("helvetica", "normal");
@@ -196,21 +196,21 @@ const ManagerTimesheets = () => {
  
     doc.save("Timesheets.pdf");
   };
-
+ 
   const downloadTimesheet = (submission) => {
     const doc = new jsPDF();
     doc.setFont("helvetica", "normal");
     doc.setFontSize(14);
-
+ 
     doc.text(`Timesheet for ${submission.clientName}`, 20, 20);
-
+ 
     const tableData = [
       ["Project", submission.projectName],
       ["Date Range", `${submission.startDate} - ${submission.endDate}`],
       ["Total Hours", submission.totalNumberOfHours],
       ["Status", submission.status],
     ];
-
+ 
     doc.autoTable({
       startY: 30,
       head: [["Field", "Value"]],
@@ -222,10 +222,10 @@ const ManagerTimesheets = () => {
         1: { cellWidth: "auto", halign: "left" },
       },
     });
-
+ 
     doc.save(`Timesheet_${submission.clientName}_${submission.projectName}.pdf`);
   };
-
+ 
   const handleApplyDateRange = () => {
     if (startDate && endDate) { // Only apply the date range if both dates are provided
       setIsDownloadEnabled(true);
@@ -234,19 +234,19 @@ const ManagerTimesheets = () => {
       alert("Please select both start and end dates.");
     }
   };
-
+ 
   // Pagination logic
   const indexOfLastEmployee = currentPage * itemsPerPage;
   const indexOfFirstEmployee = indexOfLastEmployee - itemsPerPage;
   const currentEmployees = filteredSubmissions.slice(indexOfFirstEmployee, indexOfLastEmployee);
   const totalPages = Math.ceil(filteredSubmissions.length / itemsPerPage);
-
+ 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
+ 
   const capitalizeFirstLetter = (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   };
-
+ 
   return (
     <div className="bg-gray-100 min-h-screen p-4 sm:p-6 lg:p-8">
       {loading && <Loader />}
@@ -262,7 +262,7 @@ const ManagerTimesheets = () => {
                 {showCalendar ? "Hide Calendar" : "Show Calendar"}
               </button>
             </div>
-
+ 
             {showCalendar && (
               <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                 <div className="bg-white rounded-lg shadow-lg p-4 text-center">
@@ -276,7 +276,7 @@ const ManagerTimesheets = () => {
                 </div>
               </div>
             )}
-
+ 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 text-5xl">
               {["TOTAL REQUESTS", "APPROVED", "PENDING", "REJECTED"].map((status) => (
                 <div
@@ -299,7 +299,7 @@ const ManagerTimesheets = () => {
                 </div>
               ))}
             </div>
-
+ 
             <div className="mb-10">
               <label className="block text-lg font-medium text-gray-700">Filter by Date Range</label>
               <div className="flex gap-4">
@@ -320,11 +320,11 @@ const ManagerTimesheets = () => {
                   className={`bg-blue-500 text-white py-2 px-4 rounded-md ${!startDate || !endDate ? 'opacity-50 cursor-not-allowed' : ''}`}
                   disabled={!startDate || !endDate}
                 >
-                  Apply Date Range
+                  Download
                 </button>
               </div>
             </div>
-
+ 
             {currentEmployees.length ? (
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
@@ -343,12 +343,12 @@ const ManagerTimesheets = () => {
                   <tbody className="bg-white divide-y divide-gray-200">
                     {currentEmployees.map((submission) => (
                       <tr key={submission.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap text-lg text-gray-900">{submission.startDate}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-lg text-gray-900">{submission.endDate}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-lg text-gray-900">{submission.employeeName}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-lg text-gray-900">{submission.clientName}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-lg text-gray-900">{submission.projectName}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-lg text-gray-900">{submission.totalNumberOfHours}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-xl text-gray-900">{submission.startDate}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-xl text-gray-900">{submission.endDate}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-xl text-gray-900">{submission.employeeName}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-xl text-gray-900">{submission.clientName}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-xl text-gray-900">{submission.projectName}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-xl text-gray-900">{submission.totalNumberOfHours}</td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
                             className={`px-2 inline-flex text-lg leading-5 font-semibold rounded-full ${
@@ -394,7 +394,7 @@ const ManagerTimesheets = () => {
             ) : (
               <div className="text-center text-lg text-gray-600 mt-4">No submissions found.</div>
             )}
-
+ 
             {isDownloadEnabled && (
               <button
                 onClick={downloadTimesheets}
@@ -404,7 +404,7 @@ const ManagerTimesheets = () => {
                 Download All Timesheets
               </button>
             )}
-
+ 
             {/* Pagination */}
             <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
               <div className="flex-1 flex justify-between sm:hidden">
@@ -479,7 +479,7 @@ const ManagerTimesheets = () => {
           </div>
         </div>
       </div>
-
+ 
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
@@ -512,6 +512,5 @@ const ManagerTimesheets = () => {
     </div>
   );
 };
-
+ 
 export default ManagerTimesheets;
-

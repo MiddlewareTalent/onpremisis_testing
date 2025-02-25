@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from "axios";
 import Loader from '../../Assets/Loader';
+import { useNavigate } from 'react-router-dom';
 
 const NewContacts = () => {
     const [formData, setFormData] = useState({
@@ -27,6 +28,7 @@ const NewContacts = () => {
     const [isError, setIsError]=useState(false);
     const [showPopup, setShowPopup] = useState(false);
     const token=localStorage.getItem("token");
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -74,6 +76,7 @@ const NewContacts = () => {
                  bankAddress: ''
              });
     setShowPopup(false);
+    navigate("/ProfileCard")
   };
 
     return (
@@ -150,7 +153,7 @@ const NewContacts = () => {
                         className="mt-1 p-3 block w-full shadow-sm text-lg border border-gray-300 rounded-md" />
                 </div>
             </div>
-            <h2 className="text-3xl font-bold mb-6">Bank Information</h2>
+            {/* <h2 className="text-3xl font-bold mb-6">Bank Information</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
                     <label className="block text-lg font-medium text-gray-700">Bank Name:</label>
@@ -182,7 +185,7 @@ const NewContacts = () => {
                     <input type="text" name="bankAddress" value={formData.bankAddress} onChange={handleChange}
                         className="mt-1 p-3 block w-full shadow-sm text-lg border border-gray-300 rounded-md" />
                 </div>
-            </div>
+            </div> */}
             <div className="flex flex-row">
             <button type="submit" className="px-6 py-3 bg-blue-500 text-white text-lg font-semibold rounded-md hover:bg-blue-700">Submit</button>
             {isAdding?<p className='text-green-500'>Adding Contact.....</p>:null}

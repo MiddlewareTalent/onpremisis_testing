@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-import { FaTimes } from "react-icons/fa";
+import { IoCloseCircleOutline } from "react-icons/io5";
  
 const FormField = ({
   label,
@@ -244,10 +244,9 @@ const TimesheetManagement = ({ setSubmissions ,employeeId}) => {
       <div className="bg-white shadow-md rounded-lg p-6 border border-gray-300">
         <div className="flex justify-between text-3xl font-semibold mb-6 bg-gray-100 p-2 rounded-t-sm">
           {isEditing ? "Edit Timesheet" : "Submit Timesheet"}
-          <FaTimes
-            onClick={handleCloseForm} // Close form when clicked
-            className="cursor-pointer text-gray-500 hover:text-gray-700"
-          />
+          <button onClick={handleCloseForm} className="text-gray-400 hover:text-gray-500">
+                          <IoCloseCircleOutline className="h-8 w-8" />
+                        </button>
         </div>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-row min-w-40 gap-5 text-xl">
@@ -377,4 +376,3 @@ const TimesheetManagement = ({ setSubmissions ,employeeId}) => {
 };
  
 export default TimesheetManagement;
- 
