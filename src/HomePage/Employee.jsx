@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 import {
     PlusIcon,
     UsersIcon,
-    UserGroupIcon,
-    BriefcaseIcon,
     PencilIcon,
     TrashIcon,
     ChevronLeftIcon,
@@ -31,6 +29,7 @@ export default function Employee() {
     const [updateEmployeeId, setUpdateEmployeeId]=useState(null);
     const [resetPasswordEmployeeId, setResetPasswordEmployeeId]=useState();
     const [isReset,setIsReset]=useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
  
  
     useEffect(() => {
@@ -45,7 +44,16 @@ export default function Employee() {
             fetchEmployees();
         }
     }, [navigate]);
+
+    let filteredEmployees = [];
+if (employees.length > 0) {
+  filteredEmployees = employees.filter(employee =>
+    employee.firstName.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    employee.lastName.toLowerCase().includes(searchTerm.toLowerCase()) // Filter by first name or last name
+  );
+}
  
+
  
  
     const fetchEmployees = async () => {
@@ -141,14 +149,13 @@ export default function Employee() {
     const handleCloseModal = () => setIsModalOpen(false);
  
     const totalEmployees = employees.length;
-    const totalAdmins = employees.filter(emp => emp.role === 'Admin' || 'admin').length;
-    const totalDepartments = [...new Set(employees.map(emp => emp.department))].length;
+    
  
     // Pagination logic
     const indexOfLastEmployee = currentPage * employeesPerPage;
     const indexOfFirstEmployee = indexOfLastEmployee - employeesPerPage;
-    const currentEmployees = employees.slice(indexOfFirstEmployee, indexOfLastEmployee);
-    const totalPages = Math.ceil(employees.length / employeesPerPage);
+    const currentEmployees = filteredEmployees.slice(indexOfFirstEmployee, indexOfLastEmployee);
+    const totalPages = Math.ceil(filteredEmployees.length / employeesPerPage);
  
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
  
@@ -177,36 +184,24 @@ export default function Employee() {
                             </div>
                         </div>
                     </div>
+
                     <div className="bg-white overflow-hidden shadow rounded-lg">
                         <div className="p-5">
                             <div className="flex items-center">
-                                <div className="flex-shrink-0">
-                                    <UserGroupIcon className="h-9 w-9 text-blue-400" aria-hidden="true" />
-                                </div>
-                                <div className="ml-5 w-0 flex-1">
-                                    <dl>
-                                        <dt className="text-lg font-bold text-gray-500 truncate">Total Admins</dt>
-                                        <dd className="text-xl font-medium text-gray-900">{totalAdmins}</dd>
-                                    </dl>
-                                </div>
+                            <input
+              type="text"
+              placeholder="Search by name"
+              className="mt-4 px-4 py-2 border rounded-lg w-full"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}  // Update search term
+            />
                             </div>
                         </div>
                     </div>
-                    <div className="bg-white overflow-hidden shadow rounded-lg">
-                        <div className="p-5">
-                            <div className="flex items-center">
-                                <div className="flex-shrink-0">
-                                    <BriefcaseIcon className="h-9 w-9 text-blue-400" aria-hidden="true" />
-                                </div>
-                                <div className="ml-5 w-0 flex-1">
-                                    <dl>
-                                        <dt className="text-lg font-bold text-gray-500 truncate">Total Departments</dt>
-                                        <dd className="text-xl font-medium text-gray-900">{totalDepartments}</dd>
-                                    </dl>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
+                    
+                    
+                    
                 </div>
  
                 {/* Employee List Section */}

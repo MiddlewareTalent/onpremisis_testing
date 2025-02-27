@@ -70,7 +70,6 @@ export default function Navbar() {
 
   const employeeNavItems = [
     { name: "Dashboard", href: "/dashboard" },
-    { name: "My Team", href: "/MyTeam" },
     { name: "Tasks", href: "/tasks" },
     { name: "Organization Chart", href: "/OrgChart" },
     { name: "Timesheet", href: "/TimesheetManage" },
