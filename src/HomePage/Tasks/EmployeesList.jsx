@@ -23,7 +23,8 @@ const EmployeesList = props => {
       setLoading(true);
 
       try {
-        const response = await fetch('https://middlewaretalentsbackend.azurewebsites.net/api/v1/employeeManager/employees', {
+        const employeeId=localStorage.getItem("employeeId");
+        const response = await fetch(`https://mtlbackendapp.azurewebsites.net/api/v1/employeeManager/reporting-to/${employeeId}/all`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,

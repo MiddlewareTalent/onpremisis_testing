@@ -20,6 +20,7 @@ export default function ChartNode({ employee, changeEmployee, isHighlighted }) {
       <div>
         <p className="text-2xl font-semibold">{employee.firstName} {employee.lastName}</p>
         <p className="text-xl opacity-75">{employee.jobRole}</p>
+        <p className="text-xl opacity-75">{employee.workingCountry}</p>
       </div>
     </div>
   );

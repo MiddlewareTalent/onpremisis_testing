@@ -3,8 +3,9 @@ import BasicDetailsForm from './BasicDetailsForm';
 import ProfessionalDetailsForm from './ProfessionalDetailsForm';
 import DocumentUploadForm from './DocumentUploadForm';
 import SuccessPage from './SuccessPage';
+import Loader from '../Assets/Loader';
 
-const MultiStepForm = ({ onCancel }) => {
+const MultiStepForm = ({ onCancel,handleLoadings }) => {
     const initialFormData = {
         firstName: '',
         lastName: '',
@@ -14,10 +15,11 @@ const MultiStepForm = ({ onCancel }) => {
         city: '',
         region: '',
         postalCode: '',
-        companyName: '',
+        workingCountry: '',
         employeeId: '',
         corporateEmail: '',
         jobRole: '',
+        nationalInsuranceNumber:'',
         employmentStatus: '',
         reportingTo: '',
         role: '',
@@ -26,8 +28,11 @@ const MultiStepForm = ({ onCancel }) => {
 
     const [step, setStep] = useState(1);
     const [formData, setFormData] = useState(initialFormData);
+    const [loading,setLoading]=useState(false);
 
-
+    const handleLoading=()=>{
+        handleLoadings();
+    }
 
     const handleNext = () => {
         setStep(step + 1);
@@ -53,6 +58,7 @@ const MultiStepForm = ({ onCancel }) => {
     };
 
     return (
+       <>{loading ? <Loader/>:
         <>
             {step === 1 && (
                 <BasicDetailsForm
@@ -76,6 +82,7 @@ const MultiStepForm = ({ onCancel }) => {
                     formData={formData}
                     onNext={handleNext}
                     onBack={handleBack}
+                    handleLoading={handleLoading}
                     onFormDataChange={handleFormDataChange}
                     onCancel={handleCancel}
                                     />
@@ -87,7 +94,7 @@ const MultiStepForm = ({ onCancel }) => {
                     onCancel={handleCancel}
                 />
             )}
-        </>
+        </>}</>
     );
 };
 

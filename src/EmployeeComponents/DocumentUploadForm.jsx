@@ -4,16 +4,17 @@
 import { useState } from "react";
 import axios from 'axios';
 
-const DocumentUploadForm = ({ formData, onNext, onBack, onCancel, onFormDataChange }) => {
+
+const DocumentUploadForm = ({ formData, onNext, onBack, onCancel, onFormDataChange,handleLoading }) => {
     const [documents, setDocuments] = useState({
-        nationalCard: null,
-        tenthCertificate: null,
-        twelfthCertificate: null,
-        graduationCertificate: null,
+        identityCard: null,
+        visa: null,
+        otherDocuments: null,
     });
 
     const [error, setError] = useState({});
     const [submissionMessage, setSubmissionMessage] = useState('');
+    
 
     const handleFileChange = (event, documentType) => {
         const file = event.target.files[0];
@@ -37,12 +38,13 @@ const DocumentUploadForm = ({ formData, onNext, onBack, onCancel, onFormDataChan
 
     const handleSubmit = async () => {
         let formHasError = false;
+        handleLoading();
 
         // Check if required fields are filled
-        if (!documents.nationalCard) {
+        if (!documents.identityCard) {
             setError((prevError) => ({
                 ...prevError,
-                nationalCard: 'National card is required.',
+                identityCard: 'Identity card is required.',
             }));
             formHasError = true;
         }
@@ -62,7 +64,8 @@ const DocumentUploadForm = ({ formData, onNext, onBack, onCancel, onFormDataChan
 
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.post('https://middlewaretalentsbackend.azurewebsites.net/api/v1/employeeManager/add', formDataToSend, {
+            console.log("str"+documents.identityCard);
+            const response = await axios.post('https://mtlbackendapp.azurewebsites.net/api/v1/employeeManager/add', formDataToSend, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
 
@@ -83,11 +86,12 @@ const DocumentUploadForm = ({ formData, onNext, onBack, onCancel, onFormDataChan
                 submission: 'Failed to submit the form. Please try again.'
             }));
         }
+        handleLoading();
     };
 
     return (
         <>
-            <form>
+             <form>
                 <div className="space-y-12">
                     <div className="border-b border-gray-900/10 pb-12">
                         <h2 className="text-base font-semibold leading-7 text-gray-900">Upload Documents</h2>
@@ -100,35 +104,113 @@ const DocumentUploadForm = ({ formData, onNext, onBack, onCancel, onFormDataChan
                             {/* National Card */}
                             <div className="col-span-full">
                                 <label htmlFor="national-card" className="block text-sm font-medium leading-6 text-gray-900">
-                                    National Card <span className="text-red-600">*</span>
+                                    Identity Card <span className="text-red-600">*</span>
                                 </label>
                                 <div className="mt-2 flex items-center">
-                                    {!documents.nationalCard ? (
+                                    {!documents.identityCard ? (
                                         <>
                                             <input
-                                                id="national-card"
-                                                name="national-card"
+                                                id="identityCard"
+                                                name="identityCard"
                                                 type="file"
                                                 className="sr-only"
-                                                onChange={(e) => handleFileChange(e, 'nationalCard')}
+                                                onChange={(e) => handleFileChange(e, 'identityCard')}
                                             />
                                             <label
-                                                htmlFor="national-card"
+                                                htmlFor="identityCard"
                                                 className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
                                             >
                                                 <span>Upload</span>
                                             </label>
-                                            {error.nationalCard && (
-                                                <p className="text-sm text-red-600 pl-4">{error.nationalCard}</p>
+                                            {error.identityCard && (
+                                                <p className="text-sm text-red-600 pl-4">{error.identityCard}</p>
                                             )}
                                         </>
                                     ) : (
                                         <div className="flex items-center">
-                                            <p className="pl-4 text-sm text-gray-600">{documents.nationalCard.name}</p>
+                                            <p className="pl-4 text-sm text-gray-600">{documents.identityCard.name}</p>
                                             <button
                                                 type="button"
                                                 className="ml-4 text-red-600 hover:text-red-800"
-                                                onClick={() => handleFileRemove('nationalCard')}
+                                                onClick={() => handleFileRemove('identityCard')}
+                                            >
+                                                Remove
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="col-span-full">
+                                <label htmlFor="national-card" className="block text-sm font-medium leading-6 text-gray-900">
+                                Visa 
+                                </label>
+                                <div className="mt-2 flex items-center">
+                                    {!documents.visa? (
+                                        <>
+                                            <input
+                                                id="visa"
+                                                name="visa"
+                                                type="file"
+                                                className="sr-only"
+                                                onChange={(e) => handleFileChange(e, 'visa')}
+                                            />
+                                            <label
+                                                htmlFor="visa"
+                                                className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                                            >
+                                                <span>Upload</span>
+                                            </label>
+                                            {error.identityCard && (
+                                                <p className="text-sm text-red-600 pl-4">{error.visa}</p>
+                                            )}
+                                        </>
+                                    ) : (
+                                        <div className="flex items-center">
+                                            <p className="pl-4 text-sm text-gray-600">{documents.visa.name}</p>
+                                            <button
+                                                type="button"
+                                                className="ml-4 text-red-600 hover:text-red-800"
+                                                onClick={() => handleFileRemove('identityCard')}
+                                            >
+                                                Remove
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="col-span-full">
+                                <label htmlFor="national-card" className="block text-sm font-medium leading-6 text-gray-900">
+                                Other Documents 
+                                </label>
+                                <div className="mt-2 flex items-center">
+                                    {!documents.otherDocuments ? (
+                                        <>
+                                            <input
+                                                id="otherDocuments"
+                                                name="otherDocuments"
+                                                type="file"
+                                                className="sr-only"
+                                                onChange={(e) => handleFileChange(e, 'otherDocuments')}
+                                            />
+                                            <label
+                                                htmlFor="otherDocuments"
+                                                className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                                            >
+                                                <span>Upload</span>
+                                            </label>
+                                            {error.otherDocuments && (
+                                                <p className="text-sm text-red-600 pl-4">{error.otherDocuments}</p>
+                                            )}
+                                        </>
+                                    ) : (
+                                        <div className="flex items-center">
+                                            <p className="pl-4 text-sm text-gray-600">{documents.otherDocuments.name}</p>
+                                            <button
+                                                type="button"
+                                                className="ml-4 text-red-600 hover:text-red-800"
+                                                onClick={() => handleFileRemove('otherDocuments')}
                                             >
                                                 Remove
                                             </button>
@@ -140,8 +222,18 @@ const DocumentUploadForm = ({ formData, onNext, onBack, onCancel, onFormDataChan
                             {/* Add similar code structures for other documents, e.g., tenthCertificate, twelfthCertificate, graduationCertificate */}
 
                         </div>
+                        
+
+                            {/* National Card */}
+                            
+
+                            
+
+                            {/* Add similar code structures for other documents, e.g., tenthCertificate, twelfthCertificate, graduationCertificate */}
+
+                        </div>
                     </div>
-                </div>
+                
 
                 {error.submission && <p className="text-red-500 text-sm mt-2">{error.submission}</p>}
                 {submissionMessage && <p className="text-green-500 text-sm mt-2">{submissionMessage}</p>}

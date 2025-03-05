@@ -20,7 +20,7 @@ const TimesheetSubmission = ({ setSubmissions }) => {
         SubmissionDate: new Date().toISOString(),
       };
  
-      const response = await axios.post("https://middlewaretalentsbackend.azurewebsites.net/api/timesheets", newFormData, {
+      const response = await axios.post("https://mtlbackendapp.azurewebsites.net/api/timesheets", newFormData, {
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -38,7 +38,7 @@ const TimesheetSubmission = ({ setSubmissions }) => {
     }
  
     try{
-      await axios.post("https://middlewaretalentsbackend.azurewebsites.net/apis/employees/notifications",{
+      await axios.post("https://mtlbackendapp.azurewebsites.net/apis/employees/notifications",{
         "notificationType":"TimesheetManage",
         "notification":formData.employeeName+" has submitted new timesheet, tap to see details",
         // "notification":"Tap to view the details of "+formData.employeeName+"'s recently submitted timesheet.",

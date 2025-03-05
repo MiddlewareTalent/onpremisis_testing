@@ -47,7 +47,7 @@ export default function ProfileCard() {
                 
                 console.log(token);
                 console.log("upto");
-                const response = await axios.get(`https://middlewaretalentsbackend.azurewebsites.net/api/v1/employeeManager//getEmployee//${employeeId}`,{
+                const response = await axios.get(`https://mtlbackendapp.azurewebsites.net/api/v1/employeeManager//getEmployee//${employeeId}`,{
                     method:'GET',
                     headers:{
                         'Authorization':`Bearer ${token}`,
@@ -62,7 +62,7 @@ export default function ProfileCard() {
                 console.error("Error fetching employee data:", error);
             }
             try {
-                const response = await axios.get(`https://middlewaretalentsbackend.azurewebsites.net/apis/employees/contacts/contactsBy/${employeeId}`,{
+                const response = await axios.get(`https://mtlbackendapp.azurewebsites.net/apis/employees/contacts/contactsBy/${employeeId}`,{
                   headers: {
                     "Authorization": `Bearer ${token}`  // Add the token to the Authorization header
                   }

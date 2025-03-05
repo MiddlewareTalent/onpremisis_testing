@@ -23,7 +23,7 @@ const ChangePasswordModal = ({ isOpen, onClose, id }) => {
     try {
         // Perform the API request to change the password
         const response = await axios.post(
-            `https://middlewaretalentsbackend.azurewebsites.net/api/v1/employeeManager/reset-password/${employeeId}/${newPassword}`,
+            `https://mtlbackendapp.azurewebsites.net/api/v1/employeeManager/reset-password/${employeeId}/${newPassword}`,
             
             {
                 headers: {

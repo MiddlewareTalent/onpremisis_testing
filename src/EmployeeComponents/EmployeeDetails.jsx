@@ -12,10 +12,15 @@ import {
     ClockIcon,
     BuildingOfficeIcon,
     IdentificationIcon,
+    GlobeAmericasIcon,
+    CreditCardIcon
 } from "@heroicons/react/20/solid";
+
 import axios from "axios";
 import Loader from "../Assets/Loader";
 import EmpContacts from "./EmpContacts";
+
+
  
 const Badge = ({ children, variant, className }) => (
     <span className={`inline-flex items-center rounded-full px-3 py-2 text-xs font-medium ${variant === 'outline' ? 'border' : 'bg-gray-100'} ${className}`}>
@@ -48,7 +53,7 @@ export default function EmployeeDetails() {
                 
                 console.log(token);
                 console.log("upto");
-                const response = await axios.get(`https://middlewaretalentsbackend.azurewebsites.net/api/v1/employeeManager/employees/${id}`,{
+                const response = await axios.get(`https://mtlbackendapp.azurewebsites.net/api/v1/employeeManager/employees/${id}`,{
                     method:'GET',
                     headers:{
                         'Authorization':`Bearer ${token}`,
@@ -63,7 +68,7 @@ export default function EmployeeDetails() {
                 console.error("Error fetching employee data:", error);
             }
             try {
-                const response = await axios.get(`https://middlewaretalentsbackend.azurewebsites.net/apis/employees/contacts/contactsBy/${employeeId}`,{
+                const response = await axios.get(`https://mtlbackendapp.azurewebsites.net/apis/employees/contacts/contactsBy/${employeeId}`,{
                   headers: {
                     "Authorization": `Bearer ${token}`  // Add the token to the Authorization header
                   }
@@ -85,10 +90,9 @@ export default function EmployeeDetails() {
  
     // Attachments mapping
     const attachments = [
-        { label: "National Card", file: employee.nationalCard },
-        { label: "10th Certificate", file: employee.tenthCertificate },
-        { label: "12th Certificate", file: employee.twelfthCertificate },
-        { label: "Graduation Certificate", file: employee.graduationCertificate },
+        { label: "Identity Card", file: employee.identityCard },
+        { label: "Visa", file: employee.visa },
+        { label: "Other Documents", file: employee.otherDocuments },
     ];
  
     return (
@@ -125,6 +129,8 @@ export default function EmployeeDetails() {
                                         </Badge>
                                     }
                                 />
+                                <InfoItem icon={<GlobeAmericasIcon />} label="Working Country" value={employee.workingCountry || "N/A"} />
+                                <InfoItem icon={<CreditCardIcon />} label="National Id Number" value={employee.nationalInsuranceNumber || "N/A"} />
                             </div>
                             <Separator />
                             <div>

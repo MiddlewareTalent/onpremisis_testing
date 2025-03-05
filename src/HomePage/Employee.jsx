@@ -13,8 +13,8 @@ import MultiStepForm from '../EmployeeComponents/MultiStepForm';
 import Loader from "../Assets/Loader";
 import UpdateEmployeeModal from './EmployeeUpdate/UpdateEmployeeModal';
 import ChangePass from '../HomePage/ChangePass'
- 
- 
+
+
 export default function Employee() {
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,42 +26,78 @@ export default function Employee() {
     const [employeeToDelete, setEmployeeToDelete] = useState(null);
     const [selfDelete, setSelfDelete] = useState(false);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-    const [updateEmployeeId, setUpdateEmployeeId]=useState(null);
-    const [resetPasswordEmployeeId, setResetPasswordEmployeeId]=useState();
-    const [isReset,setIsReset]=useState(false);
+    const [updateEmployeeId, setUpdateEmployeeId] = useState(null);
+    const [resetPasswordEmployeeId, setResetPasswordEmployeeId] = useState();
+    const [isReset, setIsReset] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
- 
- 
+    const [filterCountry, setFilterCountry]=useState("");
+
+
     useEffect(() => {
         const email = localStorage.getItem('email');
         const role = localStorage.getItem('role');
- 
+
+        const fetchEmployees = async () => {
+            const token = localStorage.getItem('token');
+            setIsUpdateModalOpen(false)
+            setLoading(true);
+            let url='https://mtlbackendapp.azurewebsites.net/api/v1/employeeManager/employees';
+            if (filterCountry!==""){
+                url=`https://mtlbackendapp.azurewebsites.net/api/v1/employeeManager/getEmployeesByWorkingCountry/${filterCountry}`;
+            }
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                console.log(response.data);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch employees');
+                }
+                const data = await response.json();
+                console.log(data);
+                setEmployees(data);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoading(false);
+                setIsUpdateModalOpen(false)
+            }
+        };
+
         if (!email || !role) {
             window.location.reload(); // Reload the entire application
- 
+
             navigate('/login');
         } else {
             fetchEmployees();
         }
-    }, [navigate]);
+    }, [navigate, filterCountry]);
 
     let filteredEmployees = [];
-if (employees.length > 0) {
-  filteredEmployees = employees.filter(employee =>
-    employee.firstName.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    employee.lastName.toLowerCase().includes(searchTerm.toLowerCase()) // Filter by first name or last name
-  );
-}
- 
+    if (employees.length > 0) {
+        filteredEmployees = employees.filter(employee =>
+            employee.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            employee.lastName.toLowerCase().includes(searchTerm.toLowerCase()) // Filter by first name or last name
+        );
+    }
 
- 
- 
+
+
+
     const fetchEmployees = async () => {
         const token = localStorage.getItem('token');
         setIsUpdateModalOpen(false)
         setLoading(true);
+        let url='https://mtlbackendapp.azurewebsites.net/api/v1/employeeManager/employees';
+        if (filterCountry!==""){
+            url=`https://mtlbackendapp.azurewebsites.net/api/v1/employeeManager/getEmployeesByWorkingCountry/${filterCountry}`;
+        }
         try {
-            const response = await fetch('https://middlewaretalentsbackend.azurewebsites.net/api/v1/employeeManager/employees', {
+            const response = await fetch(url, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -82,21 +118,21 @@ if (employees.length > 0) {
             setIsUpdateModalOpen(false)
         }
     };
- 
-    const updateEmployeeDetails=(id)=>{
+
+    const updateEmployeeDetails = (id) => {
         setUpdateEmployeeId(id);
         setIsUpdateModalOpen(true)
     }
- 
-    const resetPassFun=(id)=>{
+
+    const resetPassFun = (id) => {
         setResetPasswordEmployeeId(id);
         console.log(resetPasswordEmployeeId);
         setIsReset(true);
     }
-    const closeResetPass=()=>{
+    const closeResetPass = () => {
         setIsReset(false);
     }
- 
+
     const handleDeleteEmployee = async (employeeId) => {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -104,19 +140,19 @@ if (employees.length > 0) {
             navigate('/login');
             return;
         }
- 
+
         try {
-            const response = await fetch(`https://middlewaretalentsbackend.azurewebsites.net/api/v1/employeeManager/employees/${employeeId}`, {
+            const response = await fetch(`https://mtlbackendapp.azurewebsites.net/api/v1/employeeManager/employees/${employeeId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             });
- 
+
             if (response.ok) {
                 fetchEmployees();
                 setIsDeleteModalOpen(false);  // Close delete confirmation modal
- 
+
             } else {
                 const errorData = await response.json();
                 console.error("Failed to delete employee:", errorData);
@@ -125,12 +161,12 @@ if (employees.length > 0) {
             console.error("Error while deleting employee:", error.message);
         }
     };
- 
+
     const handleEmployeeAdded = () => {
         fetchEmployees();
         setIsModalOpen(false);
     };
- 
+
     const handleDeleteModalOpen = (employee) => {
         if (employee.employeeId === localStorage.getItem("employeeId")) {
             setSelfDelete(true);
@@ -140,34 +176,40 @@ if (employees.length > 0) {
             setIsDeleteModalOpen(true);
         }  // Open delete confirmation modal
     };
- 
+
     const handleDeleteModalClose = () => {
         setIsDeleteModalOpen(false);
     };
- 
+
+    const handleLoadings = () => {
+        setLoading((prevData) => !prevData);
+    }
+
     const handleOpenModal = () => setIsModalOpen(true);
     const handleCloseModal = () => setIsModalOpen(false);
- 
+
     const totalEmployees = employees.length;
-    
- 
+
+    console.log(filterCountry);
+
+
     // Pagination logic
     const indexOfLastEmployee = currentPage * employeesPerPage;
     const indexOfFirstEmployee = indexOfLastEmployee - employeesPerPage;
     const currentEmployees = filteredEmployees.slice(indexOfFirstEmployee, indexOfLastEmployee);
     const totalPages = Math.ceil(filteredEmployees.length / employeesPerPage);
- 
+
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
- 
+
     return (
         <div className="min-h-screen bg-gray-100 w-full">
             <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
                 <h1 className="text-3xl font-bold text-gray-900 mb-8">Employee Dashboard</h1>
- 
-                <ChangePass isOpen={isReset} id={resetPasswordEmployeeId} onClose={closeResetPass}/>
- 
+
+                <ChangePass isOpen={isReset} id={resetPasswordEmployeeId} onClose={closeResetPass} />
+
                 {/* Metrics Section */}
-               
+
                 <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-8">
                     <div className="bg-white overflow-hidden shadow rounded-lg">
                         <div className="p-5">
@@ -188,31 +230,51 @@ if (employees.length > 0) {
                     <div className="bg-white overflow-hidden shadow rounded-lg">
                         <div className="p-5">
                             <div className="flex items-center">
-                            <input
-              type="text"
-              placeholder="Search by name"
-              className="mt-4 px-4 py-2 border rounded-lg w-full"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}  // Update search term
-            />
+                                <input
+                                    type="text"
+                                    placeholder="Search by name"
+                                    className="mt-4 px-4 py-2 border rounded-lg w-full"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}  // Update search term
+                                />
                             </div>
                         </div>
                     </div>
 
-                    
-                    
-                    
+                    <div className="bg-white overflow-hidden shadow rounded-lg">
+                        <div className="p-5">
+                            <div className="flex items-center">
+                            <select
+                                    id="country"
+                                    name="country"
+                                    autoComplete="country-name"
+                                    className="mt-4 px-4 py-2 border rounded-lg w-full"
+                                    value={filterCountry}
+                                    onChange={(e)=>setFilterCountry(e.target.value)}
+                                >
+                                    <option value="">Filter By Country</option>
+                                    <option value="">All Employees</option>
+                                    <option>United States</option>
+                                    <option>Canada</option>
+                                    <option>Mexico</option>
+                                    <option>India</option>
+                                    <option>UK</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
- 
+
                 {/* Employee List Section */}
                 <div className="bg-white shadow overflow-hidden sm:rounded-lg">
                     <div className="px-4 py-5 sm:px-6 flex justify-between items-center">
                         <h2 className="text-xl leading-6 font-bold text-gray-900">Employee List</h2>
                         {/*here*/}
- 
- 
+
+
                         {/*here*/}
-                       
+
                         <button
                             onClick={handleOpenModal}
                             className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
@@ -257,7 +319,7 @@ if (employees.length > 0) {
                                             <tr key={`${employee.corporateEmail}-${employee.firstName}`}>
                                                 <td className="px-6 py-4 whitespace-nowrap">
                                                     <div className="flex items-center">
- 
+
                                                         <div className="ml-4">
                                                             <button
                                                                 className="text-xl font-bold text-gray-900 hover:text-blue-600 transition-colors duration-200"
@@ -276,7 +338,7 @@ if (employees.length > 0) {
                                                 <td className="px-6 py-4 whitespace-nowrap text-lg text-gray-500">{employee.jobRole}</td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                     <button
-                                                        onClick={()=>resetPassFun(employee.employeeId)}
+                                                        onClick={() => resetPassFun(employee.employeeId)}
                                                         className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100"
                                                         aria-label="Edit employee"
                                                     >
@@ -285,7 +347,7 @@ if (employees.length > 0) {
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                     <button
-                                                        onClick={()=>updateEmployeeDetails(employee.employeeId)}
+                                                        onClick={() => updateEmployeeDetails(employee.employeeId)}
                                                         className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100"
                                                         aria-label="Edit employee"
                                                     >
@@ -305,7 +367,7 @@ if (employees.length > 0) {
                                     </tbody>
                                 </table>
                             </div>
- 
+
                             {/* Pagination */}
                             <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
                                 <div className="flex-1 flex justify-between sm:hidden">
@@ -368,17 +430,17 @@ if (employees.length > 0) {
                     )}
                 </div>
             </div>
- 
+
             {/* Add Employee Modal */}
             <ModalWrapper open={isModalOpen} onClose={handleCloseModal}>
-                <MultiStepForm onSubmit={handleEmployeeAdded} onCancel={handleCloseModal} />
+                <MultiStepForm onSubmit={handleEmployeeAdded} handleLoadings={handleLoadings} onCancel={handleCloseModal} />
             </ModalWrapper>
- 
- 
+
+
             {/* <ModalWrapper open={selfDelete} onClose={handleCloseModal}>
                 <AccountDeletionModal/>
             </ModalWrapper> */}
- 
+
             {isDeleteModalOpen && (
                 <ModalWrapper open={isDeleteModalOpen} onClose={handleDeleteModalClose}>
                     <div className="p-4 text-center">
@@ -400,8 +462,8 @@ if (employees.length > 0) {
                     </div>
                 </ModalWrapper>
             )}
- 
- 
+
+
             {selfDelete && (
                 <ModalWrapper open={selfDelete} onClose={handleDeleteModalClose}>
                     <div className="p-4 text-center flex flex-col items-center justify-center">
@@ -427,9 +489,9 @@ if (employees.length > 0) {
                         </button>
                     </div>
                 </ModalWrapper>
- 
+
             )}
- 
+
             {updateEmployeeId && (
                 <UpdateEmployeeModal
                     isOpen={isUpdateModalOpen}
@@ -440,4 +502,3 @@ if (employees.length > 0) {
         </div>
     );
 }
- 

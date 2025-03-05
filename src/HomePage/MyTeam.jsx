@@ -40,7 +40,7 @@ export default function MyTeam() {
         setLoading(true);
         const employeeId=localStorage.getItem("employeeId");
         try {
-            const response = await fetch(`https://middlewaretalentsbackend.azurewebsites.net/api/v1/employeeManager/reporting-to/${employeeId}`, {
+            const response = await fetch(`https://mtlbackendapp.azurewebsites.net/api/v1/employeeManager/reporting-to/${employeeId}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
