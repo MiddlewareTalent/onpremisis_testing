@@ -28,7 +28,7 @@ const MultiStepForm = ({ onCancel,handleLoadings }) => {
 
     const [step, setStep] = useState(1);
     const [formData, setFormData] = useState(initialFormData);
-    const [loading,setLoading]=useState(false);
+    const loading=false;
 
     const handleLoading=()=>{
         handleLoadings();
