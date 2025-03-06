@@ -28,7 +28,7 @@ const MultiStepForm = ({ onCancel,handleLoadings }) => {
 
     const [step, setStep] = useState(1);
     const [formData, setFormData] = useState(initialFormData);
-    const [loading,setLoading]=useState(false);
+    const loading =false;
 
     const handleLoading=()=>{
         handleLoadings();
@@ -43,10 +43,27 @@ const MultiStepForm = ({ onCancel,handleLoadings }) => {
     };
 
     const handleFormDataChange = (newData) => {
-        setFormData((prevData) => ({
-            ...prevData,
-            ...newData
-        }));
+        console.log(newData)
+        const keys=Object.keys(newData);
+        if(keys[0]==="corporateEmail"){
+            console.log(newData.corporateEmail)
+            const data={
+                "email":newData.corporateEmail,
+                "corporateEmail":newData.corporateEmail
+            }
+            setFormData((prevData) => ({
+                ...prevData,
+                ...data
+            }));  
+        }
+        else{
+            setFormData((prevData) => ({
+                ...prevData,
+                ...newData
+            }));
+        }
+
+        console.log(formData);
     };
 
     const handleCancel = () => {

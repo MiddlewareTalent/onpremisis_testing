@@ -4,7 +4,6 @@ const BasicDetailsForm = ({ onNext, onCancel, formData: initialData = {}, onForm
     const [formData, setFormData] = useState({
         firstName: initialData.firstName || '',
         lastName: initialData.lastName || '',
-        email: initialData.email || '',
         country: initialData.country || '',
         streetAddress: initialData.streetAddress || '',
         city: initialData.city || '',
@@ -30,7 +29,6 @@ const BasicDetailsForm = ({ onNext, onCancel, formData: initialData = {}, onForm
     const validate = () => {
         const newErrors = {};
         const namePattern = /^[a-zA-Z\s]*$/;
-        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         const postalCodePattern = /^\d+$/;
 
         if (!formData.firstName || !namePattern.test(formData.firstName)) {
@@ -38,9 +36,6 @@ const BasicDetailsForm = ({ onNext, onCancel, formData: initialData = {}, onForm
         }
         if (!formData.lastName || !namePattern.test(formData.lastName)) {
             newErrors.lastName = "*Last name must contain only letters.";
-        }
-        if (!formData.email || !emailPattern.test(formData.email)) {
-            newErrors.email = "*Invalid email format.";
         }
         if (!formData.country) {
             newErrors.country = "*Country is required.";
@@ -114,25 +109,6 @@ const BasicDetailsForm = ({ onNext, onCancel, formData: initialData = {}, onForm
                                 {errors.lastName && <p className="text-lg text-red-500">{errors.lastName}</p>}
                             </div>
                         </div>
-
-                        <div className="sm:col-span-4">
-                            <label htmlFor="email" className="block text-lg font-medium leading-6 text-gray-900">
-                                Email address
-                            </label>
-                            <div className="mt-2">
-                                <input
-                                    id="email"
-                                    name="email"
-                                    type="email"
-                                    autoComplete="email"
-                                    className={`block w-full rounded-md border-0 py-2 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-base sm:leading-6 ${errors.email ? 'border-red-500' : ''}`}
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                />
-                                {errors.email && <p className="text-lg text-red-500">{errors.email}</p>}
-                            </div>
-                        </div>
-
                         <div className="sm:col-span-3">
                             <label htmlFor="country" className="block text-lg font-medium leading-6 text-gray-900">
                                 Country
