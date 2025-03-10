@@ -41,9 +41,9 @@ export default function Employee() {
             const token = localStorage.getItem('token');
             setIsUpdateModalOpen(false)
             setLoading(true);
-            let url='https://mtlbackendapp.azurewebsites.net/api/v1/employeeManager/employees';
+            let url='https://ssitcloudbackend.azurewebsites.net/api/v1/employeeManager/employees';
             if (filterCountry!==""){
-                url=`https://mtlbackendapp.azurewebsites.net/api/v1/employeeManager/getEmployeesByWorkingCountry/${filterCountry}`;
+                url=`https://ssitcloudbackend.azurewebsites.net/api/v1/employeeManager/getEmployeesByWorkingCountry/${filterCountry}`;
             }
             try {
                 const response = await fetch(url, {
@@ -92,9 +92,9 @@ export default function Employee() {
         const token = localStorage.getItem('token');
         setIsUpdateModalOpen(false)
         setLoading(true);
-        let url='https://mtlbackendapp.azurewebsites.net/api/v1/employeeManager/employees';
+        let url='https://ssitcloudbackend.azurewebsites.net/api/v1/employeeManager/employees';
         if (filterCountry!==""){
-            url=`https://mtlbackendapp.azurewebsites.net/api/v1/employeeManager/getEmployeesByWorkingCountry/${filterCountry}`;
+            url=`https://ssitcloudbackend.azurewebsites.net/api/v1/employeeManager/getEmployeesByWorkingCountry/${filterCountry}`;
         }
         try {
             const response = await fetch(url, {
@@ -142,7 +142,7 @@ export default function Employee() {
         }
 
         try {
-            const response = await fetch(`https://mtlbackendapp.azurewebsites.net/api/v1/employeeManager/employees/${employeeId}`, {
+            const response = await fetch(`https://ssitcloudbackend.azurewebsites.net/api/v1/employeeManager/employees/${employeeId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`

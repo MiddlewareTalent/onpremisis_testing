@@ -21,7 +21,7 @@ const MyTasks = props => {
     const fetchData = async () => {
 
       try {
-        const response = await axios.get(`https://mtlbackendapp.azurewebsites.net/apis/employees/tasksAssignedTo/${employeeId}`,{
+        const response = await axios.get(`https://ssitcloudbackend.azurewebsites.net/apis/employees/tasksAssignedTo/${employeeId}`,{
           headers: {
             "Authorization": `Bearer ${token}`  // Add the token to the Authorization header
           }
@@ -63,13 +63,13 @@ const MyTasks = props => {
     let url;
 
     if (event.target.value === "allTasks") {
-      url = `https://mtlbackendapp.azurewebsites.net/apis/employees/tasksAssignedTo/${employeeId}`;
+      url = `https://ssitcloudbackend.azurewebsites.net/apis/employees/tasksAssignedTo/${employeeId}`;
     } else if (event.target.value === "overdueTasks") {
-      url = `https://mtlbackendapp.azurewebsites.net/apis/employees/OverdueTasks/PersonId/${employeeId}`;
+      url = `https://ssitcloudbackend.azurewebsites.net/apis/employees/OverdueTasks/PersonId/${employeeId}`;
     } else if (event.target.value === "pendingTasks") {
-      url = `https://mtlbackendapp.azurewebsites.net/apis/employees/PendingTasks/PersonId/${employeeId}`;
+      url = `https://ssitcloudbackend.azurewebsites.net/apis/employees/PendingTasks/PersonId/${employeeId}`;
     } else if (event.target.value === "completedTasks") {
-      url = `https://mtlbackendapp.azurewebsites.net/apis/employees/CompletedTasks/PersonId/${employeeId}`;
+      url = `https://ssitcloudbackend.azurewebsites.net/apis/employees/CompletedTasks/PersonId/${employeeId}`;
     }
 
     try {

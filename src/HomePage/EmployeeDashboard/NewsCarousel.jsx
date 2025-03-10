@@ -14,7 +14,7 @@ export default function NewsCarousel() {
         const token=localStorage.getItem("token");
         
       try {
-        const response = await axios.get('https://mtlbackendapp.azurewebsites.net/apis/employees/companyNews/getAllNews', {
+        const response = await axios.get('https://ssitcloudbackend.azurewebsites.net/apis/employees/companyNews/getAllNews', {
             headers: {
               "Authorization": `Bearer ${token}`  // Add the token to the Authorization header
             }});

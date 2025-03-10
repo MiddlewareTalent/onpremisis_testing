@@ -51,7 +51,7 @@ export default function LeaveApprovalDashboard() {
       setLoading(true);
       try {
         const token = localStorage.getItem('token')
-        const response = await axios.get(`https://mtlbackendapp.azurewebsites.net/api/leaves/manager/${managerId}`, {
+        const response = await axios.get(`https://ssitcloudbackend.azurewebsites.net/api/leaves/manager/${managerId}`, {
           method:'GET',
           headers:{
             'Authorization' : `Bearer ${token}`,
@@ -88,7 +88,7 @@ export default function LeaveApprovalDashboard() {
     setLoading(true);
     try {
       const token = localStorage.getItem('token')
-      await axios.put(`https://mtlbackendapp.azurewebsites.net/api/leaves/approve/${id}`, null,  {
+      await axios.put(`https://ssitcloudbackend.azurewebsites.net/api/leaves/approve/${id}`, null,  {
        
         headers:{
           'Authorization' : `Bearer ${token}`,
@@ -96,7 +96,7 @@ export default function LeaveApprovalDashboard() {
         },
       });
 
-      await axios.post("https://mtlbackendapp.azurewebsites.net/apis/employees/notifications",{
+      await axios.post("https://ssitcloudbackend.azurewebsites.net/apis/employees/notifications",{
         "notificationType":"leave",
         "notification": "Your leave has been approved. Click here to see the full details.",
         "notificationTo":approvalEmployeeId,
@@ -108,7 +108,7 @@ export default function LeaveApprovalDashboard() {
         }
       })
 
-      const response = await axios.get(`https://mtlbackendapp.azurewebsites.net/api/leaves/manager/${managerId}`, {
+      const response = await axios.get(`https://ssitcloudbackend.azurewebsites.net/api/leaves/manager/${managerId}`, {
        
         headers:{
           'Authorization' : `Bearer ${token}`,
@@ -152,7 +152,7 @@ export default function LeaveApprovalDashboard() {
       // Encode the rejectionReason to ensure proper handling of special characters
     //const encodedReason = encodeURIComponent(rejectionReason);
     const token = localStorage.getItem('token')
-      await axios.put(`https://mtlbackendapp.azurewebsites.net/api/leaves/reject/${selectedLeaveId}/${rejectionReason}`, null,  {
+      await axios.put(`https://ssitcloudbackend.azurewebsites.net/api/leaves/reject/${selectedLeaveId}/${rejectionReason}`, null,  {
        
         headers:{
           'Authorization' : `Bearer ${token}`,
@@ -160,7 +160,7 @@ export default function LeaveApprovalDashboard() {
         },
       });
 
-      await axios.post("https://mtlbackendapp.azurewebsites.net/apis/employees/notifications",{
+      await axios.post("https://ssitcloudbackend.azurewebsites.net/apis/employees/notifications",{
         "notificationType":"leave",
         "notification": "Your leave has been rejected. Click here to see the full details.",
         "notificationTo":leaveRejectEmployeeId,
@@ -170,7 +170,7 @@ export default function LeaveApprovalDashboard() {
           "Authorization": `Bearer ${token}`
         }
       })
-      const response = await axios.get(`https://mtlbackendapp.azurewebsites.net/api/leaves/manager/${managerId}`, {
+      const response = await axios.get(`https://ssitcloudbackend.azurewebsites.net/api/leaves/manager/${managerId}`, {
        
         headers:{
           'Authorization' : `Bearer ${token}`,
