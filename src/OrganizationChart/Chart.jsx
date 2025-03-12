@@ -272,7 +272,7 @@ export default function Chart() {
               >
                 <option value="all">Filter By Country</option>
                 <option value="all">All Employees</option>
-                <option>US</option>
+                <option>United States</option>
                 <option>Canada</option>
                 <option>Mexico</option>
                 <option>India</option>

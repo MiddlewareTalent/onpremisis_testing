@@ -54,14 +54,27 @@ export default function ProfessionalInfoModal({
           <div className="space-y-6">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Working Country</label>
-                <input
-                  type="text"
-                  name="workingCountry"
-                  value={formData.workingCountry || ''}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
-                />
+              <label htmlFor="country" className="block text-lg font-medium leading-6 text-gray-900">
+                            Working Country
+                            </label>
+                            <div className="mt-2">
+                                <select
+                                    id="working-country"
+                                    name="workingCountry"
+                                    type="text"
+                                    value={formData.workingCountry}
+                                    onChange={handleChange}
+                                    className="block w-full rounded-md border-0 py-2.5 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
+                                >
+                                    <option value="">Select a country</option>
+                                    <option>United States</option>
+                                    <option>Canada</option>
+                                    <option>Mexico</option>
+                                    <option>India</option>
+                                    <option>UK</option>
+                                </select>
+                                
+                            </div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700">Employee ID</label>

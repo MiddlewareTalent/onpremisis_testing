@@ -20,7 +20,7 @@ const TimesheetSubmission = ({ setSubmissions }) => {
         SubmissionDate: new Date().toISOString(),
       };
  
-      const response = await axios.post("https://mtlbackendapp.azurewebsites.net/api/timesheets", newFormData, {
+      const response = await axios.post("https://ssitcloudbackend.azurewebsites.net/api/timesheets", newFormData, {
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -33,12 +33,33 @@ const TimesheetSubmission = ({ setSubmissions }) => {
  
     } catch (error) {
       console.log("Error submitting timesheet:", error);
-      setErrors(error.response?.data || 'Error occurred');
-      console.log("Error response data:", error.response?.data);
-    }
+ 
+      // Check if the error has response data
+      const errorData = error.response?.data;
+      console.log(error.response?.data);
+      // Initialize the error message variable
+      let errorMessage = '';
+ 
+      // Check for missing or invalid fields and add specific messages
+          if (!errorData.managerId) {
+              errorMessage += 'managerId cannot be null or empty. ';
+          }
+          else if(!errorData.employeeId) {
+              errorMessage += 'employeeId cannot be null or empty. ';
+          }
+          else if(!errorData.employeeName) {
+              errorMessage += 'employeeName cannot be null or empty. ';
+          }
+          else if(!errorData.emailId) {
+            errorMessage += 'emailId cannot be null or empty. ';
+        }
+      // If no specific error was found, set the default error message
+      setErrors(errorMessage || 'Error occurred');
+      console.log("Error response data:", errorData);
+  }
  
     try{
-      await axios.post("https://mtlbackendapp.azurewebsites.net/apis/employees/notifications",{
+      await axios.post("https://ssitcloudbackend.azurewebsites.net/apis/employees/notifications",{
         "notificationType":"TimesheetManage",
         "notification":formData.employeeName+" has submitted new timesheet, tap to see details",
         // "notification":"Tap to view the details of "+formData.employeeName+"'s recently submitted timesheet.",
