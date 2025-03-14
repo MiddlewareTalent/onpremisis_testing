@@ -59,6 +59,7 @@ export default function Employee() {
                 }
                 const data = await response.json();
                 console.log(data);
+                setCurrentPage(1);
                 setEmployees(data);
             } catch (error) {
                 console.error(error);
