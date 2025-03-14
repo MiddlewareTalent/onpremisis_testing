@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from "axios";
 import Loader from '../../Assets/Loader';
 
@@ -15,6 +15,13 @@ export default function AddTask(props) {
   const personId=personToAddTask[0].employeeId;
   console.log(personId);
   const token=localStorage.getItem('token');
+
+  useEffect(() => {
+    // Check if both taskName and taskDetails are not empty
+    if (taskName !== "" && taskDetails !== "") {
+      setIsError(false); // No error if both fields are filled
+    }
+  }, [taskName, taskDetails]);
 
   const taskCreated = async (event) => {
     event.preventDefault();
@@ -92,6 +99,8 @@ export default function AddTask(props) {
     }
   };
 
+  
+
   return (
     <div>
       {isLoading && <Loader/>}
@@ -139,7 +148,7 @@ export default function AddTask(props) {
               id="taskTitle"
               autoComplete="off"
               value={taskName}
-              onChange={event => setTaskName(event.target.value)}
+              onChange={event=>setTaskName(event.target.value)}
               className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-lg"
             />
           </div>
@@ -153,7 +162,7 @@ export default function AddTask(props) {
               id="taskDetails"
               rows={4}
               value={taskDetails}
-              onChange={event => setTaskDetails(event.target.value)}
+              onChange={event=>setTaskDetails(event.target.value)}
               className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-lg"
             />
           </div>
