@@ -5,7 +5,7 @@ import axios from 'axios';
 const ChangePassword = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
-        email: '',
+        email: localStorage.getItem("email"),
         oldPassword: '',
         newPassword: '',
         confirmPassword: ''
