@@ -59,7 +59,7 @@ const ChangePassword = () => {
             }
 
             await axios.post(
-                `https://mtlbackendapp.azurewebsites.net/api/v1/employeeManager/change-password`,
+                `https://ssitcloudbackend.azurewebsites.net/api/v1/employeeManager/change-password`,
                 {
                     email: formData.email,
                     oldPassword: formData.oldPassword,
@@ -69,8 +69,14 @@ const ChangePassword = () => {
 
             navigate('/login'); // Navigate to Dashboard upon success
         } catch (error) {
-            console.log("Error: ", error);
-            setError('Failed to change password. Please try again.');
+            console.log(error);
+            console.log(error.response.status);
+            if (error.response.status===500){
+                setError(error.response.data);
+            }
+            else{
+                setError('Failed to change password. Please try again.');
+            }
         }
     };
 
