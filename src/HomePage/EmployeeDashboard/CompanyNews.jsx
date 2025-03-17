@@ -10,7 +10,7 @@ const CompanyNews = () => {
     const postNews = async () => {
         const token=localStorage.getItem("token");
         try {
-            const response = await axios.post("https://ssitcloudbackend.azurewebsites.net/apis/employees/companyNews/addNews", {
+            const response = await axios.post("https://msquirebackend.azurewebsites.net/apis/employees/companyNews/addNews", {
                 userName: "",
                 userId: "",
                 userEmail: localStorage.getItem('email'),

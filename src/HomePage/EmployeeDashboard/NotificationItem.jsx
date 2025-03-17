@@ -18,7 +18,7 @@ const NotificationItem=(props)=>{
         const token=localStorage.getItem("token");
         try {
             const response = await axios.put(
-                `https://ssitcloudbackend.azurewebsites.net/apis/employees/notificationUpdate/${notificationId}`, 
+                `https://msquirebackend.azurewebsites.net/apis/employees/notificationUpdate/${notificationId}`, 
                 {
                     notificationId: notificationId,
                     notificationType: notificationType,

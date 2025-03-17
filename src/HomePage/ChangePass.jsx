@@ -23,7 +23,7 @@ const ChangePasswordModal = ({ isOpen, onClose, id }) => {
     try {
         // Perform the API request to change the password
         const response = await axios.post(
-            `https://ssitcloudbackend.azurewebsites.net/api/v1/employeeManager/reset-password/${employeeId}/${newPassword}`,
+            `https://msquirebackend.azurewebsites.net/api/v1/employeeManager/reset-password/${employeeId}/${newPassword}`,
             
             {
                 headers: {

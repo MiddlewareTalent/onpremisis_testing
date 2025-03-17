@@ -10,7 +10,7 @@ const Notification = () => {
             const employeeId = localStorage.getItem('employeeId');
             const token=localStorage.getItem("token");
             try {
-                const response = await axios.get(`https://ssitcloudbackend.azurewebsites.net/apis/employees/notificationsTo/${employeeId}`, {
+                const response = await axios.get(`https://msquirebackend.azurewebsites.net/apis/employees/notificationsTo/${employeeId}`, {
                     headers: {
                       "Authorization": `Bearer ${token}`  // Add the token to the Authorization header
                     }

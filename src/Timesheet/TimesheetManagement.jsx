@@ -116,7 +116,7 @@ const TimesheetManagement = ({ setSubmissions, employeeId }) => {
         console.log("Fetching data with token:", token);  // Log token for debugging
 
         const response = await axios.get(
-          `https://ssitcloudbackend.azurewebsites.net/api/v1/employeeManager/getEmployee/${employeeId}`,
+          `https://msquirebackend.azurewebsites.net/api/v1/employeeManager/getEmployee/${employeeId}`,
           {
             method: 'GET',
             headers: {
@@ -146,7 +146,7 @@ const TimesheetManagement = ({ setSubmissions, employeeId }) => {
         console.log("Fetching data with token:", token);  // Log token for debugging
 
         const response = await axios.get(
-          `https://ssitcloudbackend.azurewebsites.net/api/v1/employeeManager/getEmployee/${formData.managerId}`,
+          `https://msquirebackend.azurewebsites.net/api/v1/employeeManager/getEmployee/${formData.managerId}`,
           {
             method: 'GET',
             headers: {

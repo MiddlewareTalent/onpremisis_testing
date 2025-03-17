@@ -14,7 +14,7 @@ const LeavePerformance = () => {
             const employeeId=localStorage.getItem('employeeId');
             console.log(employeeId);
           try {
-            const response = await axios.get(`https://ssitcloudbackend.azurewebsites.net/api/leaves/getStatus/${employeeId}`, {
+            const response = await axios.get(`https://msquirebackend.azurewebsites.net/api/leaves/getStatus/${employeeId}`, {
                 headers: {
                   "Authorization": `Bearer ${token}`  
                 }});

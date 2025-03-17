@@ -18,7 +18,7 @@ const RecievedBadges=()=>{
         const fetchData = async () => {
             const email=localStorage.getItem('email');
           try {
-            const response = await axios.get(`https://middlewaretalentsbackend.azurewebsites.net/apis/employees/badges/BadgesAssignedTo/${email}`);
+            const response = await axios.get(`https://msquirebackend.azurewebsites.net/apis/employees/badges/BadgesAssignedTo/${email}`);
             console.log(response.data);
             setBadgesData(response.data.reverse());
             setLoading(false);

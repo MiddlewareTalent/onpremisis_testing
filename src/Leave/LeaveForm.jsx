@@ -55,7 +55,7 @@ function LeaveRequestForm(props) {
             const token = localStorage.getItem('token')
            
             const [originResponse] = await Promise.all([
-                axios.get(`https://ssitcloudbackend.azurewebsites.net/api/v1/employeeManager/origin/${employeeId}`, {
+                axios.get(`https://msquirebackend.azurewebsites.net/api/v1/employeeManager/origin/${employeeId}`, {
                     method: 'GET',
                     headers: {
                       'Authorization' : `Bearer ${token}`,
@@ -105,7 +105,7 @@ function LeaveRequestForm(props) {
             try {
                 const token = localStorage.getItem('token')
                 console.log(token)
-                const response = await axios.get('https://ssitcloudbackend.azurewebsites.net/api/leaves/remaining-leaves', {
+                const response = await axios.get('https://msquirebackend.azurewebsites.net/api/leaves/remaining-leaves', {
                     method:'GET',
                     headers:{
                       'Authorization' : `Bearer ${token}`,
@@ -304,8 +304,8 @@ requiredFields.forEach(field => {
             const token = localStorage.getItem('token')
             console.log(formData);
             const url = isEditing
-                ? `https://ssitcloudbackend.azurewebsites.net/api/leaves/update/${formData.id}`
-                : `https://ssitcloudbackend.azurewebsites.net/api/leaves/submit`;
+                ? `https://msquirebackend.azurewebsites.net/api/leaves/update/${formData.id}`
+                : `https://msquirebackend.azurewebsites.net/api/leaves/submit`;
  
    
             let response;
@@ -321,7 +321,7 @@ requiredFields.forEach(field => {
  
                 });
 
-                await axios.post("https://ssitcloudbackend.azurewebsites.net/apis/employees/notifications",{
+                await axios.post("https://msquirebackend.azurewebsites.net/apis/employees/notifications",{
                     "notificationType":"leave",
                     "notification": `${localStorage.getItem('firstName')} ${localStorage.getItem('lastName')} has requested new leave. Click here to see the full details.`,
                     "notificationTo":formData.managerId,
@@ -384,7 +384,7 @@ requiredFields.forEach(field => {
         try {
             const token = localStorage.getItem('token')
             console.log(token)
-            const response = await axios.get('https://ssitcloudbackend.azurewebsites.net/api/leaves/remaining-leaves', {
+            const response = await axios.get('https://msquirebackend.azurewebsites.net/api/leaves/remaining-leaves', {
                 method:'GET',
                 headers:{
                   'Authorization' : `Bearer ${token}`,
