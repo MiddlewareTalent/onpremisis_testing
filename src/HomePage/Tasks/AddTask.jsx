@@ -39,7 +39,7 @@ export default function AddTask(props) {
     if (taskName !== "" && taskDetails !== "") {
       setIsLoading(true);
       try {
-        axios.post("https://ssitcloudbackend.azurewebsites.net/apis/employees/tasks", {
+        axios.post("https://msquirebackend.azurewebsites.net/apis/employees/tasks", {
           taskAssignedById: localStorage.getItem("employeeId"),
           taskAssignedByName: localStorage.getItem('firstName') + " " + localStorage.getItem('lastName'),
           taskAssignedByEmail: localStorage.getItem('email'),
@@ -74,7 +74,7 @@ export default function AddTask(props) {
 
 
       try{
-        await axios.post("https://ssitcloudbackend.azurewebsites.net/apis/employees/notifications",{
+        await axios.post("https://msquirebackend.azurewebsites.net/apis/employees/notifications",{
           "notificationType":"tasks",
           "notification": `${localStorage.getItem('firstName')} ${localStorage.getItem('lastName')} has been assigned a new task. Click here to see the full details.`,
           "notificationTo":personId,
