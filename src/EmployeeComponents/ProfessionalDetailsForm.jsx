@@ -94,9 +94,7 @@ const ProfessionalDetailsForm = ({ formData, onNext, onBack, onFormDataChange })
             newErrors.employmentStatus="Please enter the employment status";
         }
 
-        if(formData.reportingTo===""){
-            newErrors.reportingTo="Please choose the reporting to";
-        }
+       
 
         const emailPattern = /^[a-zA-Z0-9._%+-]+@middlewaretalents\.com$/;
         if (!emailPattern.test(formData.corporateEmail)) {
