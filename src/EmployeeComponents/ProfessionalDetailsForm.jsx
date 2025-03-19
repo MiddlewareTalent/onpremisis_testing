@@ -37,7 +37,7 @@ const ProfessionalDetailsForm = ({ formData, onNext, onBack, onFormDataChange })
         fetchEmployees();
     }, []);
 
-    const giveAccess=()=>{
+    const giveAccessEmployee=()=>{
         
             onFormDataChange({task: false})
             onFormDataChange({organizationChart: false})
@@ -45,6 +45,15 @@ const ProfessionalDetailsForm = ({ formData, onNext, onBack, onFormDataChange })
             onFormDataChange({timeSheet: false})
         
     }
+
+    const giveAccessAdminAndManager=()=>{
+        
+        onFormDataChange({task: true})
+        onFormDataChange({organizationChart: true})
+        onFormDataChange({leaveManagement: true})
+        onFormDataChange({timeSheet: true})
+    
+}
 
 
 
@@ -350,7 +359,7 @@ const ProfessionalDetailsForm = ({ formData, onNext, onBack, onFormDataChange })
                                         type="radio"
                                         value="admin"
                                         checked={formData.role === 'admin'}
-                                        onChange={() => onFormDataChange({role: 'admin'})}
+                                        onChange={() => {onFormDataChange({role: 'admin'}); giveAccessAdminAndManager()}}
                                         className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                                     />
                                     <label htmlFor="role-admin"
@@ -365,7 +374,7 @@ const ProfessionalDetailsForm = ({ formData, onNext, onBack, onFormDataChange })
                                         type="radio"
                                         value="manager"
                                         checked={formData.role === 'manager'}
-                                        onChange={() => onFormDataChange({role: 'manager'})}
+                                        onChange={() =>{ onFormDataChange({role: 'manager'}); giveAccessAdminAndManager()}}
                                         className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                                     />
                                     <label htmlFor="role-manager"
@@ -380,7 +389,7 @@ const ProfessionalDetailsForm = ({ formData, onNext, onBack, onFormDataChange })
                                         type="radio"
                                         value="employee"
                                         checked={formData.role === 'employee'}
-                                        onChange={() => {onFormDataChange({role: 'employee'}); giveAccess()}}
+                                        onChange={() => {onFormDataChange({role: 'employee'}); giveAccessEmployee()}}
                                         className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                                     />
                                     <label htmlFor="role-employee"
