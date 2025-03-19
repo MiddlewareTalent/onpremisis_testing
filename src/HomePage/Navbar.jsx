@@ -329,6 +329,7 @@ if (role === "admin" || role === "Admin") {
               <Link
               key="Dashboard"
               to="/dashboard"
+              onClick={() => setMobileMenuOpen(false)}
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
             >
               Dashboard
@@ -336,6 +337,7 @@ if (role === "admin" || role === "Admin") {
             {employee.role!=="manager" && employee.role!=="employee" && <Link
               key="Employees"
               to="/employee"
+              onClick={() => setMobileMenuOpen(false)}
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
             >
               Employees
@@ -343,6 +345,7 @@ if (role === "admin" || role === "Admin") {
             {employee.role!=="employee" && <Link
               key="My Team"
               to="/MyTeam"
+              onClick={() => setMobileMenuOpen(false)}
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
             >
               My Team
