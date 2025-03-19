@@ -279,7 +279,7 @@ requiredFields.forEach(field => {
 });
  
         if (hasEmptyFields) {
-            setLeaveError('Please fill in all required fields.');
+            setLeaveError('');
             setErrors(true);
             return;
         }
@@ -392,15 +392,10 @@ requiredFields.forEach(field => {
                 },
                 params: { employeeId, leaveType, leaveStartDate, leaveEndDate }
             });
-            console.log("Fetching remaining leave days...");
     console.log("Employee ID:", employeeId);
     console.log("Leave Type:", leaveType);
     console.log("Leave Start Date:", leaveStartDate);
     console.log("Leave End Date:", leaveEndDate);
-    console.log(leaveStartDate)
-    console.log(leaveEndDate)
-   
-   
             // Ensure the response is a valid number
             const remainingDays = response.data;
             console.log("remain:", remainingDays)
@@ -477,20 +472,12 @@ requiredFields.forEach(field => {
         }
     }, [formData.leaveStartDate, formData.leaveEndDate,]);
  
-     
-   
-   //const md = formData.medicalDocument
     return (
         <div >
             <form onSubmit={handleSubmit} className="w-full max-w-lg bg-white rounded-lg shadow-lg p-8">
-           
             <h1 className="text-2xl font-bold text-center font-Playfair-Display mb-6">
                 {isEditing ? 'EDIT LEAVE REQUEST' : 'NEW LEAVE REQUEST'}
             </h1>
-               
-   
- 
- 
                 {/* Leave Dates */}
                 {/* Leave Start and End Dates */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
@@ -554,13 +541,10 @@ requiredFields.forEach(field => {
                             <option value="PATERNITY">Paternity Leave</option>
                             <option value="OTHERS">Others</option>
                         </select>
- 
                     </div>
                     {errors && formData.leaveType === '' &&
                         <span className="text-red-600 text-sm">Leave Type is required</span>}
                 </div>
- 
-             
                 {formData.leaveType === 'SICK' && formData.duration > 2 && (
     <div className="flex flex-col">
         <label htmlFor="document" className="mb-1">Upload Document</label>
@@ -587,8 +571,6 @@ requiredFields.forEach(field => {
     </div>
 )}
  
-           
- 
 <div className="flex flex-col">
     <label htmlFor="remainingLeaveDays" className="mb-1">Remaining Leave Days</label>
     <input
@@ -600,11 +582,6 @@ requiredFields.forEach(field => {
         readOnly
     />
 </div>
- 
- 
-           
- 
- 
                 {/* Comments for "OTHERS" Leave Type */}
                 {isCommentsEnabled && (
                     <div className="flex flex-col">
@@ -633,7 +610,6 @@ requiredFields.forEach(field => {
                 >
                     {loading ? 'Submitting...' : isEditing ? 'Update Leave' : 'Submit Leave'}
                 </button>
- 
             </form>
         </div>
     );

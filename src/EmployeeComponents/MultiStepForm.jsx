@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import BasicDetailsForm from './BasicDetailsForm';
 import ProfessionalDetailsForm from './ProfessionalDetailsForm';
@@ -19,11 +20,17 @@ const MultiStepForm = ({ onCancel,handleLoadings }) => {
         employeeId: '',
         corporateEmail: '',
         jobRole: '',
+        dateOfJoining:'',
+        dateOfBirth:'',
         nationalInsuranceNumber:'',
         employmentStatus: '',
         reportingTo: '',
         role: '',
-        credentials: null // For credentials data from API
+        credentials: null ,// For credentials data from API
+        task: true,
+        timeSheet:true,
+        organizationChart:true,
+        leaveManagement: true
     };
 
     const [step, setStep] = useState(1);

@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
@@ -329,7 +330,7 @@ export default function Chart() {
  
                       {isHovered && (
                         <div
-                          className="absolute  p-6"
+                          className="absolute  p-6 hidden md:block"
                           style={{ top: hoverPosition.top, left: hoverPosition.left, zIndex: 9999 }}
                         >
  
@@ -389,7 +390,7 @@ export default function Chart() {
               {reportingEmployees.length > 0 ? (
                 <div className="flex-1  bg-white rounded-lg shadow-lg p-6 items-center ">
                   <h2 className="text-2xl font-semibold text-blue-800 mb-4">Reporting Employees</h2>
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                  <div className="grid grid-cols-2 lg:grid-cols-2 gap-5">
  
                     {reportingEmployees.map((each) => (
                       <ChartNode
@@ -418,7 +419,7 @@ export default function Chart() {
               <div>
                 <h1 className="text-2xl font-semibold text-blue-800">Also works with</h1>
               </div>
-              <div className="grid grid-cols-4 gap-4 pt-3 w-auto">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
                 {workingWith.map((each) => (
                   <div onClick={() => handleAlsoWorkWith(each.employeeId)} key={each.employeeId} className="bg-white p-3 rounded-lg shadow-md hover:bg-blue-50 cursor-pointer">
                     <p className=" font-semibold text-blue-800"  >{each.firstName.charAt(0).toUpperCase() + each.firstName.slice(1).toLowerCase()} {each.lastName.charAt(0).toUpperCase() + each.lastName.slice(1).toLowerCase()}</p>

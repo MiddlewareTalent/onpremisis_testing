@@ -1,3 +1,5 @@
+
+
 import React, {useEffect, useState} from 'react';
 
 const ProfessionalDetailsForm = ({ formData, onNext, onBack, onFormDataChange }) => {
@@ -11,7 +13,7 @@ const ProfessionalDetailsForm = ({ formData, onNext, onBack, onFormDataChange })
         const fetchEmployees = async () => {
             const token = localStorage.getItem('token');
             try {
-                const response = await fetch('https://ssitcloudbackend.azurewebsites.net/api/v1/employeeManager/employees', {
+                const response = await fetch('https://msquirebackend.azurewebsites.net/api/v1/employeeManager/employees', {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -30,8 +32,19 @@ const ProfessionalDetailsForm = ({ formData, onNext, onBack, onFormDataChange })
             }
         };
 
+        
+
         fetchEmployees();
     }, []);
+
+    const giveAccess=()=>{
+        
+            onFormDataChange({task: false})
+            onFormDataChange({organizationChart: false})
+            onFormDataChange({leaveManagement: false})
+            onFormDataChange({timeSheet: false})
+        
+    }
 
 
 
@@ -45,7 +58,9 @@ const ProfessionalDetailsForm = ({ formData, onNext, onBack, onFormDataChange })
         if (!/^[A-Z0-9]+$/.test(formData.employeeId)) {
             newErrors.employeeId = "Employee ID must contain only uppercase letters and digits.For Example : MTL1010";
         }
-
+        if(!formData.dateOfJoining){
+            newErrors.dateOfJoining= "Date of joining is required"
+        } 
         // Validate Corporate Email
         if (!/\S+@\S+\.\S+/.test(formData.corporateEmail)) {
             newErrors.corporateEmail = "Please enter a valid email address.";
@@ -58,12 +73,57 @@ const ProfessionalDetailsForm = ({ formData, onNext, onBack, onFormDataChange })
             newErrors.nationalInsuranceNumber="Please enter a valid national id.";
         }
 
+        if(formData.jobRole===""){
+            newErrors.jobRole="Please choose the job role";
+        }
+
+        if(formData.role===""){
+            newErrors.role="Please enter the role";
+        }
+
+        if(formData.employmentStatus===""){
+            newErrors.employmentStatus="Please enter the employment status";
+        }
+
+        if(formData.reportingTo===""){
+            newErrors.reportingTo="Please choose the reporting to";
+        }
+
         const emailPattern = /^[a-zA-Z0-9._%+-]+@middlewaretalents\.com$/;
         if (!emailPattern.test(formData.corporateEmail)) {
             newErrors.corporateEmail = "Please enter a valid email address with @middlewaretalents.com domain.";
         }
         return newErrors;
     };
+
+    // const [leaveIsChecked, setLeaveIsChecked] = useState(false);
+    // const [orgchartIsChecked, setOrgChartIsChecked] = useState(false);
+    // const [timesheetIsChecked, setTimeSheetIsChecked] = useState(false);
+    // const [taskIsChecked , setTaskIsChecked] = useState(false);
+
+     const handleLeave = () => {
+        if(formData.role === "employee"){
+            onFormDataChange({...formData,leaveManagement:!formData.leaveManagement});
+        }
+     };
+     const handleOrgChart = () => {
+        if(formData.role === "employee"){
+            onFormDataChange({...formData,organizationChart:!formData.organizationChart});
+            
+            console.log(formData.organizationChart)
+        }
+         
+     };
+     const handleTimesheet = () => {
+        if(formData.role === "employee"){
+            onFormDataChange({...formData,timeSheet:!formData.timeSheet});
+        }
+     };
+    const handleTask = () => {
+        if(formData.role === "employee"){
+            onFormDataChange({...formData,task:!formData.task});
+        }
+     };
 
 
     const handleSubmit = async (event) => {
@@ -75,7 +135,7 @@ const ProfessionalDetailsForm = ({ formData, onNext, onBack, onFormDataChange })
         if (Object.keys(validationErrors).length === 0) {
             try {
                 // Send the request to check if Employee ID exists
-                const response = await fetch(`https://ssitcloudbackend.azurewebsites.net/api/v1/employeeManager/exists/${formData.employeeId}`, {
+                const response = await fetch(`https://msquirebackend.azurewebsites.net/api/v1/employeeManager/exists/${formData.employeeId}`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -157,7 +217,26 @@ const ProfessionalDetailsForm = ({ formData, onNext, onBack, onFormDataChange })
                             </div>
                         </div>
 
-                        <div className="sm:col-span-4">
+                        <div className="sm:col-span-3">
+                            <label htmlFor="date-of-joining"
+                                   className="block text-sm font-medium leading-6 text-gray-900">
+                                Date of joining
+                            </label>
+                            <div className="mt-2">
+                                <input
+                                    id="date-of-joining"
+                                    name="dateOfJoining"
+                                    type="date"
+                                    value={formData.dateOfJoining}
+                                    onChange={(e) => onFormDataChange({dateOfJoining: e.target.value})}
+                                    className="block w-full rounded-md border-0 py-2.5 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
+                                />
+                                {errors.dateOfJoining &&
+                                    <p className="text-sm text-red-600">{errors.dateOfJoining}</p>}
+                            </div>
+                        </div>
+
+                        <div className="sm:col-span-3">
                             <label htmlFor="corporate-email"
                                    className="block text-sm font-medium leading-6 text-gray-900">
                                 Corporate Email
@@ -195,6 +274,7 @@ const ProfessionalDetailsForm = ({ formData, onNext, onBack, onFormDataChange })
                                     <option value="Designe">Designer</option>
                                     <option value="HR">HR</option>
                                 </select>
+                                {errors.jobRole && <p className="text-sm text-red-600">{errors.jobRole}</p>}
                             </div>
                         </div>
 
@@ -215,6 +295,7 @@ const ProfessionalDetailsForm = ({ formData, onNext, onBack, onFormDataChange })
                                     <option value="full-time">Full-Time</option>
                                     <option value="part-time">Part-Time</option>
                                 </select>
+                                {errors.employmentStatus && <p className="text-sm text-red-600">{errors.employmentStatus}</p>}
                             </div>
                         </div>
 
@@ -237,6 +318,7 @@ const ProfessionalDetailsForm = ({ formData, onNext, onBack, onFormDataChange })
                                         </option>
                                     ))}
                                 </select>
+                                {errors.reportingTo && <p className="text-sm text-red-600">{errors.reportingTo}</p>}
                             </div>
                         </div>
 
@@ -286,7 +368,7 @@ const ProfessionalDetailsForm = ({ formData, onNext, onBack, onFormDataChange })
                                         onChange={() => onFormDataChange({role: 'manager'})}
                                         className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                                     />
-                                    <label htmlFor="role-admin"
+                                    <label htmlFor="role-manager"
                                            className="block text-sm font-medium leading-6 text-gray-900">
                                         Manager
                                     </label>
@@ -298,7 +380,7 @@ const ProfessionalDetailsForm = ({ formData, onNext, onBack, onFormDataChange })
                                         type="radio"
                                         value="employee"
                                         checked={formData.role === 'employee'}
-                                        onChange={() => onFormDataChange({role: 'employee'})}
+                                        onChange={() => {onFormDataChange({role: 'employee'}); giveAccess()}}
                                         className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                                     />
                                     <label htmlFor="role-employee"
@@ -306,8 +388,76 @@ const ProfessionalDetailsForm = ({ formData, onNext, onBack, onFormDataChange })
                                         Employee
                                     </label>
                                 </div>
+                                {formData.role==="employee" && <div>
+                                <p className='text-sm font-bold'>Give Access</p>
+                                 <div className="mt-10 grid grid-cols-1 gap-x-40 gap-y-8 sm:grid-cols-6  ">
+                               
+                                
+                                
+                                
+                                <div className="flex items-center gap-x-3">
+                                
+                                    <input
+                                        id="Leave-Management"
+                                        name="leaveManagement"
+                                        type="checkbox"
+                                        checked={formData.leaveManagement}
+                                        onChange={handleLeave}
+                                        className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                    />
+                                    <label htmlFor="Leave-Management"
+                                           className="block text-sm font-medium leading-6 text-gray-900">
+                                        Leave Management
+                                    </label>
+                                </div>
+                                <div className="flex items-center gap-x-3">
+                                    <input
+                                        id="Time-sheet"
+                                        name="timeSheet"
+                                        type="checkbox"
+                                        checked={formData.timeSheet}
+                                        onChange={handleTimesheet}
+                                        className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                    />
+                                    <label htmlFor="Time-sheet"
+                                           className="block text-sm font-medium leading-6 text-gray-900">
+                                        TimeSheet
+                                    </label>
+                                </div>
+                                <div className="flex items-center gap-x-3">
+                                    <input
+                                        id="Task-Manager"
+                                        name="task"
+                                        type="checkbox"
+                                        checked={formData.task}
+                                        onChange={handleTask}
+                                        className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                    />
+                                    <label htmlFor="Task-Manager"
+                                           className="block text-sm font-medium leading-6 text-gray-900">
+                                        Task Management
+                                    </label>
+                                </div>
+                                <div className="flex items-center gap-x-3">
+                                    <input
+                                        id="org-chart"
+                                        name="organizationChart"
+                                        type="checkbox"
+                                        checked={formData.organizationChart}
+                                        onChange={handleOrgChart}
+                                       
+                                         className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                    />
+                                    <label htmlFor="org-chart"
+                                           className="block text-sm font-medium leading-6 text-gray-900">
+                                        Organization Chart
+                                    </label>
+                                </div>
+                                </div>
+                                </div>}
                             </div>
                         </fieldset>
+                       
                     </div>
                 </div>
 

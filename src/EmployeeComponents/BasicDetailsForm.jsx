@@ -8,7 +8,9 @@ const BasicDetailsForm = ({ onNext, onCancel, formData: initialData = {}, onForm
         streetAddress: initialData.streetAddress || '',
         city: initialData.city || '',
         region: initialData.region || '',
-        postalCode: initialData.postalCode || ''
+        postalCode: initialData.postalCode || '',
+        dateOfBirth: initialData.dateOfBirth || '',
+        dateOfJoining : initialData.dateOfJoining || ''
     });
     const [errors, setErrors] = useState({});
 
@@ -40,6 +42,9 @@ const BasicDetailsForm = ({ onNext, onCancel, formData: initialData = {}, onForm
         if (!formData.country) {
             newErrors.country = "*Country is required.";
         }
+        if(!formData.dateOfBirth ){
+            newErrors.dateOfBirth = "*Date of Birth is required"
+        }
         if (!formData.streetAddress) {
             newErrors.streetAddress = "*Street address is required.";
         }
@@ -52,6 +57,7 @@ const BasicDetailsForm = ({ onNext, onCancel, formData: initialData = {}, onForm
         if (!formData.postalCode || !postalCodePattern.test(formData.postalCode)) {
             newErrors.postalCode = "*ZIP / Postal code must contain only numbers.";
         }
+        
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -130,6 +136,24 @@ const BasicDetailsForm = ({ onNext, onCancel, formData: initialData = {}, onForm
                                     <option>UK</option>
                                 </select>
                                 {errors.country && <p className="text-lg text-red-500">{errors.country}</p>}
+                            </div>
+                        </div>
+
+                        <div className="sm:col-span-3">
+                            <label htmlFor="date-of-birth" className="block text-lg font-medium leading-6 text-gray-900">
+                                Date of Birth
+                            </label>
+                            <div className="mt-2">
+                                <input
+                                    id="date-of-birth"
+                                    name="dateOfBirth"
+                                    type='date'
+                                    autoComplete="family-name"
+                                    className={`block w-full rounded-md border-0 py-2 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-base sm:leading-6 ${errors.lastName ? 'border-red-500' : ''}`}
+                                    value={formData.dateOfBirth}
+                                    onChange={handleChange}
+                                />
+                                {errors.dateOfBirth && <p className="text-lg text-red-500">{errors.dateOfBirth}</p>}
                             </div>
                         </div>
 

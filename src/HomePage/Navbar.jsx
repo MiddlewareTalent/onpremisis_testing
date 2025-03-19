@@ -4,6 +4,8 @@ import { Dialog, Popover, Transition, Menu } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
 import MTLogo from "../Assets/MTlogo.svg";
+import axios from "axios";
+import Loader from "../Assets/Loader";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -16,6 +18,11 @@ export default function Navbar() {
   const navigate = useNavigate();
 
   const [initials, setInitials] = useState("");
+  
+  const [employee, setEmployee] = useState(null);
+  const [loading, setLoading]=useState(true);
+   const employeeId=localStorage.getItem("employeeId");
+  
 
   useEffect(() => {
     // Retrieve the user role from localStorage
@@ -31,6 +38,37 @@ export default function Navbar() {
 
     setRole(storedRole);
   }, []);
+
+  
+
+  useEffect(() => {
+    const fetchEmployee = async () => {
+      setLoading(true)
+        const token= localStorage.getItem('token');
+        try {
+            
+            console.log(token);
+            console.log("upto");
+            const response = await axios.get(`https://msquirebackend.azurewebsites.net/api/v1/employeeManager/getEmployee/${employeeId}`,{
+                method:'GET',
+                headers:{
+                    'Authorization':`Bearer ${token}`,
+                    'Content-Type':'application/json'
+                }
+            });
+            console.log("employee", response);
+            console.log(response.status);
+            setEmployee(response.data);
+            setLoading(false);
+           
+        } catch (error) {
+            console.error("Error fetching employee data:", error);
+            setLoading(false);
+        }
+      };
+      fetchEmployee();
+  }, [employeeId]);
+
 
   const handleSignOut = () => {
     localStorage.removeItem("email");
@@ -50,48 +88,48 @@ export default function Navbar() {
   };
 
   const adminNavItems = [
-    { name: "Dashboard", href: "/dashboard" },
-    { name: "Employees", href: "/employee" },
-    { name: "My Team", href: "/MyTeam" },
-    { name: "Tasks", href: "/tasks" },
-    { name: "Organization Chart", href: "/OrgChart" },
-    { name: "Timesheet", href: "/TimesheetManage" },
-    { name: "Leave Management", href: "/LeaveManagement" },
+    
+    { name: "Tasks", href: "/tasks", access:"task" },
+    { name: "Organization Chart", href: "/OrgChart", access:"organizationChart" },
+    { name: "Timesheet", href: "/TimesheetManage", access:"timeSheet" },
+    { name: "Leave Management", href: "/LeaveManagement", access:"leaveManagement"},
   ];
 
   const managerNavItems = [
-    { name: "Dashboard", href: "/dashboard" },
-    { name: "My Team", href: "/MyTeam" },
-    { name: "Tasks", href: "/tasks" },
-    { name: "Organization Chart", href: "/OrgChart" },
-    { name: "Timesheet", href: "/TimesheetManage" },
-    { name: "Leave Management", href: "/LeaveManagement" },
+    
+    { name: "Tasks", href: "/tasks", access:"task" },
+    { name: "Organization Chart", href: "/OrgChart", access:"organizationChart"},
+    { name: "Timesheet", href: "/TimesheetManage", access:"timeSheet" },
+    { name: "Leave Management", href: "/LeaveManagement", access:"leaveManagement" },
   ];
 
   const employeeNavItems = [
-    { name: "Dashboard", href: "/dashboard" },
-    { name: "Tasks", href: "/tasks" },
-    { name: "Organization Chart", href: "/OrgChart" },
-    { name: "Timesheet", href: "/TimesheetManage" },
-    { name: "Leave Management", href: "/LeaveManagement" },
+    { name: "Tasks", href: "/tasks", access:"task"},
+    { name: "Organization Chart", href: "/OrgChart", access:"organizationChart"},
+    { name: "Timesheet", href: "/TimesheetManage", access:"timeSheet"},
+    { name: "Leave Management", href: "/LeaveManagement", access:"leaveManagement"},
   ];
 
   // Show admin nav items if role is 'admin', else show employee nav items
   
-  let navItems=[];
+  let navItems = [];
 
-    if(role==="admin" || role==="Admin"){
-      navItems=adminNavItems;
-    }
-    else if(role==="employee"){
-      navItems=employeeNavItems;
-    }
-    else if(role==="manager"){
-      navItems=managerNavItems;
-    }
+if (role === "admin" || role === "Admin") {
+  navItems = adminNavItems;
+} else if (role === "employee") {
+  navItems = employeeNavItems;
+} else if (role === "manager") {
+  navItems = managerNavItems;
+} else {
+  // Handle unexpected role case (maybe log or throw an error)
+  console.error("Unknown role:", role);
+}
+
+
 
   return (
-    <header className="bg-white">
+    <div>
+      {loading? <Loader/>:<header className="bg-white">
       <nav
         className="flex items-center justify-between p-6 lg:px-8 flex-shrink-0"
         aria-label="Global"
@@ -113,8 +151,29 @@ export default function Navbar() {
           </button>
         </div>
         <Popover.Group className="hidden lg:flex lg:gap-x-12">
+        <Link
+              key="Dashboard"
+              to="/dashboard"
+              className="text-2xl font-semibold leading-6 text-gray-900"
+            >
+              Dashboard
+            </Link>
+            {employee.role!=="manager" && employee.role!=="employee" && <Link
+              key="Employees"
+              to="/employee"
+              className="text-2xl font-semibold leading-6 text-gray-900"
+            >
+              Employees
+            </Link>}
+            {employee.role!=="employee" && <Link
+              key="My Team"
+              to="/MyTeam"
+              className="text-2xl font-semibold leading-6 text-gray-900"
+            >
+              My Team
+            </Link>}
           {navItems.length!==0 && navItems.map((item) => (
-            <Link
+            employee[item.access] && <Link
               key={item.name}
               to={item.href}
               className="text-2xl font-semibold leading-6 text-gray-900"
@@ -296,6 +355,7 @@ export default function Navbar() {
           </div>
         </Dialog.Panel>
       </Dialog>
-    </header>
+    </header>}
+    </div>
   );
 }
