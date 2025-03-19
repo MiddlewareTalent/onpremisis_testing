@@ -7,6 +7,7 @@ import MTLogo from "../Assets/MTlogo.svg";
 import axios from "axios";
 import Loader from "../Assets/Loader";
 
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -62,12 +63,22 @@ export default function Navbar() {
             setLoading(false);
            
         } catch (error) {
-            console.error("Error fetching employee data:", error);
+            console.error("Error fetching employee data:", error.response.status);
+            if(error.response.status===401){
+              localStorage.removeItem("employeeId");
+              localStorage.removeItem("email");
+              localStorage.removeItem("role");
+              localStorage.removeItem("firstName");
+              localStorage.removeItem("lastName");
+              localStorage.removeItem("token");
+              navigate("/login")
+
+            }
             setLoading(false);
         }
       };
       fetchEmployee();
-  }, [employeeId]);
+  }, [employeeId, navigate]);
 
 
   const handleSignOut = () => {
