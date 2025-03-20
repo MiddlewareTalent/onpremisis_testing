@@ -9,8 +9,10 @@ import {
     MapPinIcon,
     PaperClipIcon,
     ClockIcon,
-    BuildingOfficeIcon,
+    // BuildingOfficeIcon,
     IdentificationIcon,
+    CalendarDaysIcon,
+    CalendarIcon
 } from "@heroicons/react/20/solid";
 import axios from "axios";
 import Loader from "../Assets/Loader";
@@ -105,12 +107,14 @@ export default function ProfileCard() {
                         <div className="p-8 space-y-8">
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                                 <InfoItem icon={<UserCircleIcon />} label="Full name" value={`${employee.firstName || 'N/A'} ${employee.lastName || ''}`} />
-                                <InfoItem icon={<BuildingOfficeIcon />} label="Company Name" value={employee.companyName || "N/A"} highlight={true} />
+                                {/* <InfoItem icon={<BuildingOfficeIcon />} label="Company Name" value={employee.companyName || "N/A"} highlight={true} /> */}
                                 <InfoItem icon={<IdentificationIcon />} label="Employee ID" value={employee.employeeId || "N/A"} />
                                 <InfoItem icon={<EnvelopeIcon />} label="Personal Email" value={employee.email || "N/A"} />
                                 <InfoItem icon={<EnvelopeIcon />} label="Corporate Email" value={employee.corporateEmail || "N/A"} />
                                 <InfoItem icon={<UserGroupIcon />} label="Reporting to" value={employee.reportingTo || "N/A"} />
                                 <InfoItem icon={<UserGroupIcon />} label="Reporting to" value={employee.employeeId || "N/A"} />
+                                <InfoItem icon={<CalendarDaysIcon/> } label="Date of Birth" value={employee.dateOfBirth || "N/A"} />
+                                <InfoItem icon={<CalendarIcon/> } label="Date of joining" value={employee.dateOfJoining || "N/A"} />
 
                                 <InfoItem icon={<BriefcaseIcon />} label="Job role" value={employee.jobRole || "N/A"} />
                                 <InfoItem
