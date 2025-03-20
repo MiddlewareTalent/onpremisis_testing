@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext} from "react";
 import { Link } from "react-router-dom";
 import { Dialog, Popover, Transition, Menu } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import MTLogo from "../Assets/MTlogo.svg";
 import axios from "axios";
 import Loader from "../Assets/Loader";
+import { MyContext } from "../MyProvider/MyProvider";
 
 
 function classNames(...classes) {
@@ -15,6 +16,7 @@ function classNames(...classes) {
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [role, setRole] = useState(null);
+  const {updateState } = useContext(MyContext);
 
   const navigate = useNavigate();
 
@@ -40,45 +42,50 @@ export default function Navbar() {
     setRole(storedRole);
   }, []);
 
-  
+  // The empty array means this function won't change unless dependencies inside useCallback change
 
   useEffect(() => {
     const fetchEmployee = async () => {
-      setLoading(true)
-        const token= localStorage.getItem('token');
-        try {
-            
-            console.log(token);
-            console.log("upto");
-            const response = await axios.get(`https://msquirebackend.azurewebsites.net/api/v1/employeeManager/getEmployee/${employeeId}`,{
-                method:'GET',
-                headers:{
-                    'Authorization':`Bearer ${token}`,
-                    'Content-Type':'application/json'
-                }
-            });
-            console.log("employee", response);
-            console.log(response.status);
-            setEmployee(response.data);
-            setLoading(false);
-           
-        } catch (error) {
-            console.error("Error fetching employee data:", error.response.status);
-            if(error.response.status===401){
-              localStorage.removeItem("employeeId");
-              localStorage.removeItem("email");
-              localStorage.removeItem("role");
-              localStorage.removeItem("firstName");
-              localStorage.removeItem("lastName");
-              localStorage.removeItem("token");
-              navigate("/login")
+      setLoading(true);
+      const token = localStorage.getItem('token');
+      try {
+        console.log(token);
+        console.log("upto");
 
-            }
-            setLoading(false);
+        const response = await axios.get(`https://msquirebackend.azurewebsites.net/api/v1/employeeManager/getEmployee/${employeeId}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        console.log("employee", response);
+        console.log(response.status);
+
+        setEmployee(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching employee data:", error.response.status);
+        if (error.response.status === 401) {
+          localStorage.removeItem("employeeId");
+          localStorage.removeItem("email");
+          localStorage.removeItem("role");
+          localStorage.removeItem("firstName");
+          localStorage.removeItem("lastName");
+          localStorage.removeItem("token");
+          navigate("/login");
         }
-      };
-      fetchEmployee();
+        setLoading(false);
+      }
+    };
+
+    fetchEmployee();
   }, [employeeId, navigate]);
+
+  if(!loading){
+    updateState(employee);
+  }
 
 
   const handleSignOut = () => {

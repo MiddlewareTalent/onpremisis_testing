@@ -1,11 +1,12 @@
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import PerformanceMatrix from './EmployeeDashboard/PerformanceMatrix'
 import LeavePerformance from './EmployeeDashboard/LeavePerformance'
 import TimesheetPerformance from './EmployeeDashboard/TimeSheetPerformance'
 import CompanyNews from './EmployeeDashboard/CompanyNews'
 import Notification from './EmployeeDashboard/Notification'
 import { motion } from "framer-motion"
+import { MyContext } from '../MyProvider/MyProvider'
 import {
   BriefcaseIcon,
   // PencilIcon,
@@ -25,28 +26,20 @@ export default function EnhancedDashboard() {
 
 
 
-const [email, setEmail]=useState('')
-const [employeeId, setEmployeeId]=useState('');
-const[employeeName,setemployeeName]=useState('');
 const[initials,setInitials]=useState('');  // New state to store initials
+const { state} = useContext(MyContext);
 
 useEffect(()=>{
-  const storedEmail=localStorage.getItem('email');
-  const storedEmployeeID=localStorage.getItem('employeeId');
-  const firstName=localStorage.getItem('firstName');
-  const lastName=localStorage.getItem('lastName');
-  const fullName=firstName+" "+lastName;
+  
 
-  if(storedEmail){
-    setEmail(storedEmail);
-    setEmployeeId(storedEmployeeID);
-    setemployeeName(fullName);
+  if(state.email){
+    
     // Get the initials (first letter of firstName and lastName)
-    if(firstName && lastName) {
-      setInitials(firstName.charAt(0).toUpperCase() + lastName.charAt(0).toUpperCase());
+    if(state.firstName && state.lastName) {
+      setInitials(state.firstName.charAt(0).toUpperCase() + state.lastName.charAt(0).toUpperCase());
     }
   }
-},[])
+},[state.email,state.firstName,state.lastName])
 
 
 
@@ -74,10 +67,10 @@ useEffect(()=>{
               <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-500 text-2xl font-bold text-white">{initials}
               </div>
               <div>
-                <p className="text-xl font-semibold text-gray-800">{employeeName||'employeeName not available'}</p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Software Engineer</p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Employee ID: {employeeId||'employee Id not available'}</p>
-                <p className="text-sm text-blue-600 dark:text-blue-400">{email || 'Email not available'}</p>
+                <p className="text-xl font-semibold text-gray-800">{state.firstName+" "+state.lastName||'employeeName not available'}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{state.jobRole}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Employee ID: {state.employeeId||'employee Id not available'}</p>
+                <p className="text-sm text-blue-600 dark:text-blue-400">{state.email || 'Email not available'}</p>
               </div>
             </div>
 

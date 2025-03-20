@@ -35,6 +35,7 @@ import ChangePassword from './Components/ChangePassword.jsx';
 import ProfileCard from './EmployeeComponents/ProfileCard.jsx';
 import EmpContactsDetails from './EmployeeComponents/EmpContactsDetails.jsx';
 import MyTeam from './HomePage/MyTeam.jsx';
+import { MyProvider } from './MyProvider/MyProvider.jsx';
 
 function App() {
 const [submissions, setSubmissions] = useState([]);
@@ -44,7 +45,8 @@ const [submissions, setSubmissions] = useState([]);
   const isLoggedIn = localStorage.getItem('token') && localStorage.getItem('email') && localStorage.getItem('role');
 
   return (
-    <Router>
+    <MyProvider>
+      <Router>
       <Routes>
         <Route path="/login" element={isLoggedIn ? <Navigate to="/dashboard" /> : <Login />} />
         <Route path="/register" element={isLoggedIn ? <Navigate to="/dashboard" /> : <Register />} />
@@ -53,6 +55,7 @@ const [submissions, setSubmissions] = useState([]);
         <Route path="/*" element={<Main submissions={submissions} setSubmissions={setSubmissions} />} />
       </Routes>
     </Router>
+    </MyProvider>
   );
 }
 
