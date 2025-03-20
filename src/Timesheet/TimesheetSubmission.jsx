@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
-// import { FaTimes } from "react-icons/fa";
+import Loader from "./loader.js";
 import { IoCloseCircleOutline } from "react-icons/io5";
  
 const TimesheetSubmission = ({ setSubmissions }) => {
@@ -9,11 +9,13 @@ const TimesheetSubmission = ({ setSubmissions }) => {
   const location = useLocation();
   const [isFormVisible, setIsFormVisible] = useState(true);
   const [errors, setErrors] = useState("");
+  const [loading, setLoading] = useState(false);
   const { formData } = location.state || {};
   const token=localStorage.getItem("token");
  
   // Function to handle timesheet submission
   const handleSubmitToHome = async () => {
+    setLoading(true);
     try {
       const newFormData = {
         ...formData,
@@ -56,6 +58,8 @@ const TimesheetSubmission = ({ setSubmissions }) => {
       // If no specific error was found, set the default error message
       setErrors(errorMessage || 'Error occurred');
       console.log("Error response data:", errorData);
+  }finally {
+    setLoading(false);
   }
  
     try{
@@ -102,6 +106,7 @@ const TimesheetSubmission = ({ setSubmissions }) => {
  
   const handleCloseForm = () => {
     setIsFormVisible(false); // Set form visibility to false
+    navigate('/TimesheetManage');
   };
  
   // Function to handle going back to the form
@@ -116,6 +121,7 @@ const TimesheetSubmission = ({ setSubmissions }) => {
  
   return (
     <div className="mx-auto py-4 px-6 text-black w-10/12">
+       {loading && <Loader />}
       <div className="bg-white rounded-lg shadow-md m-2 border border-gray-300">
         <div className="flex justify-between text-xs font-semibold mb-4 bg-gray-100 p-2 rounded-t-sm">
           <h2 className="text-3xl font-semibold">Submitted Timesheet Data</h2>

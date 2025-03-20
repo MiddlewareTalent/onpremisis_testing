@@ -24,13 +24,14 @@ const ManagerTimesheets = () => {
   const [rejectEmployeeId,setRejectEmployeeId]=useState();
  
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(5);  // Set the number of items per page
+  const [itemsPerPage] = useState(7);  // Set the number of items per page
  
   // const managerId = "";
   const employeeId = localStorage.getItem('employeeId');
   const token=localStorage.getItem("token");
  
   const fetchSubmissions = useCallback(async () => {
+    setLoading(true);
     if (!employeeId) return;
  
     try {
@@ -57,6 +58,8 @@ const ManagerTimesheets = () => {
       });
     } catch (error) {
       console.log("Error:", error);
+    }finally{
+      setLoading(false);
     }
   }, [startDate, endDate, employeeId, token]);
  
@@ -234,6 +237,21 @@ const ManagerTimesheets = () => {
       alert("Please select both start and end dates.");
     }
   };
+
+  // Show All Button Logic
+  const handleShowAll = () => {
+    setStartDate("");
+    setEndDate("");
+    setFilteredSubmissions(submissions); // Show all submissions
+    setCounts({
+      total: submissions.length,
+      pending: submissions.filter((sub) => sub.status === "PENDING").length,
+      approved: submissions.filter((sub) => sub.status === "APPROVED").length,
+      rejected: submissions.filter((sub) => sub.status === "REJECTED").length,
+    });
+    setIsDownloadEnabled(false); // Disable download if no date range is applied
+    setCurrentPage(1); // Reset pagination to first page
+  };
  
   // Pagination logic
   const indexOfLastEmployee = currentPage * itemsPerPage;
@@ -322,6 +340,12 @@ const ManagerTimesheets = () => {
                 >
                   Download
                 </button>
+                <button
+                  onClick={handleShowAll}
+                  className="bg-gray-400 text-white py-2 px-4 rounded-md ml-4 hover:bg-gray-500"
+                >
+                  Show All
+                </button>
               </div>
             </div>
  
@@ -406,7 +430,7 @@ const ManagerTimesheets = () => {
             )}
  
             {/* Pagination */}
-            <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+            {/* <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
               <div className="flex-1 flex justify-between sm:hidden">
                 <button
                   onClick={() => paginate(currentPage - 1)}
@@ -475,7 +499,86 @@ const ManagerTimesheets = () => {
                   </nav>
                 </div>
               </div>
-            </div>
+            </div> */}
+            <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+  <div className="flex-1 flex justify-between sm:hidden">
+    <button
+      onClick={() => paginate(currentPage - 1)}
+      disabled={currentPage === 1}
+      className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+    >
+      Previous
+    </button>
+    <button
+      onClick={() => paginate(currentPage + 1)}
+      disabled={currentPage === totalPages}
+      className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+    >
+      Next
+    </button>
+  </div>
+
+  <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+    <div>
+      <p className="text-lg text-gray-700">
+        Showing{" "}
+        <span className="font-medium">{indexOfFirstEmployee + 1}</span> to{" "}
+        <span className="font-medium">
+          {Math.min(indexOfLastEmployee, filteredSubmissions.length)}
+        </span>{" "}
+        of <span className="font-medium">{counts.total}</span> results
+      </p>
+    </div>
+    
+    <div>
+      <nav
+        className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
+        aria-label="Pagination"
+      >
+        {/* Previous button */}
+        <button
+          onClick={() => paginate(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+        >
+          <span className="sr-only">Previous</span>
+          <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+        </button>
+
+        {/* Page Numbers */}
+        {[...Array(5)].map((_, index) => {
+          const pageNumber = Math.floor((currentPage - 1) / 5) * 5 + (index + 1);
+          if (pageNumber <= totalPages) {
+            return (
+              <button
+                key={pageNumber}
+                onClick={() => paginate(pageNumber)}
+                className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
+                  pageNumber === currentPage
+                    ? "z-10 bg-blue-50 border-blue-500 text-blue-600"
+                    : "bg-white border-gray-300 text-gray-500 hover:bg-gray-50"
+                }`}
+              >
+                {pageNumber}
+              </button>
+            );
+          }
+          return null;
+        })}
+
+        {/* Next button */}
+        <button
+          onClick={() => paginate(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+        >
+          <span className="sr-only">Next</span>
+          <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+        </button>
+      </nav>
+    </div>
+  </div>
+</div>
           </div>
         </div>
       </div>
@@ -483,27 +586,27 @@ const ManagerTimesheets = () => {
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-            <h2 className="text-xl font-bold mb-4 text-gray-900">Comments</h2>
+            <h2 className="text-2xl font-bold mb-4 text-gray-900">Reject Timesheet</h2>
             <textarea
               className="w-full mt-2 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
               rows={3}
               value={comments}
               onChange={(e) => setComments(e.target.value)}
-              placeholder="Write your comments here"
+              placeholder="Enter rejection reason..."
             />
             <div className="mt-4 flex justify-end space-x-2">
               <button
                 onClick={handleClose}
-                className="bg-gray-200 text-lg text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300 transition duration-300 ease-in-out"
+                className="bg-gray-200 text-2xl text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300 transition duration-300 ease-in-out"
               >
-                Close
+                Cancel
               </button>
               <button
                 onClick={handleReject}
-                className="bg-blue-600 text-lg text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300 ease-in-out"
+                className="bg-red-600 text-2xl text-white px-4 py-2 rounded-md hover:bg-red-700 transition duration-300 ease-in-out"
                 disabled={loading}
               >
-                Reject
+                Confirm Reject
               </button>
             </div>
           </div>
