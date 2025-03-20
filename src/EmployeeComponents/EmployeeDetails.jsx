@@ -46,11 +46,13 @@ export default function EmployeeDetails() {
     const { id,employeeId } = useParams();
     const [employee, setEmployee] = useState(null);
     const [contacts, setContacts]=useState([]);
+     const [isLoading, setIsLoading]=useState(true);
     
  
     useEffect(() => {
         const fetchEmployee = async () => {
             const token= localStorage.getItem('token');
+            setIsLoading(true);
             try {
                 
                 console.log(token);
@@ -65,6 +67,7 @@ export default function EmployeeDetails() {
                 console.log(response.data);
                 console.log(response.status);
                 setEmployee(response.data);
+                setIsLoading(false);
                
             } catch (error) {
                 console.error("Error fetching employee data:", error);
@@ -96,6 +99,28 @@ export default function EmployeeDetails() {
         { label: "Visa", file: employee.visa },
         { label: "Other Documents", file: employee.otherDocuments },
     ];
+
+    var givenDate;
+    var currentDate=new Date();
+    var years;
+    var months;
+    var days;
+    var employeeMentDuration;
+
+
+    if(!isLoading){
+        givenDate=new Date(employee.dateOfJoining);
+        console.log(givenDate);
+        console.log(currentDate);
+        var difference = currentDate.getTime() - givenDate.getTime();
+    
+    years = Math.floor(difference / (1000 * 60 * 60 * 24 * 365.25));
+    months = Math.floor((difference % (1000 * 60 * 60 * 24 * 365.25)) / (1000 * 60 * 60 * 24 * 30.44));
+    days = Math.floor((difference % (1000 * 60 * 60 * 24 * 30.44)) / (1000 * 60 * 60 * 24));
+    employeeMentDuration=years+" " +(years > 1 ? "Years ": "Year ")+months+" "+(months>1? "Months ":"Month ")+days+" "+(days>1? "Days.":"Day.")
+
+    }
+ 
  
     return (
         <div className="flex flex-col min-h-screen bg-gray-50">
@@ -140,6 +165,12 @@ export default function EmployeeDetails() {
                             <Separator />
                             <div>
                                 <InfoItem icon={<MapPinIcon />} label="Address" value={`${employee.streetAddress || ''}, ${employee.city || ''}, ${employee.region || ''} - ${employee.postalCode || ''}`} fullWidth />
+                            </div>
+                            <Separator />
+
+                           
+                           <div>
+                            <InfoItem icon={<ClockIcon/>} label="Duration Of Employeement" value={employeeMentDuration || "N/A"} />      
                             </div>
                             <Separator />
                             <div>
