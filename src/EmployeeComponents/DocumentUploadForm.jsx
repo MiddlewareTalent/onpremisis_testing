@@ -9,6 +9,7 @@ const DocumentUploadForm = ({ formData, onNext, onBack, onCancel, onFormDataChan
     const [documents, setDocuments] = useState({
         identityCard: null,
         visa: null,
+        profilePhoto:null,
         otherDocuments: null,
     });
 
@@ -101,9 +102,50 @@ const DocumentUploadForm = ({ formData, onNext, onBack, onCancel, onFormDataChan
 
                         <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 
+                            <div className="col-span-full">
+                                <label htmlFor="profile-photo"
+                                       className="block text-sm font-medium leading-6 text-gray-900">
+                                    Profile Photo
+                                </label>
+                                <div className="mt-2 flex items-center">
+                                    {!documents.profilePhoto ? (
+                                        <>
+                                            <input
+                                                id="profile-photo"
+                                                name="profilePhoto"
+                                                type="file"
+                                                className="sr-only"
+                                                onChange={(e) => handleFileChange(e, 'profilePhoto')}
+                                            />
+                                            <label
+                                                htmlFor="profile-photo"
+                                                className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                                            >
+                                                <span>Upload</span>
+                                            </label>
+                                            {error.profilePhoto && (
+                                                <p className="text-sm text-red-600 pl-4">{error.profilePhoto}</p>
+                                            )}
+                                        </>
+                                    ) : (
+                                        <div className="flex items-center">
+                                            <p className="pl-4 text-sm text-gray-600">{documents.profilePhoto.name}</p>
+                                            <button
+                                                type="button"
+                                                className="ml-4 text-red-600 hover:text-red-800"
+                                                onClick={() => handleFileRemove('profilePhoto')}
+                                            >
+                                                Remove
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
                             {/* National Card */}
                             <div className="col-span-full">
-                                <label htmlFor="national-card" className="block text-sm font-medium leading-6 text-gray-900">
+                                <label htmlFor="national-card"
+                                       className="block text-sm font-medium leading-6 text-gray-900">
                                     Identity Card <span className="text-red-600">*</span>
                                 </label>
                                 <div className="mt-2 flex items-center">
@@ -142,11 +184,12 @@ const DocumentUploadForm = ({ formData, onNext, onBack, onCancel, onFormDataChan
                             </div>
 
                             <div className="col-span-full">
-                                <label htmlFor="national-card" className="block text-sm font-medium leading-6 text-gray-900">
-                                Visa 
+                                <label htmlFor="national-card"
+                                       className="block text-sm font-medium leading-6 text-gray-900">
+                                    Visa
                                 </label>
                                 <div className="mt-2 flex items-center">
-                                    {!documents.visa? (
+                                    {!documents.visa ? (
                                         <>
                                             <input
                                                 id="visa"
@@ -161,7 +204,7 @@ const DocumentUploadForm = ({ formData, onNext, onBack, onCancel, onFormDataChan
                                             >
                                                 <span>Upload</span>
                                             </label>
-                                            {error.identityCard && (
+                                            {error.visa && (
                                                 <p className="text-sm text-red-600 pl-4">{error.visa}</p>
                                             )}
                                         </>
@@ -181,8 +224,9 @@ const DocumentUploadForm = ({ formData, onNext, onBack, onCancel, onFormDataChan
                             </div>
 
                             <div className="col-span-full">
-                                <label htmlFor="national-card" className="block text-sm font-medium leading-6 text-gray-900">
-                                Other Documents 
+                                <label htmlFor="national-card"
+                                       className="block text-sm font-medium leading-6 text-gray-900">
+                                    Other Documents
                                 </label>
                                 <div className="mt-2 flex items-center">
                                     {!documents.otherDocuments ? (
@@ -222,35 +266,33 @@ const DocumentUploadForm = ({ formData, onNext, onBack, onCancel, onFormDataChan
                             {/* Add similar code structures for other documents, e.g., tenthCertificate, twelfthCertificate, graduationCertificate */}
 
                         </div>
-                        
 
-                            {/* National Card */}
-                            
 
-                            
+                        {/* National Card */}
 
-                            {/* Add similar code structures for other documents, e.g., tenthCertificate, twelfthCertificate, graduationCertificate */}
 
-                        </div>
+                        {/* Add similar code structures for other documents, e.g., tenthCertificate, twelfthCertificate, graduationCertificate */}
+
                     </div>
-                
-
-                {error.submission && <p className="text-red-500 text-sm mt-2">{error.submission}</p>}
-                {submissionMessage && <p className="text-green-500 text-sm mt-2">{submissionMessage}</p>}
-
-                <div className="mt-6 flex items-center justify-end gap-x-6">
-                    <button type="button" className="text-sm font-semibold leading-6 text-gray-900" onClick={onBack}>
-                        Back
-                    </button>
-                    <button
-                        type="button"
-                        className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                        onClick={handleSubmit}
-                    >
-                        Submit
-                    </button>
                 </div>
-            </form>
+
+
+                 {error.submission && <p className="text-red-500 text-sm mt-2">{error.submission}</p>}
+                 {submissionMessage && <p className="text-green-500 text-sm mt-2">{submissionMessage}</p>}
+
+                 <div className="mt-6 flex items-center justify-end gap-x-6">
+                     <button type="button" className="text-sm font-semibold leading-6 text-gray-900" onClick={onBack}>
+                         Back
+                     </button>
+                     <button
+                         type="button"
+                         className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                         onClick={handleSubmit}
+                     >
+                         Submit
+                     </button>
+                 </div>
+             </form>
         </>
     );
 };

@@ -97,6 +97,7 @@ export default function EmployeeDetails() {
     const attachments = [
         { label: "Identity Card", file: employee.identityCard },
         { label: "Visa", file: employee.visa },
+        {label: "Profile Photo", file: employee.profilePhoto},
         { label: "Other Documents", file: employee.otherDocuments },
     ];
 
