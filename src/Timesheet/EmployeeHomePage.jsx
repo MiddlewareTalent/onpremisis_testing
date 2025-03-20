@@ -26,6 +26,7 @@ const EmployeeHomePage = ({ submissions, setSubmissions }) => {
   const [selectedSubmissionId, setSelectedSubmissionId] = useState(null);
   const [loading,setLoading]= useState(false);
   const token=localStorage.getItem("token");
+  
  
   useEffect(() => {
     
@@ -46,6 +47,7 @@ const EmployeeHomePage = ({ submissions, setSubmissions }) => {
             "Authorization": `Bearer ${token}`
           }
         });
+        setCurrentPage(1);
         const data = response.data.reverse();
         setSubmissions(data);
         setFilteredSubmissions(data);
@@ -101,7 +103,7 @@ const EmployeeHomePage = ({ submissions, setSubmissions }) => {
       ? submissions.filter((sub) => sub.status === status)
       : submissions;
     setFilteredSubmissions(filtered);
-    setCurrentPage(1); 
+    setCurrentPage(1);
   };
  
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
