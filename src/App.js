@@ -37,7 +37,9 @@ import EmpContactsDetails from './EmployeeComponents/EmpContactsDetails.jsx';
 import MyTeam from './HomePage/MyTeam.jsx';
 
 function App() {
-  const [submissions, setSubmissions] = useState([]);
+const [submissions, setSubmissions] = useState([]);
+
+  
 
   const isLoggedIn = localStorage.getItem('token') && localStorage.getItem('email') && localStorage.getItem('role');
 
@@ -57,6 +59,8 @@ function App() {
 function Main({ submissions, setSubmissions }) {
   const location = useLocation();
   const showNavbar = !['/login', '/register'].includes(location.pathname);
+
+  
 
   return (
     <>

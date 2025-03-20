@@ -12,7 +12,9 @@ import {
     // BuildingOfficeIcon,
     IdentificationIcon,
     CalendarDaysIcon,
-    CalendarIcon
+    CalendarIcon,
+    CreditCardIcon,
+    GlobeAmericasIcon,
 } from "@heroicons/react/20/solid";
 import axios from "axios";
 import Loader from "../Assets/Loader";
@@ -40,11 +42,14 @@ export default function ProfileCard() {
     
     const [employee, setEmployee] = useState(null);
     const [contacts, setContacts]=useState([]);
+    const [isLoading, setIsLoading]=useState(true);
     const employeeId=localStorage.getItem("employeeId");
     const token= localStorage.getItem('token');
+    
  
     useEffect(() => {
         const fetchEmployee = async () => {
+            setIsLoading(true);
             try {
                 
                 console.log(token);
@@ -59,6 +64,7 @@ export default function ProfileCard() {
                 console.log(response.data);
                 console.log(response.status);
                 setEmployee(response.data);
+                setIsLoading(false);
                
             } catch (error) {
                 console.error("Error fetching employee data:", error);
@@ -87,11 +93,32 @@ export default function ProfileCard() {
  
     // Attachments mapping
     const attachments = [
-        { label: "National Card", file: employee.nationalCard },
+        // { label: "National Card", file: employee.nationalCard },
         { label: "10th Certificate", file: employee.tenthCertificate },
         { label: "12th Certificate", file: employee.twelfthCertificate },
         { label: "Graduation Certificate", file: employee.graduationCertificate },
     ];
+
+    var givenDate;
+    var currentDate=new Date();
+    var years;
+    var months;
+    var days;
+    var employeeMentDuration;
+
+
+    if(!isLoading){
+        givenDate=new Date(employee.dateOfJoining);
+        console.log(givenDate);
+        console.log(currentDate);
+        var difference = currentDate.getTime() - givenDate.getTime();
+    
+    years = Math.floor(difference / (1000 * 60 * 60 * 24 * 365.25));
+    months = Math.floor((difference % (1000 * 60 * 60 * 24 * 365.25)) / (1000 * 60 * 60 * 24 * 30.44));
+    days = Math.floor((difference % (1000 * 60 * 60 * 24 * 30.44)) / (1000 * 60 * 60 * 24));
+    employeeMentDuration=years+" " +(years > 1 ? "Years ": "Year ")+months+" "+(months>1? "Months ":"Month ")+days+" "+(days>1? "Days.":"Day.")
+
+    }
  
     return (
         <div className="flex flex-col min-h-screen bg-gray-50">
@@ -112,11 +139,12 @@ export default function ProfileCard() {
                                 <InfoItem icon={<EnvelopeIcon />} label="Personal Email" value={employee.email || "N/A"} />
                                 <InfoItem icon={<EnvelopeIcon />} label="Corporate Email" value={employee.corporateEmail || "N/A"} />
                                 <InfoItem icon={<UserGroupIcon />} label="Reporting to" value={employee.reportingTo || "N/A"} />
-                                <InfoItem icon={<UserGroupIcon />} label="Reporting to" value={employee.employeeId || "N/A"} />
+                                {/* <InfoItem icon={<UserGroupIcon />} label="Reporting to" value={employee.employeeId || "N/A"} /> */}
                                 <InfoItem icon={<CalendarDaysIcon/> } label="Date of Birth" value={employee.dateOfBirth || "N/A"} />
                                 <InfoItem icon={<CalendarIcon/> } label="Date of joining" value={employee.dateOfJoining || "N/A"} />
-
+                                 <InfoItem icon={<GlobeAmericasIcon />} label="Working Country" value={employee.workingCountry || "N/A"} />
                                 <InfoItem icon={<BriefcaseIcon />} label="Job role" value={employee.jobRole || "N/A"} />
+                                
                                 <InfoItem
                                     icon={<ClockIcon />}
                                     label="Employee Status"
@@ -125,11 +153,17 @@ export default function ProfileCard() {
                                             {employee.employmentStatus || "N/A"}
                                         </Badge>
                                     }
+                                    
                                 />
+                                <InfoItem icon={<CreditCardIcon />} label="National Id Number" value={employee.nationalInsuranceNumber || "N/A"} />
                             </div>
                             <Separator />
                             <div>
                                 <InfoItem icon={<MapPinIcon />} label="Address" value={`${employee.streetAddress || ''}, ${employee.city || ''}, ${employee.region || ''} - ${employee.postalCode || ''}`} fullWidth />
+                            </div>
+                            <Separator />
+                            <div>
+                            <InfoItem icon={<ClockIcon/>} label="Duration Of Employeement" value={employeeMentDuration || "N/A"} />      
                             </div>
                             <Separator />
                             <div>

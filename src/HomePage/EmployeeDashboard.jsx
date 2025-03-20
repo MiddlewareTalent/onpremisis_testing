@@ -8,7 +8,7 @@ import Notification from './EmployeeDashboard/Notification'
 import { motion } from "framer-motion"
 import {
   BriefcaseIcon,
-  PencilIcon,
+  // PencilIcon,
 } from "@heroicons/react/24/outline"
 
 
@@ -49,6 +49,8 @@ useEffect(()=>{
 },[])
 
 
+
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -63,7 +65,7 @@ useEffect(()=>{
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-2xl font-semibold text-gray-800">Employee Details</h2>
             <button className="rounded-full p-2 text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700">
-              <PencilIcon className="h-5 w-5" />
+              
             </button>
           </div>
 
