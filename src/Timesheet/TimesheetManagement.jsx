@@ -11,11 +11,12 @@ const FormField = ({
   type = "text",
   required = false,
   options = [],
+  errorMessage = "",
 }) => (
-  <div className="mb-4 md:w-1/2 flex flex-col space-y-2 font-serif">
-    <label className="block text-xl font-medium text-black font-serif py-5">
+  <div className="mb-4 md:w-1/2 flex flex-col space-y-2 ">
+    <label className="block text-2xl font-medium text-black  py-5">
       {label}
-      {required && <span className="text-red-500">*</span>}
+      {required && <span className="text-red-500"> *</span>}
     </label>
     {type === "select" ? (
       <select
@@ -25,7 +26,7 @@ const FormField = ({
         className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
       >
         <option value="" className="text-gray-500">
-          Select {label.toLowerCase()}
+        Select {typeof label === "string" ? label.toLowerCase() : "option"}
         </option>
         {options.map((opt, index) => (
           <option key={index} value={opt.value}>
@@ -43,6 +44,7 @@ const FormField = ({
         className="mt-1 p-2 block w-full border border-gray-300 rounded-md "
       />
     )}
+     {errorMessage && <div className="text-red-500 text-xl">{errorMessage}</div>}
   </div>
 );
 
@@ -69,7 +71,7 @@ const TimesheetManagement = ({ setSubmissions, employeeId }) => {
     taskDescription: "",
     emailId: localStorage.getItem("email")
   });
-  const [errors, setErrors] = useState(null);
+  const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -191,52 +193,68 @@ const TimesheetManagement = ({ setSubmissions, employeeId }) => {
       // For other fields (text, select, etc.), just update the state
       setFormData((prevData) => ({ ...prevData, [name]: value }));
     }
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: "",
+    }));
   };
 
 
   const handleCloseForm = () => {
     setIsFormVisible(false); // Set form visibility to false
+    navigate('/TimesheetManage');
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // console.log(errors);
+    let formErrors = {};
 
-    // List of required fields
-    const requiredFields = [
-      "startDate",
-      "endDate",
-      "clientName",
-      "projectName",
-      "taskType",
-      "workLocation",
-      "reportingManager",
-      "onCallSupport",
-    ];
-
-    // Validation to check if all required fields are filled correctly
-    const isValid = requiredFields.every((field) => {
-      const fieldValue = formData[field];
-      if (field === "numberOfHours" || field === "extraHours") {
-        // For numeric fields, check if they are valid numbers
-        return !isNaN(fieldValue) && fieldValue !== "";
-      }
-      // For string fields, use trim to ensure there is no empty or whitespace only value
-      return typeof fieldValue === "string"
-        ? fieldValue.trim() !== ""
-        : fieldValue != null;
-    });
-
-    // Additional validation to check if the start date is before or equal to the end date
-    if (!isValid || new Date(formData.startDate) > new Date(formData.endDate)) {
-      setErrors("Please fill all required fields correctly.");
-      return;
+    // Validation logic for each field
+    if (!formData.startDate) {
+      formErrors.startDate = "Please fill start date field.";
     }
 
+    if (!formData.endDate) {
+      formErrors.endDate = "Please fill end date field.";
+    } else if (new Date(formData.startDate) > new Date(formData.endDate)) {
+      formErrors.endDate = "End date must be after or equal to start date.";
+    }
+
+    if (!formData.clientName) {
+      formErrors.clientName = "Please fill client name field.";
+    }
+
+    if (!formData.projectName) {
+      formErrors.projectName = "Please fill project name field.";
+    }
+
+    if (!formData.taskType) {
+      formErrors.taskType = "Please select a task type.";
+    }
+
+    if (!formData.workLocation) {
+      formErrors.workLocation = "Please select a work mode.";
+    }
+
+    if (!formData.onCallSupport) {
+      formErrors.onCallSupport = "Please select on-call support option.";
+    }
+
+    if (!formData.numberOfHours || isNaN(formData.numberOfHours)) {
+      formErrors.numberOfHours = "Please fill number of hours.";
+    }
+
+    if (Object.keys(formErrors).length > 0) {
+      setErrors(formErrors);  // Set errors state here
+      return;  // Prevent form submission if there are errors
+    }
+    
     setLoading(true);
 
-    // Navigate to TimesheetSubmission.jsx without submitting to database yet
     navigate("/timesheet-submission", { state: { formData } });
   };
+  
 
   // Options for dropdowns
   const taskTypes = [
@@ -262,17 +280,16 @@ const TimesheetManagement = ({ setSubmissions, employeeId }) => {
     "hybrid",
     "on-Site",
     "temporary Location",
-    "mobile",
   ];
   const onCallOptions = [
     { value: "true", label: "Yes" },
     { value: "false", label: "No" },
   ];
 
-  if (!isFormVisible) return navigate('/EmployeeHomePage');
+  if (!isFormVisible) return null;
 
   return (
-    <div className="mx-auto py-8 px-4 font-serif w-8/12 text-xl ">
+    <div className="mx-auto py-8 px-4  w-8/12 text-2xl ">
       <div className="bg-white shadow-md rounded-lg p-6 border border-gray-300">
         <div className="flex justify-between text-3xl font-semibold mb-6 bg-gray-100 p-2 rounded-t-sm">
           {isEditing ? "Edit Timesheet" : "Submit Timesheet"}
@@ -283,31 +300,31 @@ const TimesheetManagement = ({ setSubmissions, employeeId }) => {
         <form onSubmit={handleSubmit}>
           <div className="flex flex-row min-w-40 gap-5 text-xl">
             <FormField
-              label="Start Date"
+             label={<>Start Date <span style={{ color: 'red' }}>*</span></>}
               name="startDate"
               value={formData.startDate}
               onChange={handleChange}
               type="date"
-              required
+              errorMessage={errors.startDate}
             />
             <FormField
-              label="End Date"
+              label={<>End Date <span style={{color:'red'}}>*</span></>}
               name="endDate"
               value={formData.endDate}
               onChange={handleChange}
               type="date"
-              required
+              errorMessage={errors.endDate}
             />
-          </div>
-          <div className="flex flex-row min-w-40 gap-5">
+          </div> 
+          <div className="flex flex-row min-w-40 gap-5 text-xl">
             <FormField
-              label="Number of Hours"
+            label={<>Number of Hours <span style={{color:'red'}}>*</span></>}
               name="numberOfHours"
               value={formData.numberOfHours}
               onChange={handleChange}
               type="number"
               min="0"
-              required
+              errorMessage={errors.numberOfHours}
             />
             <FormField
               label="Extra Hours"
@@ -315,27 +332,28 @@ const TimesheetManagement = ({ setSubmissions, employeeId }) => {
               value={formData.extraHours}
               onChange={handleChange}
               type="number"
+              required={false}
             />
           </div>
-          <div className="flex flex-row min-w-40 gap-5">
+          <div className="flex flex-row min-w-40 gap-5 text-xl">
             <FormField
-              label="Client Name"
+            label={<>Client Name <span style={{color:'red'}}>*</span></>}
               name="clientName"
               value={formData.clientName}
               onChange={handleChange}
-              required
+              errorMessage={errors.clientName}
             />
             <FormField
-              label="Project Name"
+             label={<>Project Name <span style={{color:'red'}}>*</span></>}
               name="projectName"
               value={formData.projectName}
               onChange={handleChange}
-              required
+              errorMessage={errors.projectName}
             />
           </div>
-          <div className="flex flex-row min-w-40 gap-5">
+          <div className="flex flex-row min-w-40 gap-5 text-xl">
             <FormField
-              label="Task Type"
+            label={<>Task Type <span style={{color:'red'}}>*</span></>}
               name="taskType"
               value={formData.taskType}
               onChange={handleChange}
@@ -344,10 +362,10 @@ const TimesheetManagement = ({ setSubmissions, employeeId }) => {
                 value: type,
                 label: type.charAt(0).toUpperCase() + type.slice(1),
               }))}
-              required
+              errorMessage={errors.taskType}
             />
             <FormField
-              label="Work Mode"
+             label={<>Work Mode <span style={{color:'red'}}>*</span></>}
               name="workLocation"
               value={formData.workLocation}
               onChange={handleChange}
@@ -356,22 +374,22 @@ const TimesheetManagement = ({ setSubmissions, employeeId }) => {
                 value: location,
                 label: location.charAt(0).toUpperCase() + location.slice(1),
               }))}
-              required
+              errorMessage={errors.workLocation}
             />
           </div>
-          <div className="flex flex-row min-w-40 gap-5">
+          <div className="flex flex-row min-w-40 gap-5 text-xl">
             <FormField
-              label="On-Call Support"
+            label={<>On-Call Support <span style={{color:'red'}}>*</span></>}
               name="onCallSupport"
               value={formData.onCallSupport}
               onChange={handleChange}
               type="select"
               options={onCallOptions}
-              required
+              errorMessage={errors.onCallSupport}
             />
 
-            <div className="mb-4 md:w-1/2 flex flex-col space-y-2 font-serif">
-              <label className="block text-xl font-medium text-black font-serif py-5">
+            <div className="mb-4 md:w-1/2 flex flex-col space-y-2 text-xl ">
+              <label className="block text-2xl font-medium text-black  py-5">
                 Task Description
               </label>
               <textarea
@@ -383,7 +401,7 @@ const TimesheetManagement = ({ setSubmissions, employeeId }) => {
             </div>
           </div>
 
-          {errors && <div className="text-red-500 mb-3">{errors}</div>}
+        
           <button
             disabled={loading}
             type="submit"

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Loader from './loader.js'
 import { jsPDF } from "jspdf";
 import { FaTrash, FaEdit } from "react-icons/fa";
 import { MdOutlineFileDownload } from "react-icons/md";
@@ -17,18 +18,20 @@ const EmployeeHomePage = ({ submissions, setSubmissions }) => {
     rejected: 0,
   });
   const [currentPage, setCurrentPage] = useState(1);
-  const submissionsPerPage = 5;
+  const submissionsPerPage = 7;
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [isDownloadEnabled, setIsDownloadEnabled] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selectedSubmissionId, setSelectedSubmissionId] = useState(null);
+  const [loading,setLoading]= useState(false);
   const token=localStorage.getItem("token");
  
   useEffect(() => {
+    
     const employeeId = localStorage.getItem("employeeId");
     const token=localStorage.getItem("token");
- 
+    setLoading(true);
     const fetchSubmissions = async () => {
       try {
         let url = `https://msquirebackend.azurewebsites.net/api/timesheets/list/${employeeId}`;
@@ -38,6 +41,7 @@ const EmployeeHomePage = ({ submissions, setSubmissions }) => {
         }
  
         const response = await axios.get(url, {
+          
           headers: {
             "Authorization": `Bearer ${token}`
           }
@@ -53,6 +57,8 @@ const EmployeeHomePage = ({ submissions, setSubmissions }) => {
         });
       } catch (error) {
         console.error("Error fetching submissions:", error);
+      }finally{
+        setLoading(false);
       }
     };
  
@@ -64,6 +70,7 @@ const EmployeeHomePage = ({ submissions, setSubmissions }) => {
     navigate("/timesheet-management", { state: { submission } });
  
   const handleDeleteTimesheet = async () => {
+    setLoading(true);
     try {
       await axios.delete(`https://msquirebackend.azurewebsites.net/api/timesheets/delete/${selectedSubmissionId}`, {
         headers: {
@@ -84,6 +91,8 @@ const EmployeeHomePage = ({ submissions, setSubmissions }) => {
       setShowModal(false); // Close the modal after deletion
     } catch (error) {
       console.error("Error deleting timesheet:", error);
+    }finally{
+      setLoading(false);
     }
   };
  
@@ -92,6 +101,7 @@ const EmployeeHomePage = ({ submissions, setSubmissions }) => {
       ? submissions.filter((sub) => sub.status === status)
       : submissions;
     setFilteredSubmissions(filtered);
+    setCurrentPage(1); 
   };
  
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
@@ -192,8 +202,25 @@ const EmployeeHomePage = ({ submissions, setSubmissions }) => {
     }
   };
  
+  // Show All Button Logic
+  const handleShowAll = () => {
+    setStartDate("");
+    setEndDate("");
+    setFilteredSubmissions(submissions); // Show all submissions
+    setCounts({
+      total: submissions.length,
+      pending: submissions.filter((sub) => sub.status === "PENDING").length,
+      approved: submissions.filter((sub) => sub.status === "APPROVED").length,
+      rejected: submissions.filter((sub) => sub.status === "REJECTED").length,
+    });
+    setIsDownloadEnabled(false); // Disable download if no date range is applied
+    setCurrentPage(1); // Reset pagination to first page
+  };
+
   return (
+    
     <div className="bg-gray-100 min-h-screen p-4 sm:p-6 lg:p-8">
+      {loading && <Loader/>}
       <div className="max-w-full mx-auto">
         <div className="bg-white shadow-lg rounded-lg overflow-hidden">
           <div className="p-6 sm:p-8">
@@ -205,17 +232,17 @@ const EmployeeHomePage = ({ submissions, setSubmissions }) => {
             {showModal && (
               <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                 <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-                  <h2 className="text-xl font-bold mb-4 text-gray-900">Are you sure to delete?</h2>
-                  <div className="mt-4 flex justify-end space-x-2">
+                  <h2 className="text-xl font-bold mb-4 text-gray-900">Are you sure you want to delete this Timesheet?</h2>
+                  <div className="mt-5 p-4 flex justify-center space-x-2 ">
                     <button
                       onClick={() => setShowModal(false)}
-                      className="bg-gray-200 text-lg text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300 transition duration-300 ease-in-out"
+                      className="bg-gray-200 text-lg text-gray-800 mr-3 px-4 py-2 rounded-md hover:bg-gray-300 transition duration-300 ease-in-out"
                     >
                       Close
                     </button>
                     <button
                       onClick={handleDeleteTimesheet}
-                      className="bg-blue-600 text-lg text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300 ease-in-out"
+                      className="bg-red-600 text-lg text-white px-4 py-2 ml-4 rounded-md hover:bg-red-700 transition duration-300 ease-in-out"
                     >
                       Delete
                     </button>
@@ -278,6 +305,12 @@ const EmployeeHomePage = ({ submissions, setSubmissions }) => {
                   disabled={!startDate || !endDate}
                 >
                   Download
+                </button>
+                <button
+                  onClick={handleShowAll}
+                  className="bg-gray-400 text-white py-2 px-4 rounded-md ml-4 hover:bg-gray-500"
+                >
+                  Show All
                 </button>
               </div>
             </div>
@@ -366,78 +399,85 @@ const EmployeeHomePage = ({ submissions, setSubmissions }) => {
  
             {/* Pagination */}
             <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-              <div className="flex-1 flex justify-between sm:hidden">
-                <button
-                  onClick={() => paginate(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-                >
-                  Previous
-                </button>
-                <button
-                  onClick={() => paginate(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-                >
-                  Next
-                </button>
-              </div>
-              <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                <div>
-                  <p className="text-lg text-gray-700">
-                    Showing{" "}
-                    <span className="font-medium">{(currentPage - 1) * submissionsPerPage + 1}</span> to{" "}
-                    <span className="font-medium">
-                      {Math.min(currentPage * submissionsPerPage, filteredSubmissions.length)}
-                    </span>{" "}
-                    of <span className="font-medium">{filteredSubmissions.length}</span>{" "}
-                    results
-                  </p>
-                </div>
-                <div>
-                  <nav
-                    className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
-                    aria-label="Pagination"
-                  >
-                    <button
-                      onClick={() => paginate(currentPage - 1)}
-                      disabled={currentPage === 1}
-                      className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                    >
-                      <span className="sr-only">Previous</span>
-                      <ChevronLeftIcon
-                        className="h-5 w-5"
-                        aria-hidden="true"
-                      />
-                    </button>
-                    {[...Array(totalPages)].map((_, index) => (
-                      <button
-                        key={index}
-                        onClick={() => paginate(index + 1)}
-                        className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
-                          index + 1 === currentPage
-                            ? "z-10 bg-blue-50 border-blue-500 text-blue-600"
-                            : "bg-white border-gray-300 text-gray-500 hover:bg-gray-50"
-                        }`}
-                      >
-                        {index + 1}
-                      </button>
-                    ))}
-                    <button
-                      onClick={() => paginate(currentPage + 1)}
-                      disabled={currentPage === totalPages}
-                      className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                    >
-                      <span className="sr-only">Next</span>
-                      <ChevronRightIcon
-                        className="h-5 w-5"
-                        aria-hidden="true"
-                      />
-                    </button>
-                  </nav>
-                </div>
-              </div>
-            </div>
+  <div className="flex-1 flex justify-between sm:hidden">
+    <button
+      onClick={() => paginate(currentPage - 1)}
+      disabled={currentPage === 1}
+      className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+    >
+      Previous
+    </button>
+    <button
+      onClick={() => paginate(currentPage + 1)}
+      disabled={currentPage === totalPages}
+      className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+    >
+      Next
+    </button>
+  </div>
+  
+  <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+    <div>
+      <p className="text-lg text-gray-700">
+        Showing{" "}
+        <span className="font-medium">
+          {(currentPage - 1) * submissionsPerPage + 1}
+        </span>{" "}
+        to{" "}
+        <span className="font-medium">
+          {Math.min(currentPage * submissionsPerPage, filteredSubmissions.length)}
+        </span>{" "}
+        of <span className="font-medium">{filteredSubmissions.length}</span>{" "}
+        results
+      </p>
+    </div>
+    <div>
+      <nav
+        className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
+        aria-label="Pagination"
+      >
+        <button
+          onClick={() => paginate(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+        >
+          <span className="sr-only">Previous</span>
+          <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+        </button>
+        
+        {/* Generate the visible pages */}
+        {[...Array(5)].map((_, index) => {
+          const pageNumber = Math.floor((currentPage - 1) / 5) * 5 + (index + 1);
+          if (pageNumber <= totalPages) {
+            return (
+              <button
+                key={pageNumber}
+                onClick={() => paginate(pageNumber)}
+                className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
+                  pageNumber === currentPage
+                    ? "z-10 bg-blue-50 border-blue-500 text-blue-600"
+                    : "bg-white border-gray-300 text-gray-500 hover:bg-gray-50"
+                }`}
+              >
+                {pageNumber}
+              </button>
+            );
+          }
+          return null;
+        })}
+        
+        <button
+          onClick={() => paginate(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+        >
+          <span className="sr-only">Next</span>
+          <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+        </button>
+      </nav>
+    </div>
+  </div>
+</div>
             {/* End Pagination */}
           </div>
         </div>
