@@ -134,6 +134,11 @@ export default function Employee() {
         setIsReset(false);
     }
 
+    const searchEmployees=(e)=>{
+        setCurrentPage(1);
+        setSearchTerm(e.target.value)
+    }
+
     const handleDeleteEmployee = async (employeeId) => {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -236,7 +241,7 @@ export default function Employee() {
                                     placeholder="Search by name"
                                     className="mt-4 px-4 py-2 border rounded-lg w-full"
                                     value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}  // Update search term
+                                    onChange={(e) => searchEmployees(e)}  // Update search term
                                 />
                             </div>
                         </div>
