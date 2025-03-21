@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef,useContext } from "react";
 import axios from "axios";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import ChartNode from "./ChartNode";
@@ -10,6 +10,8 @@ import { FaMapMarkerAlt, FaEnvelope, FaCopy } from 'react-icons/fa';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { motion } from "framer-motion"
 import Loader from "../Assets/Loader";
+import { MyContext } from "../MyProvider/MyProvider";
+import { useNavigate } from "react-router-dom";
  
  
 export default function Chart() {
@@ -29,6 +31,8 @@ export default function Chart() {
   const [workingWith, setWorkingWith] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filterCountry, setFilterCountry] = useState("all");
+  const {state}=useContext(MyContext);
+  const navigate=useNavigate();
  
   // Fetch data based on the employeeId
   useEffect(() => {
@@ -160,6 +164,10 @@ export default function Chart() {
  
  
   }, [employeeId, filterCountry]); // This effect runs when the employeeId changes
+
+  if(!state.organisationChart){
+    navigate("/dashboard");
+  }
  
   // Handle employee change on suggestion click
   const changeEmployee = (newEmployeeId) => {
