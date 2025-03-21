@@ -304,7 +304,8 @@ const EmployeeHomePage = ({ submissions, setSubmissions }) => {
                 <button
                   onClick={handleApplyDateRange}
                   className={`bg-blue-500 text-white py-2 px-4 rounded-md ${!startDate || !endDate ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  disabled={!startDate || !endDate}
+                  disabled={!startDate || !endDate} 
+                  title={(!startDate || !endDate) ? "The button is disabled because the date range has not been applied yet." : ""}
                 >
                   Download
                 </button>
@@ -324,10 +325,10 @@ const EmployeeHomePage = ({ submissions, setSubmissions }) => {
                     <tr>
                       <th className="px-6 py-3 text-left text-xl font-medium text-gray-500 uppercase tracking-wider">Start Date</th>
                       <th className="px-6 py-3 text-left text-xl font-medium text-gray-500 uppercase tracking-wider">End Date</th>
-                      <th className="px-6 py-3 text-left text-xl font-medium text-gray-500 uppercase tracking-wider">Client</th>
-                      <th className="px-6 py-3 text-left text-xl font-medium text-gray-500 uppercase tracking-wider">Project</th>
-                      <th className="px-6 py-3 text-left text-xl font-medium text-gray-500 uppercase tracking-wider">Hours</th>
-                      <th className="px-6 py-3 text-left text-xl font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                      <th className="px-6 py-3 text-center text-xl font-medium text-gray-500 uppercase tracking-wider">Client</th>
+                      <th className="px-6 py-3 text-center text-xl font-medium text-gray-500 uppercase tracking-wider">Project</th>
+                      <th className="px-6 py-3 text-center text-xl font-medium text-gray-500 uppercase tracking-wider">Hours</th>
+                      <th className="px-6 py-3 text-center text-xl font-medium text-gray-500 uppercase tracking-wider">Status</th>
                       <th className="px-6 py-3 text-left text-xl font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                     </tr>
                   </thead>
@@ -337,12 +338,12 @@ const EmployeeHomePage = ({ submissions, setSubmissions }) => {
                        
                         <td className="px-6 py-4 whitespace-nowrap text-xl font-medium text-gray-900">{submission.startDate}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-xl font-medium text-gray-900">{submission.endDate}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-xl font-medium text-gray-900">{submission.clientName}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-xl font-medium text-gray-900">{submission.projectName}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-xl font-medium text-gray-900">{submission.totalNumberOfHours}</td>
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-6 py-4 whitespace-nowrap text-xl text-center font-medium text-gray-900">{submission.clientName}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-xl text-center font-medium text-gray-900">{submission.projectName}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-xl text-center font-medium text-gray-900">{submission.totalNumberOfHours}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-center">
                           <span
-                            className={`px-2 inline-flex text-lg leading-5 font-semibold rounded-full ${
+                            className={`px-2 inline-flex text-lg text-center leading-5 font-semibold rounded-full ${
                               submission.status === "APPROVED"
                                 ? " text-green-500"
                                 : submission.status === "REJECTED"
@@ -353,7 +354,7 @@ const EmployeeHomePage = ({ submissions, setSubmissions }) => {
                             {submission.status}
                           </span>
                         </td>
-                        <td className="flex px-6 py-6 gap-4 whitespace-nowrap text-lg font-medium">
+                        <td className="flex px-6 py-6 gap-4 text-center whitespace-nowrap text-lg font-medium">
                           {submission.status !== "APPROVED" && submission.status !== "REJECTED" && (
                             <div className="flex space-x-2 gap-4">
                               <button

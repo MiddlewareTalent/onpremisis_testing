@@ -338,6 +338,7 @@ const ManagerTimesheets = () => {
                   onClick={handleApplyDateRange}
                   className={`bg-blue-500 text-white py-2 px-4 rounded-md ${!startDate || !endDate ? 'opacity-50 cursor-not-allowed' : ''}`}
                   disabled={!startDate || !endDate}
+                  title={(!startDate || !endDate ? "The button is disabled because the date range has not been applied yet.":"")}
                 >
                   Download
                 </button>
