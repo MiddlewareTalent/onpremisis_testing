@@ -165,7 +165,7 @@ export default function Chart() {
  
   }, [employeeId, filterCountry]); // This effect runs when the employeeId changes
 
-  if(!state.organisationChart){
+  if(!state.organizationChart){
     navigate("/dashboard");
   }
  
