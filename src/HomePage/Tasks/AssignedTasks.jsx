@@ -404,10 +404,10 @@ const AssignedTasks = (props) => {
   const customStylesDelete = {
     content: {
       width: '40vw',
-      height: '20vh',
+      height: '25vh',
       margin: 'auto',
       top: '20%',
-      left: '30%',
+      left: '50%',
       transform: 'translate(-50%, -50%)',
     },
   };
