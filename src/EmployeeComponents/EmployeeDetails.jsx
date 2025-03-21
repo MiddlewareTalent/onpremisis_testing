@@ -93,7 +93,7 @@ export default function EmployeeDetails() {
         return <div className="flex justify-center items-center h-screen"><Loader /></div>;
     }
  
-    // Attachments mapping
+    // Attachments
     const attachments = [
         { label: "Identity Card", file: employee.identityCard },
         { label: "Visa", file: employee.visa },
