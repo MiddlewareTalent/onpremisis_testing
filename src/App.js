@@ -36,6 +36,7 @@ import ProfileCard from './EmployeeComponents/ProfileCard.jsx';
 import EmpContactsDetails from './EmployeeComponents/EmpContactsDetails.jsx';
 import MyTeam from './HomePage/MyTeam.jsx';
 import { MyProvider } from './MyProvider/MyProvider.jsx';
+import NotFound from './Components/NotFound.jsx';
 
 function App() {
 const [submissions, setSubmissions] = useState([]);
@@ -101,9 +102,18 @@ function Main({ submissions, setSubmissions }) {
         <Route path='/ProfileCard' element={<ProfileCard/>} />
         <Route path='/EmpContactsDetails/:contactId' element={<EmpContactsDetails/>} />
         <Route path='/MyTeam' element={<MyTeam/>} />
+        <Route path='/*' element={<NotFoundPage/>} />
       </Routes>
     </>
   );
+}
+
+function NotFoundPage(){
+  return(
+    <Routes>
+    <Route path='/*' element={<NotFound/>} />
+  </Routes>
+  )
 }
 
 export default App;
