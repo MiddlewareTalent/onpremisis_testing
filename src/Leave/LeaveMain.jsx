@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import { MyContext } from '../MyProvider/MyProvider';
 import LeaveEmployee from './LeaveEmployee';
 import LeaveApprovalDashboard from './LeaveAdmin';
 
 const LeaveMain = () => {
   const navigate = useNavigate();
   const [isTrue, setIsTrue] = useState(true);
+  const {state}=useContext(MyContext);
+  
 
   // Button styles
   const btn1 = "border border-gray-950 rounded-lg w-80 py-2"; // added padding for button height consistency
@@ -15,6 +17,10 @@ const LeaveMain = () => {
   // Navigate to LeaveSheet page
   const sheetButton = () => {
     navigate('/LeaveSheet');
+  };
+
+  if(!state.leaveManagement){
+    navigate("/dashboard");
   };
 
   return (

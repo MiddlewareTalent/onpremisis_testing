@@ -41,7 +41,7 @@ export default function Employee() {
             const token = localStorage.getItem('token');
             setIsUpdateModalOpen(false)
             setLoading(true);
-            let url='https://msquirebackend.azurewebsites.net/api/v1/employeeManager/employees';
+            let url='https://msquirebackend.azurewebsites.net/api/v1/employeeManager/employeesByOrder';
             if (filterCountry!==""){
                 url=`https://msquirebackend.azurewebsites.net/api/v1/employeeManager/getEmployeesByWorkingCountry/${filterCountry}`;
             }
@@ -93,7 +93,7 @@ export default function Employee() {
         const token = localStorage.getItem('token');
         setIsUpdateModalOpen(false)
         setLoading(true);
-        let url='https://msquirebackend.azurewebsites.net/api/v1/employeeManager/employees';
+        let url='https://msquirebackend.azurewebsites.net/api/v1/employeeManager/employeesByOrder';
         if (filterCountry!==""){
             url=`https://msquirebackend.azurewebsites.net/api/v1/employeeManager/getEmployeesByWorkingCountry/${filterCountry}`;
         }

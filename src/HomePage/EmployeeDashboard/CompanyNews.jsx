@@ -1,18 +1,20 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from "axios";
 import NewsCarousel from "./NewsCarousel";
+import { MyContext } from "../../MyProvider/MyProvider";
  
 const CompanyNews = () => {
     const [tab, setTab]=useState("View News");
     const [news, setNews]=useState("");
     const [newsHeading, setNewsHeading]=useState("");
+    const {state}=useContext(MyContext);
  
     const postNews = async () => {
         const token=localStorage.getItem("token");
         try {
             const response = await axios.post("https://msquirebackend.azurewebsites.net/apis/employees/companyNews/addNews", {
-                userName: "",
-                userId: "",
+                userName: state.firstName+" "+state.lastName,
+                userId: state.employeeId,
                 userEmail: localStorage.getItem('email'),
                 newsHeading: newsHeading,
                 news: news,

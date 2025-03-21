@@ -18,7 +18,7 @@ export default function ProfessionalInfoModal({
       const token = localStorage.getItem("token");
       try {
         const response = await fetch(
-          "https://msquirebackend.azurewebsites.net/api/v1/employeeManager/employees",
+          "https://msquirebackend.azurewebsites.net/api/v1/employeeManager/AdminsAndManagers",
           {
             method: "GET",
             headers: {
