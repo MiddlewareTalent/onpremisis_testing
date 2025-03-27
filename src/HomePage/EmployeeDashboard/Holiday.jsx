@@ -188,7 +188,7 @@ const Holiday = () => {
                         <textarea
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
-                            className="mt-5 w-full h-48 border border-gray-300 rounded-lg p-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="mt-5 w-full h-40 border border-gray-300 rounded-lg p-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="Holiday Description"
                         ></textarea>
                     </div>
