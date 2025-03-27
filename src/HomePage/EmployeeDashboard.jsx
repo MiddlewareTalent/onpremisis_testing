@@ -7,10 +7,7 @@ import CompanyNews from './EmployeeDashboard/CompanyNews'
 import Notification from './EmployeeDashboard/Notification'
 import { motion } from "framer-motion"
 import { MyContext } from '../MyProvider/MyProvider'
-import {
-  BriefcaseIcon,
-  // PencilIcon,
-} from "@heroicons/react/24/outline"
+import Holiday from './EmployeeDashboard/Holiday'
 
 
 export default function EnhancedDashboard() {
@@ -104,29 +101,10 @@ useEffect(()=>{
 </div>
 
 
-        {/* Current Projects */}
-        <div className="rounded-lg bg-white p-6 shadow-lg">
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-gray-1300">Current Projects</h2>
-            <BriefcaseIcon className="h-5 w-7 text-gray-900 dark:text-gray-900" />
-          </div>
-          <ul className="space-y-2">
-            <li className="flex items-center justify-between text-sm">
-              <span className="text-gray-1200">Website Redesign</span>
-              <span className="rounded-full bg-yellow-100 px-2 py-1 text-base font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">In Progress</span>
-            </li>
-            <li className="flex items-center justify-between text-sm">
-              <span className="text-gray-1600">Mobile App Development</span>
-              <span className="rounded-full bg-green-100 px-2 py-1 text-base font-medium text-green-800 dark:bg-green-900 dark:text-green-200">On Track</span>
-            </li>
-            <li className="flex items-center justify-between text-sm">
-              <span className="text-gray-1200">Customer Feedback Analysis</span>
-              <span className="rounded-full bg-red-100 px-2 py-1 text-base font-medium text-red-800 dark:bg-red-900 dark:text-red-200">Delayed</span>
-            </li>
-          </ul>
-        </div>
-
-        {/* Quick Links */}
+        
+<div className="rounded-lg bg-white p-6 shadow-lg" style={{ height: '400px' }}>
+    <Holiday/>
+</div>
         
       </div>
     </motion.div>
