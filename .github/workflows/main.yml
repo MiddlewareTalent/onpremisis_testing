@@ -1,4 +1,4 @@
-# name: Build and Deploy React App to Azure Web Apps
+# name: Build and Deploy React App to Azure Web App
  
 # on:
 #   push:
