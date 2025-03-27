@@ -27,7 +27,7 @@ const LeaveSheet = () => {
     const fetchLeaveSheet = async () => {
         try {
             const token = localStorage.getItem("token");
-            const response = await axios.get("https://msquirebackend.azurewebsites.net/api/getSheets", {
+            const response = await axios.get("https://mtlbackendapp.azurewebsites.net/api/getSheets", {
                 method: "GET",
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -60,7 +60,7 @@ const LeaveSheet = () => {
             const token = localStorage.getItem("token");
             if (isSubmitted && leaveId) {
                 const response = await axios.put(
-                    `https://msquirebackend.azurewebsites.net/api/updateSheet/${leaveId}`,
+                    `https://mtlbackendapp.azurewebsites.net/api/updateSheet/${leaveId}`,
                     leaveData,
                     {
                         headers: {
@@ -75,7 +75,7 @@ const LeaveSheet = () => {
                 // If no data exists, create a new leave sheet
                 const token = localStorage.getItem("token");
                 const response = await axios.post(
-                    "https://msquirebackend.azurewebsites.net/api/submitSheet",
+                    "https://mtlbackendapp.azurewebsites.net/api/submitSheet",
                     leaveData,
                     {
                         headers: {

@@ -24,7 +24,7 @@ const EmployeesList = props => {
 
       try {
         const employeeId=localStorage.getItem("employeeId");
-        const response = await fetch(`https://msquirebackend.azurewebsites.net/api/v1/employeeManager/getEmployeesForTasks/${employeeId}`, {
+        const response = await fetch(`https://mtlbackendapp.azurewebsites.net/api/v1/employeeManager/getEmployeesForTasks/${employeeId}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,

@@ -35,10 +35,10 @@ const ManagerTimesheets = () => {
     if (!employeeId) return;
  
     try {
-      let url = `https://msquirebackend.azurewebsites.net/api/timesheets/list/manager/${employeeId}`;
+      let url = `https://mtlbackendapp.azurewebsites.net/api/timesheets/list/manager/${employeeId}`;
        
       if (startDate && endDate) {
-        url = `https://msquirebackend.azurewebsites.net/api/timesheets/totalList/startDate/${startDate}/endDate/${endDate}`;
+        url = `https://mtlbackendapp.azurewebsites.net/api/timesheets/totalList/startDate/${startDate}/endDate/${endDate}`;
       }
  
       const response = await axios.get(url, {
@@ -88,7 +88,7 @@ const ManagerTimesheets = () => {
     setLoading(true);
     console.log(token); // Make sure the token is valid here
     try {
-      await axios.put(`https://msquirebackend.azurewebsites.net/api/timesheets/Approve/${id}/status/APPROVED`, null, {
+      await axios.put(`https://mtlbackendapp.azurewebsites.net/api/timesheets/Approve/${id}/status/APPROVED`, null, {
         headers: {
           "Authorization": `Bearer ${token}`,  // Ensure token is valid
         },
@@ -102,7 +102,7 @@ const ManagerTimesheets = () => {
     }
     try{
       console.log(submissions.employeeId);
-      await axios.post("https://msquirebackend.azurewebsites.net/apis/employees/notifications",{
+      await axios.post("https://mtlbackendapp.azurewebsites.net/apis/employees/notifications",{
         "notificationType":"TimesheetManage",
         "notification":"Your Timesheet has been Approved, tap to see details",
         "notificationTo":aproveEmployeeId,
@@ -125,7 +125,7 @@ const ManagerTimesheets = () => {
     setLoading(true);
     console.log(rejectEmployeeId);
     try {
-      await axios.put(`https://msquirebackend.azurewebsites.net/api/timesheets/reject/${currentId}/status/REJECTED/comments/${comments}`, null, {
+      await axios.put(`https://mtlbackendapp.azurewebsites.net/api/timesheets/reject/${currentId}/status/REJECTED/comments/${comments}`, null, {
         headers: {
           "Authorization": `Bearer ${token}`,  // Ensure the token is valid
         } // Ensure credentials (cookies) are sent
@@ -138,7 +138,7 @@ const ManagerTimesheets = () => {
       setLoading(false);
     }
     try{
-      await axios.post("https://msquirebackend.azurewebsites.net/apis/employees/notifications",{
+      await axios.post("https://mtlbackendapp.azurewebsites.net/apis/employees/notifications",{
         "notificationType":"TimesheetManage",
         "notification":"Your Timesheet has been Rejected, tap to see details",
         "notificationTo":rejectEmployeeId,

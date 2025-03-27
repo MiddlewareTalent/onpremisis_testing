@@ -66,7 +66,7 @@ const DocumentUploadForm = ({ formData, onNext, onBack, onCancel, onFormDataChan
         try {
             const token = localStorage.getItem('token');
             console.log("str"+documents.identityCard);
-            const response = await axios.post('https://msquirebackend.azurewebsites.net/api/v1/employeeManager/add', formDataToSend, {
+            const response = await axios.post('https://mtlbackendapp.azurewebsites.net/api/v1/employeeManager/add', formDataToSend, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
 

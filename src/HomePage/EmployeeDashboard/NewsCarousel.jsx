@@ -16,7 +16,7 @@ export default function NewsCarousel() {
       const token = localStorage.getItem("token");
 
       try {
-        const response = await axios.get('https://msquirebackend.azurewebsites.net/apis/employees/companyNews/getAllNews', {
+        const response = await axios.get('https://mtlbackendapp.azurewebsites.net/apis/employees/companyNews/getAllNews', {
           headers: {
             "Authorization": `Bearer ${token}`  // Add the token to the Authorization header
           }
@@ -53,7 +53,7 @@ export default function NewsCarousel() {
   const deleteNews=async(id)=>{
     const token = localStorage.getItem("token");
     try{
-      axios.delete(`https://msquirebackend.azurewebsites.net/apis/employees/companyNews/deleteNewsById/${id}`, {
+      axios.delete(`https://mtlbackendapp.azurewebsites.net/apis/employees/companyNews/deleteNewsById/${id}`, {
         headers: {
           "Authorization": `Bearer ${token}`  // Add the token to the Authorization header
         }
@@ -67,7 +67,7 @@ export default function NewsCarousel() {
       const token = localStorage.getItem("token");
 
       try {
-        const response = await axios.get('https://msquirebackend.azurewebsites.net/apis/employees/companyNews/getAllNews', {
+        const response = await axios.get('https://mtlbackendapp.azurewebsites.net/apis/employees/companyNews/getAllNews', {
           headers: {
             "Authorization": `Bearer ${token}`  // Add the token to the Authorization header
           }

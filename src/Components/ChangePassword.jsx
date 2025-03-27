@@ -59,7 +59,7 @@ const ChangePassword = () => {
             }
 
             await axios.post(
-                `https://msquirebackend.azurewebsites.net/api/v1/employeeManager/change-password`,
+                `https://mtlbackendapp.azurewebsites.net/api/v1/employeeManager/change-password`,
                 {
                     email: formData.email,
                     oldPassword: formData.oldPassword,

@@ -52,7 +52,7 @@ export default function Navbar() {
         console.log(token);
         console.log("upto");
 
-        const response = await axios.get(`https://msquirebackend.azurewebsites.net/api/v1/employeeManager/getEmployee/${employeeId}`, {
+        const response = await axios.get(`https://mtlbackendapp.azurewebsites.net/api/v1/employeeManager/getEmployee/${employeeId}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,

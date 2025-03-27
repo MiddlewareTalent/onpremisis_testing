@@ -57,7 +57,7 @@ export default function EmployeeDetails() {
                 
                 console.log(token);
                 console.log("upto");
-                const response = await axios.get(`https://msquirebackend.azurewebsites.net/api/v1/employeeManager/employees/${id}`,{
+                const response = await axios.get(`https://mtlbackendapp.azurewebsites.net/api/v1/employeeManager/employees/${id}`,{
                     method:'GET',
                     headers:{
                         'Authorization':`Bearer ${token}`,
@@ -73,7 +73,7 @@ export default function EmployeeDetails() {
                 console.error("Error fetching employee data:", error);
             }
             try {
-                const response = await axios.get(`https://msquirebackend.azurewebsites.net/apis/employees/contacts/contactsBy/${employeeId}`,{
+                const response = await axios.get(`https://mtlbackendapp.azurewebsites.net/apis/employees/contacts/contactsBy/${employeeId}`,{
                   headers: {
                     "Authorization": `Bearer ${token}`  // Add the token to the Authorization header
                   }

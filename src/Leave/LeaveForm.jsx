@@ -67,7 +67,7 @@ function LeaveRequestForm(props) {
 
                 const [originResponse] = await Promise.all([
                     axios.get(
-                        `https://msquirebackend.azurewebsites.net/api/v1/employeeManager/origin/${employeeId}`,
+                        `https://mtlbackendapp.azurewebsites.net/api/v1/employeeManager/origin/${employeeId}`,
                         {
                             method: "GET",
                             headers: {
@@ -122,7 +122,7 @@ function LeaveRequestForm(props) {
                 const token = localStorage.getItem("token");
                 console.log(token);
                 const response = await axios.get(
-                    "https://msquirebackend.azurewebsites.net/api/leaves/remaining-leaves",
+                    "https://mtlbackendapp.azurewebsites.net/api/leaves/remaining-leaves",
                     {
                         method: "GET",
                         headers: {
@@ -307,8 +307,8 @@ function LeaveRequestForm(props) {
             const token = localStorage.getItem("token");
             console.log(formData);
             const url = isEditing
-                ? `https://msquirebackend.azurewebsites.net/api/leaves/update/${formData.id}`
-                : `https://msquirebackend.azurewebsites.net/api/leaves/submit`;
+                ? `https://mtlbackendapp.azurewebsites.net/api/leaves/update/${formData.id}`
+                : `https://mtlbackendapp.azurewebsites.net/api/leaves/submit`;
 
             let response;
             if (!isEditing) {
@@ -376,7 +376,7 @@ function LeaveRequestForm(props) {
             const token = localStorage.getItem("token");
             console.log(token);
             const response = await axios.get(
-                "https://msquirebackend.azurewebsites.net/api/leaves/remaining-leaves",
+                "https://mtlbackendapp.azurewebsites.net/api/leaves/remaining-leaves",
                 {
                     method: "GET",
                     headers: {

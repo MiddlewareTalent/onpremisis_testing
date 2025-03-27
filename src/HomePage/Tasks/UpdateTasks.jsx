@@ -30,7 +30,7 @@ export default function UpdateTasks(props) {
 
       if(taskName!=="" && taskDetails!==""){
         setIsError(false)
-        await axios.put(`https://msquirebackend.azurewebsites.net/apis/employees/tasks/${taskId}`, {
+        await axios.put(`https://mtlbackendapp.azurewebsites.net/apis/employees/tasks/${taskId}`, {
         taskId:taskId,
         taskAssignedBy:localStorage.getItem('email'),
         personName:personName,

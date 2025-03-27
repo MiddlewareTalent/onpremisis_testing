@@ -48,7 +48,7 @@ export default function LeaveApprovalDashboard() {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-            `https://msquirebackend.azurewebsites.net/api/leaves/manager/${managerId}`,
+            `https://mtlbackendapp.azurewebsites.net/api/leaves/manager/${managerId}`,
             {
               method: "GET",
               headers: {
@@ -92,14 +92,14 @@ export default function LeaveApprovalDashboard() {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      await axios.put(`https://msquirebackend.azurewebsites.net/api/leaves/approve/${id}`, null, {
+      await axios.put(`https://mtlbackendapp.azurewebsites.net/api/leaves/approve/${id}`, null, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
       const response = await axios.get(
-          `https://msquirebackend.azurewebsites.net/api/leaves/manager/${managerId}`,
+          `https://mtlbackendapp.azurewebsites.net/api/leaves/manager/${managerId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -145,7 +145,7 @@ export default function LeaveApprovalDashboard() {
       //const encodedReason = encodeURIComponent(rejectionReason);
       const token = localStorage.getItem("token");
       await axios.put(
-          `https://msquirebackend.azurewebsites.net/api/leaves/reject/${selectedLeaveId}/${rejectionReason}`,
+          `https://mtlbackendapp.azurewebsites.net/api/leaves/reject/${selectedLeaveId}/${rejectionReason}`,
           null,
           {
             headers: {

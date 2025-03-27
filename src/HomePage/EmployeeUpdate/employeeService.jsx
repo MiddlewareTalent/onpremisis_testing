@@ -1,6 +1,6 @@
 import axios from 'axios';
  
-const BASE_URL = 'https://msquirebackend.azurewebsites.net/api/v1/employeeManager';
+const BASE_URL = 'https://mtlbackendapp.azurewebsites.net/api/v1/employeeManager';
  
 export const getEmployeeDetails = async (employeeId) => {
    

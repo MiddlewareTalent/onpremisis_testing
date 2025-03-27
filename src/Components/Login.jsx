@@ -31,7 +31,7 @@ const Login = () => {
 
         try {
             // Send login request to the backend
-            const response = await axios.post('https://msquirebackend.azurewebsites.net/api/v1/employeeManager/login', {
+            const response = await axios.post('https://mtlbackendapp.azurewebsites.net/api/v1/employeeManager/login', {
                 email: email,
                 password: password,
             }
