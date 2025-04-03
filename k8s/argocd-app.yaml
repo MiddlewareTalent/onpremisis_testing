@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: react-app
+  namespace: argocd
+spec:
+  destination:
+    namespace: default
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    repoURL: "https://github.com/your-username/your-repo.git"  # Change this!
+    path: "k8s"
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
