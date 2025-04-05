@@ -3,7 +3,7 @@ name: Deploy React App to Kubernetes with ArgoCD
 on:
   push:
     branches:
-      - main  # Change if using another branch
+      - main
 
 jobs:
   build:
@@ -13,30 +13,29 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Install Node.js & Build React App
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
-      - name: Clean Cache and Install Dependencies
+      - name: Install Dependencies
         run: |
           rm -rf node_modules package-lock.json
           npm cache clean --force
           npm install --legacy-peer-deps
 
-      - name: Manually Install ajv if needed
-        run: npm install ajv ajv-keywords --save-dev
-
       - name: Build React App
         run: npm run build
 
-      - name: Login to DockerHub
+      - name: Docker Login
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Build & Push Docker Image
         run: |
-          docker build -t yaswanthkumar12/react-app:latest .
-          docker push yaswanthkumar12/react-app:latest
+          IMAGE_TAG=yaswanthkumar12/react-app:${{ github.sha }}
+          docker build -t $IMAGE_TAG .
+          docker push $IMAGE_TAG
+          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
 
   deploy:
     runs-on: ubuntu-latest
@@ -46,19 +45,37 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Set Up Kubernetes Config
+      - name: Setup Kubeconfig
         run: |
-          echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 --decode > kubeconfig.yaml
-          export KUBECONFIG=kubeconfig.yaml
+          echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 --decode > $HOME/kubeconfig.yaml
+        env:
+          KUBECONFIG: $HOME/kubeconfig.yaml
 
-      - name: Deploy to Kubernetes
+      - name: Update Kubernetes Manifests with New Image
         run: |
-          kubectl apply -f k8s/deployment.yaml
-          kubectl apply -f k8s/service.yaml
+          sed -i "s|image: .*|image: ${{ env.IMAGE_TAG }}|" k8s/deployment.yaml
+
+      - name: Apply Kubernetes Manifests
+        run: |
+          kubectl --kubeconfig=$HOME/kubeconfig.yaml apply -f k8s/deployment.yaml
+          kubectl --kubeconfig=$HOME/kubeconfig.yaml apply -f k8s/service.yaml
+
+      - name: Install ArgoCD CLI
+        run: |
+          curl -sSL -o argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+          chmod +x argocd
+          sudo mv argocd /usr/local/bin/
 
       - name: Login to ArgoCD
         run: |
-          argocd login ${{ secrets.ARGOCD_SERVER }} --username ${{ secrets.ARGOCD_USERNAME }} --password ${{ secrets.ARGOCD_PASSWORD }} --insecure
+          argocd login ${{ secrets.ARGOCD_SERVER }} \
+            --username ${{ secrets.ARGOCD_USERNAME }} \
+            --password ${{ secrets.ARGOCD_PASSWORD }} --insecure
 
       - name: Sync ArgoCD Application
-        run: argocd app sync react-app
+        run: |
+          argocd app sync react-app
+          argocd app wait react-app --health --timeout 300
+
+      - name: Clean up Kubeconfig
+        run: rm -f $HOME/kubeconfig.yaml
