@@ -9,7 +9,7 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    repoURL: "https://github.com/MiddlewareTalent/MTL_Official_Frontendcode.git "  # Update this!
+    repoURL: "https://github.com/MiddlewareTalent/onpremisis_testing.git"  # Update this!
     path: "k8s"
     targetRevision: main
   syncPolicy:
