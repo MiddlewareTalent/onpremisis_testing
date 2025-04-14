@@ -1,0 +1,33 @@
+name: Deploy to GitHub Pages
+
+# Trigger the workflow on push to the 'main' branch (or adjust to your default branch)
+on:
+  push:
+    branches:
+      - main  # Replace with 'master' if that's your default branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest  # This specifies the virtual machine for the job
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2  # Check out the repository
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'  # Specify the version of Node.js
+
+      - name: Install dependencies
+        run: npm install  # Install all project dependencies
+
+      - name: Build the React app
+        run: npm run build  # Build the React app (this creates a 'build' folder)
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4.7.3  # Deploy action
+        with:
+          branch: gh-pages  # The branch where your app will be deployed
+          folder: build     # The folder with the build files (by default 'build' for React)
+          token: ${{ secrets.GITHUB_TOKEN }}  # Use the GitHub token for authentication
